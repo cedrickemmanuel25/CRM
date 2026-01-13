@@ -24,19 +24,20 @@
 }">
     
     <!-- Header professionnel, Métriques clés, Barre de contrôles, Panneau de filtres -->
-    <div class="flex-shrink-0 max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="mb-8">
-            <div class="flex items-center justify-between mb-6">
+    <div class="flex-shrink-0 max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div class="mb-6 sm:mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">Pipeline des Ventes</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Pipeline des Ventes</h1>
                     <p class="mt-1 text-sm text-gray-600">Gérez et suivez vos opportunités commerciales</p>
                 </div>
                 
                 <div class="flex items-center gap-3">
                     @if(auth()->user()->hasRole(['admin', 'commercial']))
-                    <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                        Nouvelle Opportunité
+                    <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent rounded-lg shadow-sm text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                        <svg class="-ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        <span class="hidden sm:inline">Nouvelle Opportunité</span>
+                        <span class="sm:hidden">Nouveau</span>
                     </a>
                     @endif
                 </div>
@@ -102,23 +103,23 @@
         </div>
 
         <!-- Barre de contrôles -->
-        <div class="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-            <div class="flex items-center justify-between">
+        <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 mb-4 sm:mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <!-- Toggle de vue -->
-                <div class="inline-flex bg-gray-100 rounded-lg p-1">
-                    <button @click="switchView('pipeline')" :class="viewMode === 'pipeline' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'" class="px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center">
-                        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                <div class="inline-flex bg-gray-100 rounded-lg p-1 w-full sm:w-auto">
+                    <button @click="switchView('pipeline')" :class="viewMode === 'pipeline' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
+                        <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
                         Pipeline
                     </button>
-                    <button @click="switchView('list')" :class="viewMode === 'list' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'" class="px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center">
-                        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                    <button @click="switchView('list')" :class="viewMode === 'list' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
+                        <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                         Liste
                     </button>
                 </div>
 
                 <!-- Bouton filtres -->
-                <button @click="showFilters = !showFilters" :class="showFilters ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'bg-white text-gray-700 border-gray-300'" class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition-all">
-                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                <button @click="showFilters = !showFilters" :class="showFilters ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'bg-white text-gray-700 border-gray-300'" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-all w-full sm:w-auto">
+                    <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     Filtres
                 </button>
             </div>
