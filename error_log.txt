@@ -1,0 +1,11 @@
+ERROR: SQLSTATE[01000]: Warning: 1265 Data truncated for column 'role' at row 1 (Connection: mysql, SQL: insert into `users` (`name`, `email`, `password`, `role`, `telephone`, `email_verified_at`, `updated_at`, `created_at`) values (Visiteur Test, visitor@crm.local, $2y$12$47YoJpM/.mryPOLCJKympOLYdDPiXtQLewea2tS.t6HeNi/dK6KQ6, visitor, +33 1 23 45 67 92, 2026-01-05 11:08:48, 2026-01-05 11:08:48, 2026-01-05 11:08:48))
+#0 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Connection.php(780): Illuminate\Database\Connection->runQueryCallback()
+#1 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php(42): Illuminate\Database\Connection->run()
+#2 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Query\Processors\MySqlProcessor.php(35): Illuminate\Database\MySqlConnection->insert()
+#3 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php(3853): Illuminate\Database\Query\Processors\MySqlProcessor->processInsertGetId()
+#4 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php(2235): Illuminate\Database\Query\Builder->insertGetId()
+#5 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1436): Illuminate\Database\Eloquent\Builder->__call()
+#6 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1401): Illuminate\Database\Eloquent\Model->insertAndSetId()
+#7 C:\Users\yaoce\CRM\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php(1240): Illuminate\Database\Eloquent\Model->performInsert()
+#8 C:\Users\yaoce\CRM\create_visitor_robust.php(32): Illuminate\Database\Eloquent\Model->save()
+#9 {main}
