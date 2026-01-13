@@ -2,14 +2,14 @@
         
         <!-- VUE PIPELINE -->
         <div x-show="viewMode === 'pipeline'" class="pb-6">
-            <div class="flex gap-2 sm:gap-1.5 w-full items-start overflow-x-auto pb-4 snap-x snap-mandatory">
-                <!-- Scroll hint for mobile -->
-                <div class="block sm:hidden text-xs text-gray-500 text-center w-full mb-2">
-                    <p class="flex items-center justify-center gap-1">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
-                        Faites glisser pour voir toutes les colonnes
-                    </p>
-                </div>
+            <!-- Scroll hint for mobile -->
+            <div class="block sm:hidden text-xs text-gray-500 text-center mb-3 px-4">
+                <p class="flex items-center justify-center gap-1 bg-blue-50 border border-blue-200 rounded-lg py-2">
+                    <svg class="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                    <span class="text-blue-700 font-medium">Faites glisser pour voir toutes les colonnes</span>
+                </p>
+            </div>
+            <div class="flex gap-2 sm:gap-1.5 w-full items-start overflow-x-auto pb-4">
                 @php
                     $stages = [
                         'prospection'   => ['label' => 'Prospection',   'color' => 'slate',    'icon' => 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
@@ -22,7 +22,7 @@
                 @endphp
 
                 @foreach($stages as $key => $config)
-                <div class="flex-none w-[85vw] sm:w-auto sm:flex-1 sm:min-w-[240px] lg:min-w-[200px] flex flex-col snap-center">
+                <div class="flex-none w-[85vw] sm:w-auto sm:flex-1 sm:min-w-[240px] lg:min-w-[200px] flex flex-col">
                     <div class="bg-white rounded-lg border border-gray-200 flex flex-col">
                         <!-- En-tête de colonne -->
                         <div class="px-4 py-4 border-b border-gray-200 flex-shrink-0">
@@ -235,12 +235,16 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
             
-            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between flex-shrink-0">
-                <div class="text-sm text-gray-600">
-                    Affichage de <span class="font-medium">{{ $opportunities->firstItem() ?? 0 }}</span> à <span class="font-medium">{{ $opportunities->lastItem() ?? 0 }}</span> sur <span class="font-medium">{{ $opportunities->total() }}</span> opportunités
+            <!-- Pagination (visible on all screens) -->
+            <div class="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
+                        Affichage de <span class="font-medium">{{ $opportunities->firstItem() ?? 0 }}</span> à <span class="font-medium">{{ $opportunities->lastItem() ?? 0 }}</span> sur <span class="font-medium">{{ $opportunities->total() }}</span> opportunités
+                    </div>
+                    <div class="flex justify-center sm:justify-end">{{ $opportunities->appends(request()->query())->links() }}</div>
                 </div>
-                <div>{{ $opportunities->appends(request()->query())->links() }}</div>
             </div>
         </div>
 
