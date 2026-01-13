@@ -15,7 +15,7 @@
                 @endphp
 
                 @foreach($stages as $key => $config)
-                <div class="flex-1 min-w-[140px] flex flex-col">
+                <div class="flex-1 min-w-[280px] sm:min-w-[240px] lg:min-w-[200px] flex flex-col">
                     <div class="bg-white rounded-lg border border-gray-200 flex flex-col">
                         <!-- En-tête de colonne -->
                         <div class="px-4 py-4 border-b border-gray-200 flex-shrink-0">

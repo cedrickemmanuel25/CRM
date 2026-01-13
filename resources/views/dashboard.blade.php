@@ -3,7 +3,7 @@
 @section('title', 'Tableau de Bord')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<div class="mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
     <!-- Header & Welcome -->
     <div class="sm:flex sm:items-center sm:justify-between">

@@ -40,7 +40,7 @@ if (auth()->check()) {
     $pendingAccessCount = 0;
 }
 @endphp
-<body class="h-full bg-gray-50 overflow-hidden" x-data="{ 
+<body class="min-h-screen bg-gray-50" x-data="{ 
     sidebarOpen: false, 
     notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
     showNotif(notif) {
@@ -117,7 +117,7 @@ if (auth()->check()) {
     </div>
 
     <!-- Main ContentArea -->
-    <div class="lg:fixed lg:inset-y-0 lg:right-0 lg:w-[82%] h-full flex flex-col">
+    <div class="lg:pl-[18%] min-h-screen flex flex-col">
         <div class="flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                 <span class="sr-only">Ouvrir la barre latérale</span>
@@ -176,7 +176,7 @@ if (auth()->check()) {
             </div>
         </div>
 
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar">
+        <main class="flex-1 p-4 sm:p-6 lg:p-8">
             @if(session('success'))
                 <div class="mb-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
                     <div class="flex items-center">

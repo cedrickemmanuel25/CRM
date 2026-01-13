@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-<div class="w-full flex flex-col bg-slate-50" x-data="{ 
+<div class="w-full flex flex-col" x-data="{ 
     viewMode: '{{ session('opportunities_view_mode', 'pipeline') }}', 
     showFilters: {{ request()->anyFilled(['search', 'commercial_id', 'stade', 'amount_min', 'amount_max', 'date_close_start', 'date_close_end']) ? 'true' : 'false' }},
     switchView(mode) {
