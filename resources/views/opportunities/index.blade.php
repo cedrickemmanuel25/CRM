@@ -15,11 +15,15 @@
 
 @section('content')
 <div class="w-full flex flex-col" x-data="{ 
-    viewMode: '{{ session('opportunities_view_mode', 'pipeline') }}', 
+    viewMode: '{{ request('view', session('opportunities_view_mode', 'pipeline')) }}', 
     showFilters: {{ request()->anyFilled(['search', 'commercial_id', 'stade', 'amount_min', 'amount_max', 'date_close_start', 'date_close_end']) ? 'true' : 'false' }},
     switchView(mode) {
         this.viewMode = mode;
         localStorage.setItem('oppViewMode', mode);
+        // Update URL with view parameter
+        const url = new URL(window.location);
+        url.searchParams.set('view', mode);
+        window.history.pushState({}, '', url);
     }
 }">
     

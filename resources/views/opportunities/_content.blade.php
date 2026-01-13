@@ -49,7 +49,7 @@
                         <div class="p-3 space-y-3 kanban-list" data-stage="{{ $key }}">
                             @if(isset($pipeline[$key]))
                                 @foreach($pipeline[$key] as $opp)
-                                <div class="kanban-card bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-{{ $config['color'] }}-400 hover:shadow-md transition-all cursor-grab active:cursor-grabbing group" data-id="{{ $opp->id }}">
+                                <div class="kanban-card bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-{{ $config['color'] }}-400 hover:shadow-md transition-all sm:cursor-grab sm:active:cursor-grabbing group" data-id="{{ $opp->id }}">
                                     
                                     <a href="{{ route('opportunities.show', $opp) }}" class="block mb-2">
                                         <h4 class="text-xs font-bold text-gray-900 hover:text-indigo-600 line-clamp-2">{{ $opp->titre }}</h4>
@@ -245,7 +245,7 @@
                     <div class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
                         Affichage de <span class="font-medium">{{ $opportunities->firstItem() ?? 0 }}</span> à <span class="font-medium">{{ $opportunities->lastItem() ?? 0 }}</span> sur <span class="font-medium">{{ $opportunities->total() }}</span> opportunités
                     </div>
-                    <div class="flex justify-center sm:justify-end">{{ $opportunities->appends(request()->query())->links() }}</div>
+                    <div class="flex justify-center sm:justify-end">{{ $opportunities->appends(array_merge(request()->query(), ['view' => request('view', 'pipeline')]))->links() }}</div>
                 </div>
             </div>
         </div>
