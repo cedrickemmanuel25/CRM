@@ -1,4 +1,4 @@
-    <div class="relative max-w-[1800px] mx-auto px-4 sm:px-4 lg:px-4 pb-8">
+    <div class="relative max-w-[1800px] mx-auto pb-8">
         
         <!-- VUE PIPELINE -->
         <div x-show="viewMode === 'pipeline'" class="pb-6">
@@ -6,10 +6,11 @@
             <div class="block sm:hidden text-xs text-gray-500 text-center mb-3 px-4">
                 <p class="flex items-center justify-center gap-1 bg-blue-50 border border-blue-200 rounded-lg py-2">
                     <svg class="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
-                    <span class="text-blue-700 font-medium">Faites glisser pour voir toutes les colonnes</span>
+                    <span class="text-blue-700 font-medium">Faites glisser horizontalement →</span>
                 </p>
             </div>
-            <div class="flex gap-2 sm:gap-1.5 w-full items-start overflow-x-auto pb-4">
+            <div class="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+                <div class="flex gap-2 sm:gap-1.5 items-start min-w-min">
                 @php
                     $stages = [
                         'prospection'   => ['label' => 'Prospection',   'color' => 'slate',    'icon' => 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
@@ -91,10 +92,11 @@
                 </div>
                 @endforeach
             </div>
+            </div>
         </div>
 
         <!-- VUE LISTE -->
-        <div x-show="viewMode === 'list'" x-transition>
+        <div x-show="viewMode === 'list'" x-transition class="px-4 sm:px-4 lg:px-4">
             <!-- Mobile Card View -->
             <div class="block md:hidden space-y-3 p-4">
                 @foreach($opportunities as $opp)
