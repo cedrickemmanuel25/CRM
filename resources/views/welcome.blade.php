@@ -59,15 +59,15 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50" x-data="{ mobileMenuOpen: false }">
     <!-- Navigation -->
     <nav class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
-                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <a href="/" class="flex items-center space-x-2 sm:space-x-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-8 sm:h-10 w-auto">
+                        <span class="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
                     </a>
                 </div>
                 
@@ -77,82 +77,103 @@
                     <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Contact</a>
                 </div>
                 
-                <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                        <a href="{{ url('/dashboard') }}" class="px-4 sm:px-6 py-2 sm:py-2.5 gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-sm sm:text-base">
                             Mon Espace
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 font-semibold transition-colors">Connexion</a>
-                        <a href="{{ route('access.request') }}" class="px-6 py-2.5 gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 font-semibold transition-colors text-sm sm:text-base">Connexion</a>
+                        <a href="{{ route('access.request') }}" class="px-4 sm:px-6 py-2 sm:py-2.5 gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-sm sm:text-base">
                             Créer un compte
                         </a>
                     @endauth
                 </div>
+                
+                <!-- Mobile menu button -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile menu -->
+            <div x-show="mobileMenuOpen" x-transition class="md:hidden py-4 space-y-3">
+                <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium">Fonctionnalités</a>
+                <a href="#avantages" @click="mobileMenuOpen = false" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium">Avantages</a>
+                <a href="#contact" @click="mobileMenuOpen = false" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium">Contact</a>
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="block px-4 py-2 gradient-primary text-white rounded-lg font-semibold text-center">Mon Espace</a>
+                @else
+                    <a href="{{ route('login') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-semibold">Connexion</a>
+                    <a href="{{ route('access.request') }}" class="block px-4 py-2 gradient-primary text-white rounded-lg font-semibold text-center">Créer un compte</a>
+                @endauth
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-4 relative overflow-hidden">
-        <div class="blob absolute top-0 right-0 w-96 h-96"></div>
-        <div class="blob absolute bottom-0 left-0 w-80 h-80" style="animation-delay: -6s;"></div>
+    <section class="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 relative overflow-hidden">
+        <div class="blob absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96"></div>
+        <div class="blob absolute bottom-0 left-0 w-56 sm:w-80 h-56 sm:h-80" style="animation-delay: -6s;"></div>
         
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
-                    <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2">
+            <div class="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+                <div class="space-y-6 sm:space-y-8">
+                    <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 rounded-full px-3 sm:px-4 py-1.5 sm:py-2">
                         <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-                        <span class="text-sm font-semibold text-blue-700">Solution CRM Professionnelle</span>
+                        <span class="text-xs sm:text-sm font-semibold text-blue-700">Solution CRM Professionnelle</span>
                     </div>
                     
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-tight">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-tight">
                         Gérez votre entreprise
                         <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">intelligemment</span>
                     </h1>
                     
-                    <p class="text-xl text-gray-600 leading-relaxed">
+                    <p class="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
                         Une plateforme complète pour piloter votre activité commerciale, gérer vos contacts et optimiser vos processus de vente.
                     </p>
                     
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="group px-8 py-4 gradient-primary text-white rounded-xl text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">
+                            <a href="{{ url('/dashboard') }}" class="group px-6 sm:px-8 py-3 sm:py-4 gradient-primary text-white rounded-xl text-base sm:text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">
                                 Accéder à mon espace
-                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                 </svg>
                             </a>
                         @else
-                            <a href="{{ route('access.request') }}" class="group px-8 py-4 gradient-primary text-white rounded-xl text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">
+                            <a href="{{ route('access.request') }}" class="group px-6 sm:px-8 py-3 sm:py-4 gradient-primary text-white rounded-xl text-base sm:text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">
                                 Commencer gratuitement
-                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                 </svg>
                             </a>
-                            <a href="{{ route('login') }}" class="px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl text-lg font-bold hover:border-blue-600 hover:text-blue-600 transition-all inline-flex items-center justify-center">
+                            <a href="{{ route('login') }}" class="px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl text-base sm:text-lg font-bold hover:border-blue-600 hover:text-blue-600 transition-all inline-flex items-center justify-center">
                                 Se connecter
                             </a>
                         @endauth
                     </div>
                     
-                    <div class="flex items-center space-x-6 pt-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 pt-4">
                         <div class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
-                            <span class="text-sm text-gray-600 font-medium">Sans engagement</span>
+                            <span class="text-xs sm:text-sm text-gray-600 font-medium">Sans engagement</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
-                            <span class="text-sm text-gray-600 font-medium">Configuration rapide</span>
+                            <span class="text-xs sm:text-sm text-gray-600 font-medium">Configuration rapide</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="relative float-animation">
+                <div class="relative float-animation hidden lg:block">
                     <div class="gradient-primary rounded-3xl p-8 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
                         <div class="bg-white rounded-2xl p-6 space-y-4">
                             <div class="flex items-center justify-between">

@@ -11,7 +11,7 @@
     <div class="flex-shrink-0">
         <!-- Header professionnel -->
         <div class="bg-white border-b border-slate-200">
-            <div class="max-w-[1800px] mx-auto px-8 py-6">
+            <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="max-w-[1800px] mx-auto px-8 py-6">
+        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <!-- Statistiques -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <!-- Stats markup remains same but inside this wrapper -->
@@ -121,7 +121,7 @@
     </div>
 
     <!-- Scrollable Kanban Board -->
-    <div class="overflow-x-auto pb-8 bg-slate-50 px-8">
+    <div class="overflow-x-auto pb-8 bg-slate-50 px-4 sm:px-6 lg:px-8">
         <div x-data="{
             startPolling() {
                 setInterval(() => {

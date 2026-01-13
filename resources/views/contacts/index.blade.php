@@ -115,8 +115,8 @@
     </div>
 
     <!-- Table Container -->
-    <div class="bg-white border-t border-slate-200">
-        <table class="w-full table-fixed divide-y divide-slate-200 relative">
+    <div class="bg-white border-t border-slate-200 overflow-x-auto">
+        <table class="min-w-full w-full divide-y divide-slate-200 relative">
             <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm">
                 <tr>
                     <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[20%]">Contact</th>
