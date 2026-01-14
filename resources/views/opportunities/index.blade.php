@@ -196,28 +196,33 @@
         isDragging: false,
         initKanban() {
             @if(!auth()->user()->isSupport())
-            const kanbanContainers = document.querySelectorAll('.kanban-list');
-            const self = this;
-            kanbanContainers.forEach(container => {
-                new Sortable(container, {
-                    group: 'opportunities',
-                    animation: 200,
-                    ghostClass: 'sortable-ghost',
-                    dragClass: 'sortable-drag',
-                    onStart: function() {
-                        self.isDragging = true;
-                    },
-                    onEnd: function (evt) {
-                        self.isDragging = false;
-                        const opportunityId = evt.item.getAttribute('data-id');
-                        const newStage = evt.to.getAttribute('data-stage');
-                        
-                        if (evt.from !== evt.to) {
-                            updateOpportunityStage(opportunityId, newStage);
+            // Only initialize drag-and-drop on desktop (screen width >= 640px)
+            if (window.innerWidth >= 640) {
+                const kanbanContainers = document.querySelectorAll('.kanban-list');
+                const self = this;
+                kanbanContainers.forEach(container => {
+                    new Sortable(container, {
+                        group: 'opportunities',
+                        animation: 200,
+                        ghostClass: 'sortable-ghost',
+                        dragClass: 'sortable-drag',
+                        // Disable on mobile touch devices
+                        forceFallback: false,
+                        onStart: function() {
+                            self.isDragging = true;
+                        },
+                        onEnd: function (evt) {
+                            self.isDragging = false;
+                            const opportunityId = evt.item.getAttribute('data-id');
+                            const newStage = evt.to.getAttribute('data-stage');
+                            
+                            if (evt.from !== evt.to) {
+                                updateOpportunityStage(opportunityId, newStage);
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
             @endif
         },
         startPolling() {

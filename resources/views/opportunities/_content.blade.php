@@ -245,7 +245,15 @@
                     <div class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
                         Affichage de <span class="font-medium">{{ $opportunities->firstItem() ?? 0 }}</span> à <span class="font-medium">{{ $opportunities->lastItem() ?? 0 }}</span> sur <span class="font-medium">{{ $opportunities->total() }}</span> opportunités
                     </div>
-                    <div class="flex justify-center sm:justify-end">{{ $opportunities->appends(array_merge(request()->query(), ['view' => request('view', 'pipeline')]))->links() }}</div>
+                    <div class="flex justify-center sm:justify-end">
+                        @php
+                            $paginationParams = request()->query();
+                            if (request()->has('view')) {
+                                $paginationParams['view'] = request('view');
+                            }
+                        @endphp
+                        {{ $opportunities->appends($paginationParams)->links() }}
+                    </div>
                 </div>
             </div>
         </div>
