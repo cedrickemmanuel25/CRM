@@ -251,7 +251,24 @@
                 .then(response => response.json())
                 .then(data => {
                     if (!this.isDragging) { // Double check
+                        // Save scroll position before updating
+                        const scrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
+                        const scrollPositions = Array.from(scrollContainers).map(container => ({
+                            element: container,
+                            scrollLeft: container.scrollLeft
+                        }));
+                        
                         this.$refs.contentArea.innerHTML = data.html;
+                        
+                        // Restore scroll positions after update
+                        setTimeout(() => {
+                            const newScrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
+                            scrollPositions.forEach((saved, index) => {
+                                if (newScrollContainers[index]) {
+                                    newScrollContainers[index].scrollLeft = saved.scrollLeft;
+                                }
+                            });
+                        }, 50);
                         
                         // Update metrics
                         document.getElementById('total-pipeline-value').innerText = data.total_pipeline_value;
