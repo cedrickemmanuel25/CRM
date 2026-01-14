@@ -3,241 +3,152 @@
 @section('title', 'Nouveau Ticket Support')
 
 @section('content')
-<div class="min-h-screen bg-[#fcfdfe]">
-    <!-- Dynamic Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-indigo-50/50 rounded-full blur-[120px]"></div>
-        <div class="absolute top-[20%] -right-[5%] w-[30%] h-[30%] bg-blue-50/50 rounded-full blur-[100px]"></div>
+<div class="min-h-screen bg-gray-50/50">
+    <!-- Header Decor -->
+    <div class="absolute top-0 inset-x-0 h-80 bg-gradient-to-b from-indigo-600 to-indigo-800 -z-10">
+        <div class="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
+        <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-gray-50/50 to-transparent"></div>
     </div>
 
-    <!-- Top Navigation / Header -->
-    <div class="relative bg-white border-b border-slate-200/60 shadow-sm z-20">
-        <div class="max-w-[1440px] mx-auto px-6 h-24 flex items-center justify-between">
-            <div class="flex items-center gap-6">
-                <div class="h-14 w-14 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 rotate-3 group-hover:rotate-0 transition-transform">
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-none uppercase italic">Ticket <span class="text-indigo-600">Studio</span></h1>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1.5 flex items-center gap-2">
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Ouverture d'une nouvelle session support
-                    </p>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button type="button" onclick="document.getElementById('ticket-form').submit()" 
-                    class="group relative inline-flex items-center px-10 py-4 bg-indigo-600 rounded-2xl text-white text-sm font-black uppercase tracking-widest overflow-hidden transition-all hover:bg-indigo-700 active:scale-95 shadow-xl shadow-indigo-600/20">
-                    <span class="relative z-10 flex items-center">
-                        <svg class="w-4 h-4 mr-2.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        Propulser le ticket
-                    </span>
-                </button>
-            </div>
+    <!-- Main Content -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Breadcrumb & Title -->
+        <div class="mb-10 text-center sm:text-left">
+            <nav class="flex justify-center sm:justify-start items-center space-x-2 text-indigo-100 text-sm mb-4">
+                <a href="{{ route('dashboard') }}" class="hover:text-white transition-colors">Dashboard</a>
+                <span class="opacity-50">/</span>
+                <a href="{{ route('tickets.index') }}" class="hover:text-white transition-colors">Tickets</a>
+                <span class="opacity-50">/</span>
+                <span class="text-white font-medium">Nouveau</span>
+            </nav>
+            <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Créer un nouveau ticket</h1>
+            <p class="mt-2 text-indigo-100/80 text-lg max-w-2xl">Notre équipe de support est là pour vous aider. Décrivez votre problème ci-dessous.</p>
         </div>
-    </div>
 
-    <div class="max-w-[1440px] mx-auto px-6 py-12 relative z-10">
-        <form id="ticket-form" action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data" class="divide-y divide-gray-100">
+                @csrf
                 
-                <!-- CONTENT ZONE -->
-                <div class="lg:col-span-8 space-y-10">
-                    
-                    <!-- Main Editor Card -->
-                    <div class="bg-white rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] border border-slate-200 overflow-hidden group/card relative">
-                        <div class="px-12 py-10 border-b border-slate-100 flex items-center justify-between">
-                            <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-                                <span class="h-10 w-1 bg-indigo-600 rounded-full"></span>
-                                Objet & Description
-                            </h2>
-                        </div>
-                        
-                        <div class="p-12 space-y-12">
-                            <!-- Subject Input -->
-                            <div class="space-y-4">
-                                <label for="subject" class="block text-xs font-black text-slate-400 uppercase tracking-widest transition-colors group-focus-within/subject:text-indigo-600" id="subject-label">Sujet de la demande</label>
-                                <div class="relative group/subject">
-                                    <input type="text" name="subject" id="subject" value="{{ old('subject') }}" required
-                                        class="w-full px-0 py-4 bg-transparent border-0 border-b-2 border-slate-200 text-2xl font-black text-slate-900 placeholder-slate-300 focus:ring-0 focus:border-indigo-600 transition-all outline-none"
-                                        placeholder="Ex: Problème d'accès à la plateforme...">
-                                </div>
-                                @error('subject') <p class="text-xs text-rose-500 font-bold">{{ $message }}</p> @enderror
-                            </div>
-
-                            <!-- Description Area -->
-                            <div class="space-y-4">
-                                <label for="description" class="block text-xs font-black text-slate-400 uppercase tracking-widest">Description détaillée</label>
-                                <div class="relative p-8 bg-slate-50/50 rounded-3xl border border-slate-200 focus-within:bg-white focus-within:border-indigo-400 transition-all">
-                                    <textarea name="description" id="description" rows="12" required
-                                        class="w-full bg-transparent border-0 focus:ring-0 text-lg font-medium text-slate-700 leading-relaxed placeholder-slate-400 outline-none"
-                                        placeholder="Décrivez votre problème en détail ici..."></textarea>
-                                </div>
-                                @error('description') <p class="text-xs text-rose-500 font-bold">{{ $message }}</p> @enderror
-                            </div>
+                <!-- Section 1: Informations principales -->
+                <div class="p-8 sm:p-10 space-y-8">
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <!-- Sujet -->
+                        <div class="flex-1 space-y-2">
+                            <label for="subject" class="text-sm font-semibold text-gray-700">Sujet de la demande <span class="text-red-500">*</span></label>
+                            <input type="text" name="subject" id="subject" value="{{ old('subject') }}" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-gray-400 font-medium"
+                                placeholder="Ex: Problème d'accès au module CRM...">
+                            @error('subject') <p class="text-xs text-red-500 font-medium">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Professional Drag & Drop -->
-                        <div class="bg-indigo-50/20 p-12 border-t border-slate-100">
-                            <div class="relative group/upload h-64">
-                                <input type="file" name="attachment" id="attachment" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                <div class="h-full flex flex-col items-center justify-center border-4 border-dashed border-indigo-200/50 rounded-[2rem] bg-white transition-all group-hover/upload:border-indigo-500 group-hover/upload:shadow-2xl group-hover/upload:shadow-indigo-500/10">
-                                    <div class="h-20 w-20 bg-indigo-600 rounded-3xl flex items-center justify-center text-white mb-6 shadow-xl group-hover/upload:scale-110 transition-transform">
-                                        <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                    </div>
-                                    <p class="text-lg font-black text-slate-900 uppercase tracking-tight">Pièces jointes</p>
-                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Glissez votre fichier technique ici</p>
-                                    <div id="file-name-container" class="hidden mt-6 bg-slate-900 text-white px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl scale-110 animate-fade-in">
-                                        📎 <span id="file-name"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SIDEBAR ZONE -->
-                <div class="lg:col-span-4 space-y-10">
-                    
-                    <!-- Advanced Metadata Card -->
-                    <div class="bg-[#1e293b] rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden group/meta">
-                        <!-- Background Glow -->
-                        <div class="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px] group-hover/meta:bg-indigo-500/30 transition-colors"></div>
-                        
-                        <div class="relative z-10 space-y-10">
-                            <h3 class="text-sm font-black uppercase tracking-[0.3em] text-indigo-400 border-b border-white/10 pb-6">Options Avancées</h3>
-
-                            <!-- Category Grid -->
-                            <div class="space-y-4">
-                                <label class="block text-[10px] font-black uppercase tracking-widest text-white/40">Catégorie du dossier</label>
-                                <div class="grid grid-cols-1 gap-3">
-                                    @foreach([
-                                        'technical' => 'Support Technique',
-                                        'commercial' => 'Commercial',
-                                        'billing' => 'Facturation',
-                                        'feature_request' => 'Suggestion',
-                                        'other' => 'Autre'
-                                    ] as $val => $txt)
-                                    <label class="flex items-center p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all cursor-pointer group/opt">
-                                        <input type="radio" name="category" value="{{ $val }}" {{ $val === 'technical' ? 'checked' : '' }} class="sr-only peer">
-                                        <div class="h-5 w-5 rounded-full border-2 border-white/20 mr-4 flex items-center justify-center peer-checked:border-indigo-500 transition-all">
-                                            <div class="h-2.5 w-2.5 rounded-full bg-indigo-500 scale-0 peer-checked:scale-100 transition-transform"></div>
-                                        </div>
-                                        <span class="text-xs font-bold uppercase tracking-widest text-white/70 peer-checked:text-white transition-colors">{{ $txt }}</span>
-                                    </label>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <!-- High-Impact Priority -->
-                            <div class="space-y-4">
-                                <label class="block text-[10px] font-black uppercase tracking-widest text-white/40">Urgence du ticket</label>
-                                <div class="flex flex-wrap gap-2">
-                                    @foreach(['low' => 'Slow', 'medium' => 'Norm', 'high' => 'High', 'urgent' => 'CRIT'] as $val => $txt)
-                                    <label class="flex-1 text-center py-4 rounded-xl border-2 border-white/5 bg-white/5 cursor-pointer hover:border-white/20 transition-all group/prio">
-                                        <input type="radio" name="priority" value="{{ $val }}" {{ $val === 'medium' ? 'checked' : '' }} class="sr-only peer">
-                                        <span class="text-[10px] font-black uppercase tracking-tighter text-white/40 peer-checked:text-indigo-400 transition-all">{{ $txt }}</span>
-                                        <div class="mx-auto mt-2 h-1.5 w-8 rounded-full bg-white/10 peer-checked:bg-indigo-500 transition-all"></div>
-                                    </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Enhanced Client Match Card -->
-                    <div class="bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-xl group/client">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="h-14 w-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover/client:bg-indigo-600 group-hover/client:text-white transition-all duration-500">
-                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-base font-black text-slate-900 tracking-tight leading-none uppercase italic">Client <span class="text-indigo-600">ID</span></h3>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">Synchonisation Contact</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div class="relative group/select">
-                                <select name="contact_id" required class="block w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl text-[13px] font-black text-slate-800 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
-                                    <option value="">Sélectionner le client...</option>
-                                    @foreach($contacts as $contact)
-                                        <option value="{{ $contact->id }}" {{ (request('contact_id') == $contact->id) || old('contact_id') == $contact->id ? 'selected' : '' }}>
-                                            {{ $contact->nom_complet }}
-                                        </option>
-                                    @endforeach
+                        <!-- Priorité -->
+                        <div class="w-full sm:w-1/3 space-y-2">
+                            <label for="priority" class="text-sm font-semibold text-gray-700">Niveau d'urgence <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select name="priority" id="priority" class="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer font-medium">
+                                    <option value="low">Faible - Information</option>
+                                    <option value="medium" selected>Moyenne - Normal</option>
+                                    <option value="high">Élevée - Bloquant</option>
+                                    <option value="urgent">Critique - Panne</option>
                                 </select>
-                                <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none text-slate-400">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>
                                 </div>
                             </div>
-                            
-                            <div class="p-6 bg-indigo-50/50 rounded-3xl border border-indigo-100/50">
-                                <p class="text-[11px] font-bold text-indigo-600/70 leading-relaxed italic text-center">
-                                    "L'historique client sera automatiquement lié à ce nouveau ticket après validation."
-                                </p>
-                            </div>
+                        </div>
+                    </div>
 
-                            <!-- Responsable -->
-                            <div class="space-y-4 pt-4 border-t border-slate-100">
-                                <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">Agent en charge</label>
-                                <div class="relative group/agent">
-                                    <select name="assigned_to" class="block w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-[13px] font-black text-slate-800 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
-                                        <option value="">Auto-Assignation</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
-                                                {{ $user->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none text-slate-400">
-                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                    <!-- Client (Admin/Commercial only) -->
+                    @if(auth()->user()->hasRole(['admin', 'commercial']))
+                    <div class="space-y-2">
+                        <label for="contact_id" class="text-sm font-semibold text-gray-700">Client concerné</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <select name="contact_id" id="contact_id" class="w-full pl-12 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer font-medium">
+                                <option value="">Sélectionner un client (Optionnel)</option>
+                                @foreach($contacts as $contact)
+                                    <option value="{{ $contact->id }}" {{ (request('contact_id') == $contact->id) ? 'selected' : '' }}>
+                                        {{ $contact->nom_complet }} ({{ $contact->entreprise ?? 'Particulier' }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- Description -->
+                    <div class="space-y-2">
+                        <label for="description" class="text-sm font-semibold text-gray-700">Description détaillée <span class="text-red-500">*</span></label>
+                        <textarea name="description" id="description" rows="6" required
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-gray-400 font-medium resize-none"
+                            placeholder="Veuillez décrire le problème rencontré, les étapes pour le reproduire et tout autre détail pertinent..."></textarea>
+                        @error('description') <p class="text-xs text-red-500 font-medium">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <!-- Section 2: Pièces jointes & Métadonnées -->
+                <div class="p-8 sm:p-10 bg-gray-50/50 space-y-8">
+                    <div class="flex flex-col sm:flex-row gap-8">
+                        <!-- Catégorie -->
+                        <div class="w-full sm:w-1/2 space-y-2">
+                            <label class="text-sm font-semibold text-gray-700">Catégorie</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                @foreach(['technical' => 'Technique', 'billing' => 'Facturation', 'commercial' => 'Commercial', 'feature' => 'Suggestion'] as $val => $label)
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="category" value="{{ $val }}" class="peer sr-only" {{ $val === 'technical' ? 'checked' : '' }}>
+                                    <div class="px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 text-center hover:bg-gray-50 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition-all shadow-sm">
+                                        {{ $label }}
                                     </div>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Upload File -->
+                        <div class="w-full sm:w-1/2 space-y-2">
+                            <label class="text-sm font-semibold text-gray-700">Pièce jointe</label>
+                            <div class="relative group">
+                                <input type="file" name="attachment" id="attachment" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <div class="w-full px-6 py-8 bg-white border-2 border-dashed border-gray-200 rounded-xl text-center group-hover:border-indigo-400 group-hover:bg-indigo-50/10 transition-all">
+                                    <div class="text-indigo-500 mb-2">
+                                        <svg class="mx-auto h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-700" id="file_label">
+                                        Cliquez ou glissez un fichier ici
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, PDF (Max 5Mo)</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+
+                <!-- Footer Actions -->
+                <div class="px-8 py-6 bg-gray-50 flex items-center justify-between sm:px-10">
+                    <a href="{{ route('tickets.index') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                        Annuler
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-indigo-600 border border-transparent rounded-xl font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02]">
+                        <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        Envoyer le ticket
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <script>
     document.getElementById('attachment').addEventListener('change', function(e) {
-        const fileName = e.target.files[0] ? e.target.files[0].name : '';
-        const nameDisplay = document.getElementById('file-name');
-        const container = document.getElementById('file-name-container');
-        
-        if (fileName) {
-            nameDisplay.textContent = fileName;
-            container.classList.remove('hidden');
-        } else {
-            container.classList.add('hidden');
+        if (e.target.files[0]) {
+            document.getElementById('file_label').innerHTML = '<span class="text-indigo-600 font-semibold">' + e.target.files[0].name + '</span> sélectionné';
         }
     });
-
-    // Subject Focus Label Toggle
-    const subjInput = document.getElementById('subject');
-    subjInput.addEventListener('focus', () => {
-        document.getElementById('subject-label').classList.add('text-indigo-600');
-    });
-    subjInput.addEventListener('blur', () => {
-        if(!subjInput.value) document.getElementById('subject-label').classList.remove('text-indigo-600');
-    });
 </script>
-
-<style>
-    @keyframes fade-in {
-        from { opacity: 0; transform: scale(0.9); }
-        to { opacity: 1; transform: scale(1.1); }
-    }
-    .animate-fade-in {
-        animation: fade-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-</style>
 @endsection
