@@ -15,7 +15,7 @@
 
 @section('content')
 <div class="w-full flex flex-col" x-data="{ 
-    viewMode: '{{ request('view', session('opportunities_view_mode', 'pipeline')) }}', 
+    viewMode: '{{ request('view', 'pipeline') }}', 
     showFilters: {{ request()->anyFilled(['search', 'commercial_id', 'stade', 'amount_min', 'amount_max', 'date_close_start', 'date_close_end']) ? 'true' : 'false' }},
     switchView(mode) {
         this.viewMode = mode;
@@ -25,7 +25,13 @@
         url.searchParams.set('view', mode);
         window.history.pushState({}, '', url);
     }
-}">
+}" x-init="
+    // Ensure view mode is set from URL on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('view')) {
+        viewMode = urlParams.get('view');
+    }
+">
     
     <!-- Header professionnel, Métriques clés, Barre de contrôles, Panneau de filtres -->
     <div class="flex-shrink-0 max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
@@ -196,8 +202,14 @@
         isDragging: false,
         initKanban() {
             @if(!auth()->user()->isSupport())
-            // Only initialize drag-and-drop on desktop (screen width >= 640px)
-            if (window.innerWidth >= 640) {
+            // Detect if device is mobile/touch-enabled
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                           ('ontouchstart' in window) || 
+                           (navigator.maxTouchPoints > 0) ||
+                           window.innerWidth < 640;
+            
+            // Only initialize drag-and-drop on desktop (non-touch devices)
+            if (!isMobile) {
                 const kanbanContainers = document.querySelectorAll('.kanban-list');
                 const self = this;
                 kanbanContainers.forEach(container => {
@@ -206,8 +218,9 @@
                         animation: 200,
                         ghostClass: 'sortable-ghost',
                         dragClass: 'sortable-drag',
-                        // Disable on mobile touch devices
-                        forceFallback: false,
+                        delay: 0,
+                        delayOnTouchOnly: true,
+                        touchStartThreshold: 5,
                         onStart: function() {
                             self.isDragging = true;
                         },
@@ -222,6 +235,9 @@
                         }
                     });
                 });
+            } else {
+                // On mobile, ensure cards are clickable but not draggable
+                console.log('Mobile detected - drag-and-drop disabled');
             }
             @endif
         },
@@ -264,6 +280,18 @@
     .kanban-list { min-height: 100px; }
     .sortable-ghost { opacity: 0.5; }
     .sortable-drag { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    
+    /* Prevent drag interference on mobile */
+    @media (max-width: 639px) {
+        .kanban-card {
+            touch-action: pan-y pan-x !important;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .kanban-list {
+            touch-action: pan-y pan-x !important;
+        }
+    }
     
     .line-clamp-2 {
         display: -webkit-box;
