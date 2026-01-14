@@ -101,16 +101,25 @@
             </div>
             
             <!-- Mobile menu -->
-            <div x-show="mobileMenuOpen" x-transition class="md:hidden py-4 space-y-3">
-                <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium">Fonctionnalités</a>
-                <a href="#avantages" @click="mobileMenuOpen = false" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium">Avantages</a>
-                <a href="#contact" @click="mobileMenuOpen = false" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium">Contact</a>
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="block px-4 py-2 gradient-primary text-white rounded-lg font-semibold text-center">Mon Espace</a>
-                @else
-                    <a href="{{ route('login') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-semibold">Connexion</a>
-                    <a href="{{ route('access.request') }}" class="block px-4 py-2 gradient-primary text-white rounded-lg font-semibold text-center">Créer un compte</a>
-                @endauth
+            <div x-show="mobileMenuOpen" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-2"
+                 class="md:hidden bg-white border-t border-gray-200 shadow-lg">
+                <div class="py-3 px-4 space-y-2">
+                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">Fonctionnalités</a>
+                    <a href="#avantages" @click="mobileMenuOpen = false" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">Avantages</a>
+                    <a href="#contact" @click="mobileMenuOpen = false" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">Contact</a>
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="block px-4 py-2.5 gradient-primary text-white rounded-lg font-semibold text-center shadow-sm">Mon Espace</a>
+                    @else
+                        <a href="{{ route('login') }}" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-semibold transition-colors">Connexion</a>
+                        <a href="{{ route('access.request') }}" class="block px-4 py-2.5 gradient-primary text-white rounded-lg font-semibold text-center shadow-sm">Créer un compte</a>
+                    @endauth
+                </div>
             </div>
         </div>
     </nav>
