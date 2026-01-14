@@ -28,7 +28,6 @@
     @if($showLink)
     <li>
         <a href="{{ route($link['route']) }}" 
-           @click="sidebarOpen = false"
            class="group flex items-center gap-x-2.5 rounded-lg py-1.5 px-2.5 text-xs font-medium leading-6 transition-all duration-200 
            {{ request()->routeIs($link['route']) || request()->routeIs($link['route'].'*') 
                 ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20 translate-x-1' 
@@ -51,7 +50,6 @@
 @foreach($adminLinks as $link)
 <li>
     <a href="{{ route($link['route']) }}" 
-       @click="sidebarOpen = false"
        class="group flex items-center justify-between rounded-lg py-1.5 px-2.5 text-xs font-medium leading-6 transition-all duration-200 
        {{ request()->routeIs($link['route']) || request()->routeIs($link['route'].'*') 
             ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20 translate-x-1' 

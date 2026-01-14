@@ -15,6 +15,7 @@
     <style>
         .iti { width: 100%; }
         .iti__flag-container { z-index: 10; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 @php
@@ -57,11 +58,13 @@ if (auth()->check()) {
             notif.read_at = new Date();
         }
     }
-}" @close-sidebar.window="sidebarOpen = false">
+}" 
+x-init="sidebarOpen = false"
+@close-sidebar.window="sidebarOpen = false">
     @include('layouts.partials._notification_modal')
 
     <!-- Mobile Sidebar Backdrop -->
-    <div x-show="sidebarOpen" class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
+    <div x-show="sidebarOpen" x-cloak class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
         <div x-show="sidebarOpen" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/80"></div>
 
         <div class="fixed inset-0 flex">
