@@ -7,18 +7,18 @@
     
     <!-- Header -->
     <div class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                <div class="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
-                        <h1 class="text-2xl font-bold text-gray-900">Calendrier</h1>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Calendrier</h1>
                     </div>
-                    <button @click="showEventModal = true" class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow-sm transition-colors">
+                    <button @click="showEventModal = true" class="px-3 py-1.5 bg-indigo-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-indigo-700 flex items-center space-x-2 shadow-sm transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -26,33 +26,33 @@
                     </button>
                 </div>
 
-                <div class="flex items-center space-x-3">
-                    <button @click="goToToday()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                    <button @click="goToToday()" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                         Aujourd'hui
                     </button>
                     
                     <div class="flex items-center border border-gray-300 rounded-lg bg-white">
-                        <button @click="previousPeriod()" class="px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button @click="previousPeriod()" class="px-2 sm:px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                             </svg>
                         </button>
-                        <div class="px-4 py-2 text-sm font-semibold text-gray-900 border-x border-gray-300 min-w-[200px] text-center" x-text="currentPeriodLabel"></div>
-                        <button @click="nextPeriod()" class="px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-900 border-x border-gray-300 min-w-[160px] sm:min-w-[200px] text-center" x-text="currentPeriodLabel"></div>
+                        <button @click="nextPeriod()" class="px-2 sm:px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
                         </button>
                     </div>
 
                     <div class="flex bg-gray-100 rounded-lg p-1">
-                        <button @click="currentView = 'month'" :class="currentView === 'month' ? 'bg-white shadow-sm' : ''" class="px-3 py-1.5 text-sm font-medium rounded-md">
+                        <button @click="currentView = 'month'" :class="currentView === 'month' ? 'bg-white shadow-sm' : ''" class="flex-1 sm:flex-none px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md">
                             Mois
                         </button>
-                        <button @click="currentView = 'week'" :class="currentView === 'week' ? 'bg-white shadow-sm' : ''" class="px-3 py-1.5 text-sm font-medium rounded-md">
+                        <button @click="currentView = 'week'" :class="currentView === 'week' ? 'bg-white shadow-sm' : ''" class="flex-1 sm:flex-none px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md">
                             Semaine
                         </button>
-                        <button @click="currentView = 'day'" :class="currentView === 'day' ? 'bg-white shadow-sm' : ''" class="px-3 py-1.5 text-sm font-medium rounded-md">
+                        <button @click="currentView = 'day'" :class="currentView === 'day' ? 'bg-white shadow-sm' : ''" class="flex-1 sm:flex-none px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md">
                             Jour
                         </button>
                     </div>
@@ -277,12 +277,12 @@
          x-cloak
          class="fixed inset-0 z-50 overflow-y-auto"
          @click.self="showEventModal = false">
-        <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="flex items-center justify-center min-h-screen px-4 sm:px-6">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
             
-            <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+            <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-4 sm:p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Nouvel événement</h3>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Nouvel événement</h3>
                     <button @click="showEventModal = false" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -298,20 +298,20 @@
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
                                 <input x-model="newEvent.startDate" type="date" required
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                       class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Heure de début</label>
                                 <input x-model="newEvent.startTime" type="time" required
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                       class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
                                 <input x-model="newEvent.endDate" type="date" required
