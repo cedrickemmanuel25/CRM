@@ -246,13 +246,7 @@
                         Affichage de <span class="font-medium">{{ $opportunities->firstItem() ?? 0 }}</span> à <span class="font-medium">{{ $opportunities->lastItem() ?? 0 }}</span> sur <span class="font-medium">{{ $opportunities->total() }}</span> opportunités
                     </div>
                     <div class="flex justify-center sm:justify-end">
-                        @php
-                            $paginationParams = request()->query();
-                            if (request()->has('view')) {
-                                $paginationParams['view'] = request('view');
-                            }
-                        @endphp
-                        {{ $opportunities->appends($paginationParams)->links() }}
+                        {{ $opportunities->appends(array_merge(request()->query(), ['view' => request('view', 'pipeline')]))->links() }}
                     </div>
                 </div>
             </div>
