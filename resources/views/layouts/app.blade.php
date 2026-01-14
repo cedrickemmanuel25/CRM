@@ -57,7 +57,7 @@ if (auth()->check()) {
             notif.read_at = new Date();
         }
     }
-}">
+}" @close-sidebar.window="sidebarOpen = false">
     @include('layouts.partials._notification_modal')
 
     <!-- Mobile Sidebar Backdrop -->
