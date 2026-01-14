@@ -78,10 +78,10 @@ if (auth()->check()) {
 
                 <!-- Sidebar Component (Mobile) -->
                 <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
-                    <div class="flex h-16 shrink-0 items-center gap-x-3">
+                    <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 hover:opacity-80 transition-opacity">
                         <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
                         <span class="text-white font-bold text-xl">{{ company_name() }}</span>
-                    </div>
+                    </a>
                     <nav class="flex flex-1 flex-col">
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
                             <li>
@@ -99,10 +99,10 @@ if (auth()->check()) {
     <!-- Static Sidebar for Desktop -->
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-[18%] lg:flex-col">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-100 border-r border-gray-200 px-6 pb-4 custom-scrollbar">
-            <div class="flex h-16 shrink-0 items-center gap-x-3 mt-4">
+            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 mt-4 hover:opacity-80 transition-opacity">
                 <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
                 <span class="text-gray-900 font-black text-xl tracking-tight">{{ company_name() }}</span>
-            </div>
+            </a>
 
             <nav class="flex flex-1 flex-col mt-4">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
