@@ -3,8 +3,8 @@
     <input type="hidden" name="parent_type" value="App\Models\Contact">
     <input type="hidden" name="parent_id" value="{{ $contact->id }}">
     
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6">
-        <div class="md:col-span-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+        <div>
             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Type d'activité</label>
             <select name="type" class="block w-full border-gray-200 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500/20 sm:text-sm transition-all px-4 py-2.5">
                 <option value="appel">Appel Téléphonique</option>
@@ -14,11 +14,11 @@
                 <option value="note">Note Interne</option>
             </select>
         </div>
-        <div class="md:col-span-4">
+        <div>
             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Date</label>
             <input type="date" name="date_activite" value="{{ date('Y-m-d') }}" class="block w-full border-gray-200 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500/20 sm:text-sm transition-all px-4 py-2.5">
         </div>
-        <div class="md:col-span-4">
+        <div>
             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Durée (min)</label>
             <input type="number" name="duree" placeholder="15" step="5" class="block w-full border-gray-200 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500/20 sm:text-sm transition-all px-4 py-2.5">
         </div>
@@ -34,8 +34,8 @@
         <textarea name="contenu" rows="4" class="block w-full border-gray-200 rounded-2xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500/20 sm:text-sm transition-all px-4 py-3" placeholder="Compte-rendu détaillé de l'échange..."></textarea>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8 items-end">
-        <div class="md:col-span-6">
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-8 items-stretch sm:items-end">
+        <div class="flex-1">
             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Pièce Jointe</label>
             <div class="flex items-center justify-center w-full">
                 <label class="flex flex-col items-center justify-center w-full h-12 border-2 border-gray-200 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-white transition-colors">
@@ -47,8 +47,8 @@
                 </label>
             </div>
         </div>
-        <div class="md:col-span-6 flex justify-end">
-            <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent shadow-lg text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+        <div class="flex justify-end sm:justify-start">
+            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 border border-transparent shadow-lg text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
                 Enregistrer l'activité
             </button>
         </div>
