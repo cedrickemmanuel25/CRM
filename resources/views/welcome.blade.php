@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         
@@ -61,7 +62,7 @@
 </head>
 <body class="bg-gray-50" x-data="{ mobileMenuOpen: false }">
     <!-- Navigation -->
-    <nav class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+    <nav class="fixed w-full top-0 z-50 transition-all duration-300 nav-glass shadow-sm" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center space-x-2 sm:space-x-3">
