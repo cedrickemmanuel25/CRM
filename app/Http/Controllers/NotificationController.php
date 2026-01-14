@@ -15,6 +15,25 @@ class NotificationController extends Controller
         return view('notifications.index', compact('notifications'));
     }
 
+    public function fetch()
+    {
+        $user = Auth::user();
+        $count = $user->unreadNotifications->count();
+        $notifications = $user->unreadNotifications->take(5)->map(function ($n) {
+            return [
+                'id' => $n->id,
+                'data' => $n->data,
+                'created_at' => $n->created_at,
+                'read_at' => $n->read_at
+            ];
+        });
+
+        return response()->json([
+            'count' => $count,
+            'notifications' => $notifications
+        ]);
+    }
+
     public function markAsRead(Request $request, $id = null)
     {
         if ($id) {

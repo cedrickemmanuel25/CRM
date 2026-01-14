@@ -142,6 +142,7 @@ Route::middleware('auth')->group(function () {
     
     // Notifications Module
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/fetch', [App\Http\Controllers\NotificationController::class, 'fetch'])->name('notifications.fetch');
     Route::get('/notifications/read/{id?}', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markRead');
     Route::delete('/notifications/clear', [App\Http\Controllers\NotificationController::class, 'destroyAll'])->name('notifications.clear');

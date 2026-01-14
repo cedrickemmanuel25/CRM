@@ -2,6 +2,19 @@
     open: false, 
     count: {{ auth()->user()->unreadNotifications->count() }},
     notifications: @js(auth()->user()->unreadNotifications->take(5)),
+    init() {
+        setInterval(() => {
+            this.pollNotifications();
+        }, 30000);
+    },
+    pollNotifications() {
+        fetch('{{ route('notifications.fetch') }}')
+            .then(response => response.json())
+            .then(data => {
+                this.count = data.count;
+                this.notifications = data.notifications;
+            });
+    },
     markAsRead(id) {
         fetch('/notifications/' + id + '/read', {
             method: 'POST',
