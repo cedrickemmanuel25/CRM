@@ -200,16 +200,14 @@
     <!-- Scrollable Content Area for Pipeline/List Views -->
     <div x-data="{
         isDragging: false,
+        isTouchDevice: false,
         initKanban() {
-            @if(!auth()->user()->isSupport())
-            // Detect if device is mobile/touch-enabled
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                           ('ontouchstart' in window) || 
-                           (navigator.maxTouchPoints > 0) ||
-                           window.innerWidth < 640;
+            // Detect if device supports touch
+            this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
             
-            // Only initialize drag-and-drop on desktop (non-touch devices)
-            if (!isMobile) {
+            @if(!auth()->user()->isSupport())
+            // Only initialize drag-and-drop on NON-touch devices
+            if (!this.isTouchDevice) {
                 const kanbanContainers = document.querySelectorAll('.kanban-list');
                 const self = this;
                 kanbanContainers.forEach(container => {
@@ -218,9 +216,6 @@
                         animation: 200,
                         ghostClass: 'sortable-ghost',
                         dragClass: 'sortable-drag',
-                        delay: 0,
-                        delayOnTouchOnly: true,
-                        touchStartThreshold: 5,
                         onStart: function() {
                             self.isDragging = true;
                         },
@@ -236,8 +231,12 @@
                     });
                 });
             } else {
-                // On mobile, ensure cards are clickable but not draggable
-                console.log('Mobile detected - drag-and-drop disabled');
+                // On touch devices, ensure cards are not draggable
+                const kanbanCards = document.querySelectorAll('.kanban-card');
+                kanbanCards.forEach(card => {
+                    card.style.pointerEvents = 'auto';
+                    card.style.touchAction = 'pan-x pan-y';
+                });
             }
             @endif
         },
@@ -281,15 +280,16 @@
     .sortable-ghost { opacity: 0.5; }
     .sortable-drag { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
     
-    /* Prevent drag interference on mobile */
-    @media (max-width: 639px) {
+    /* Ensure touch scrolling works on mobile */
+    @media (max-width: 640px) {
         .kanban-card {
-            touch-action: pan-y pan-x !important;
+            touch-action: auto !important;
+            pointer-events: auto !important;
             user-select: none;
-            -webkit-user-drag: none;
         }
-        .kanban-list {
-            touch-action: pan-y pan-x !important;
+        .overflow-x-auto {
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x pan-y;
         }
     }
     
