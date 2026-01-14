@@ -66,7 +66,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <a href="/" class="flex items-center space-x-2 sm:space-x-3">
+                    <a href="{{ url('/') }}" class="flex items-center space-x-2 sm:space-x-3">
                         <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-8 sm:h-10 w-auto">
                         <span class="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
                     </a>
