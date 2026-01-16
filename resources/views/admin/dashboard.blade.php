@@ -244,3 +244,78 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueData = @json($data['charts']['revenue_trend']);
+        
+        // Convert object logic to array if needed, but since it's a collection of objects:
+        // revenueData structure: [{"month": "2023-01", "total": 0}, ...]
+        
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.values(revenueData).map(item => {
+                    const date = new Date(item.month + '-01'); // Force first day
+                    return date.toLocaleDateString('fr-FR', { month: 'short' });
+                }),
+                datasets: [{
+                    label: "Chiffre d'Affaires",
+                    data: Object.values(revenueData).map(item => item.total),
+                    backgroundColor: '#4F46E5', // Indigo 600
+                    borderRadius: 4,
+                    barThickness: 24,
+                    hoverBackgroundColor: '#4338ca'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1F2937',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(context.raw);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#F3F4F6',
+                            drawBorder: false,
+                        },
+                        ticks: {
+                            font: { family: "'Inter', sans-serif", size: 11 },
+                            color: '#9CA3AF',
+                            callback: function(value) {
+                                if (value >= 1000) return (value/1000) + 'k';
+                                return value;
+                            }
+                        },
+                        border: { display: false }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: "'Inter', sans-serif", size: 11 },
+                            color: '#9CA3AF'
+                        },
+                        border: { display: false }
+                    }
+                }
+            }
+        });
+    });
+</script>
+@endpush
