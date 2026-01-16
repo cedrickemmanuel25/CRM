@@ -134,6 +134,22 @@ class DashboardController extends Controller
             ->orderByRaw("FIELD(stade, 'prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu')")
             ->get();
 
+        // Status Distribution (Totals for the Commercial)
+        $rawTrend = Opportunity::byCommercial($user->id)->select(
+                'stade',
+                DB::raw('count(*) as total')
+            )
+            ->groupBy('stade')
+            ->get()
+            ->keyBy('stade');
+
+        $stages = ['prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu'];
+        $structuredTrend = [];
+        foreach ($stages as $stage) {
+            $structuredTrend[$stage] = (int) ($rawTrend->get($stage)->total ?? 0);
+        }
+        $data['charts']['status_distribution'] = $structuredTrend;
+
         $data['lists'] = [
             'recent_activities' => Activity::with('parent')->where('user_id', $user->id)->latest()->take(5)->get(),
             'hot_opportunities' => Opportunity::byCommercial($user->id)->whereIn('stade', ['proposition', 'negociation'])->latest()->take(5)->get(),
@@ -162,7 +178,22 @@ class DashboardController extends Controller
             'tickets_in_progress' => \App\Models\Ticket::where('status', '!=', 'resolved')->count(),
             'interactions_in_progress' => Activity::where('type', 'interaction')->where('statut', '!=', 'termine')->count(),
             'resolved_today' => \App\Models\Ticket::where('status', 'resolved')->whereDate('updated_at', today())->count(),
+            'total_active_tickets' => \App\Models\Ticket::where('status', '!=', 'closed')->count(),
         ];
+
+        // Ticket Status Distribution
+        $data['charts']['ticket_status'] = \App\Models\Ticket::select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->get()
+            ->pluck('count', 'status')
+            ->toArray();
+
+        // Ticket Priority Distribution
+        $data['charts']['ticket_priority'] = \App\Models\Ticket::select('priority', DB::raw('count(*) as count'))
+            ->groupBy('priority')
+            ->get()
+            ->pluck('count', 'priority')
+            ->toArray();
 
         $data['lists'] = [
             'recent_tickets' => \App\Models\Ticket::with(['contact', 'assignee'])->latest()->take(10)->get(),

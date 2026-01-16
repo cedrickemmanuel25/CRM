@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Fix for MySQL index length on shared hosting
+        Schema::defaultStringLength(191);
+
         // Force locale to French
         app()->setLocale('fr');
         \Carbon\Carbon::setLocale('fr');
