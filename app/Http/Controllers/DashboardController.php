@@ -74,33 +74,20 @@ class DashboardController extends Controller
             ];
         });
 
-        // 2. Trend by Status (Last 6 months, breakdown by stage)
+        // 2. Distribution by Status (Totals)
         $rawTrend = Opportunity::select(
-                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
                 'stade',
                 DB::raw('count(*) as total')
             )
-            ->where('created_at', '>=', now()->startOfMonth()->subMonths(5))
-            ->groupBy('month', 'stade')
-            ->get();
+            ->groupBy('stade')
+            ->get()
+            ->keyBy('stade');
 
-        $months = collect([]);
-        for ($i = 5; $i >= 0; $i--) {
-            $months->push(now()->startOfMonth()->subMonths($i)->format('Y-m'));
-        }
-
-        // Initialize structure: Month => [Stage => Total]
-        $structuredTrend = $months->mapWithKeys(function ($month) {
-            return [$month => [
-                'prospection' => 0, 'qualification' => 0, 'proposition' => 0, 
-                'negociation' => 0, 'gagne' => 0, 'perdu' => 0
-            ]];
-        })->toArray();
-
-        foreach ($rawTrend as $record) {
-            if (isset($structuredTrend[$record->month])) {
-                $structuredTrend[$record->month][$record->stade] = (float) $record->total;
-            }
+        $stages = ['prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu'];
+        
+        $structuredTrend = [];
+        foreach ($stages as $stage) {
+            $structuredTrend[$stage] = (int) ($rawTrend->get($stage)->total ?? 0);
         }
 
         $data['charts']['revenue_trend'] = $structuredTrend;

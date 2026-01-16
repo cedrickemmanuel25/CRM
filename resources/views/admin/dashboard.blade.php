@@ -93,7 +93,7 @@
             <!-- Revenue Evolution (Left - 2/3) -->
             <div class="lg:col-span-2 bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6 flex flex-col">
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-lg font-bold text-gray-900">Évolution par Statut</h3>
+                    <h3 class="text-lg font-bold text-gray-900">Répartition par Statut</h3>
                     <div class="flex space-x-2 text-xs font-medium">
                         <span class="px-2 py-1 bg-gray-100 text-gray-500 rounded cursor-pointer hover:bg-gray-200">Mois</span>
                         <span class="px-2 py-1 text-gray-400 cursor-pointer hover:text-gray-500">Année</span>
@@ -233,52 +233,36 @@
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
         const revenueRawData = @json($data['charts']['revenue_trend']);
         
-        // Extract Months (Keys)
-        const labels = Object.keys(revenueRawData).map(month => {
-             const date = new Date(month + '-01'); 
-             return date.toLocaleDateString('fr-FR', { month: 'short' });
-        });
-
-        // Prepare Datasets for each stage
         const stagesConfig = [
-            { key: 'prospection', label: 'Prospection', color: '#3B82F6' }, // Blue 500
-            { key: 'qualification', label: 'Qualification', color: '#6366F1' }, // Indigo 500
-            { key: 'proposition', label: 'Proposition', color: '#F97316' }, // Orange 500
-            { key: 'negociation', label: 'Négociation', color: '#10B981' }, // Emerald 500
-            { key: 'gagne', label: 'Gagné', color: '#16A34A' }, // Green 600
-            { key: 'perdu', label: 'Perdu', color: '#9CA3AF' }  // Gray 400
+            { key: 'prospection', label: 'Prospection', color: '#3B82F6' },
+            { key: 'qualification', label: 'Qualification', color: '#6366F1' },
+            { key: 'proposition', label: 'Proposition', color: '#F97316' },
+            { key: 'negociation', label: 'Négociation', color: '#10B981' },
+            { key: 'gagne', label: 'Gagné', color: '#16A34A' },
+            { key: 'perdu', label: 'Perdu', color: '#9CA3AF' }
         ];
 
-        const datasets = stagesConfig.map(stage => {
-            return {
-                label: stage.label,
-                data: Object.values(revenueRawData).map(monthData => Number(monthData[stage.key] || 0)),
-                backgroundColor: stage.color,
-                borderRadius: 2, // Slight rounding
-                maxBarThickness: 32,
-            };
-        });
-        
+        const labels = stagesConfig.map(s => s.label);
+        const dataValues = stagesConfig.map(s => Number(revenueRawData[s.key] || 0));
+        const backgroundColors = stagesConfig.map(s => s.color);
+
         const revenueChart = new Chart(revenueCtx, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: datasets
+                datasets: [{
+                    label: 'Opportunités',
+                    data: dataValues,
+                    backgroundColor: backgroundColors,
+                    borderRadius: 6,
+                    maxBarThickness: 50,
+                }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { 
-                        display: true,
-                        position: 'bottom',
-                        labels: { 
-                            usePointStyle: true,
-                            boxWidth: 8,
-                            padding: 20,
-                            font: { size: 11, family: "'Inter', sans-serif" }
-                        }
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#1F2937',
                         padding: 12,
@@ -299,7 +283,7 @@
                 },
                 scales: {
                     y: {
-                        stacked: true, // Enable Stacking
+                        stacked: false,
                         beginAtZero: true,
                         grid: {
                             color: '#F3F4F6',
@@ -315,7 +299,7 @@
                         border: { display: false }
                     },
                     x: {
-                        stacked: true, // Enable Stacking
+                        stacked: false,
                         grid: { display: false },
                         ticks: {
                             font: { family: "'Inter', sans-serif", size: 11 },
