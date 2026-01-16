@@ -8,7 +8,12 @@
         }, 30000);
     },
     pollNotifications() {
-        fetch('{{ route('notifications.fetch') }}')
+        fetch('{{ route('notifications.fetch') }}', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 this.count = data.count;

@@ -71,7 +71,8 @@ class AuthController extends Controller
             // Redirection selon le rôle
             $dashboardRoute = $user->getDashboardRoute();
             
-            return redirect()->intended(route($dashboardRoute))
+            // On force la redirection vers le dashboard pour éviter de tomber sur une URL d'API (JSON) capturée par intended()
+            return redirect()->route($dashboardRoute)
                 ->with('success', "Bienvenue {$user->name}!");
         }
 
