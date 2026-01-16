@@ -110,7 +110,7 @@ class AttributionService
      */
     protected function findLeastLoadedCommercial(): ?User
     {
-        return User::commercial()
+        return User::commercials()
             ->withCount(['opportunities' => function ($query) {
                 $query->active();
             }])
