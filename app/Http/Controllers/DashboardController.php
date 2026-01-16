@@ -51,34 +51,56 @@ class DashboardController extends Controller
     {
         // KPIs
         $data['kpis'] = [
-            'total_leads_opps' => Opportunity::inProgress()->count(), // Changed to active opportunities as per image
+            'total_leads_opps' => Opportunity::inProgress()->count(),
             'global_forecast_revenue' => Opportunity::inProgress()->sum('montant_estime'),
             'contacts_count' => Contact::count(),
             'pending_tasks_count' => \App\Models\Task::where('statut', '!=', 'done')->count(),
             'avg_conversion_rate' => $this->calculateConversionRate(),
         ];
 
-        // Pipeline by Stage (Dynamic)
-        $data['charts']['pipeline_by_stage'] = Opportunity::select('stade', DB::raw('count(*) as count'), DB::raw('sum(montant_estime) as total_amount'))
+        // 1. Pipeline by Stage (Ensure all stages exist)
+        $rawPipeline = Opportunity::select('stade', DB::raw('count(*) as count'), DB::raw('sum(montant_estime) as total_amount'))
             ->groupBy('stade')
-            ->orderByRaw("FIELD(stade, 'prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu')")
-            ->get();
+            ->get()
+            ->keyBy('stade');
 
-        // Revenue Trend (Last 6 months)
-        $data['charts']['revenue_trend'] = Opportunity::select(
+        $stages = ['prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu'];
+        $data['charts']['pipeline_by_stage'] = collect($stages)->map(function ($stage) use ($rawPipeline) {
+            $record = $rawPipeline->get($stage);
+            return (object) [
+                'stade' => $stage,
+                'count' => $record ? $record->count : 0,
+                'total_amount' => $record ? $record->total_amount : 0,
+            ];
+        });
+
+        // 2. Revenue Trend (Last 6 months, fill missing with 0)
+        $rawTrend = Opportunity::select(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
                 DB::raw('sum(montant_estime) as total')
             )
             ->where('stade', 'gagne')
-            ->where('created_at', '>=', now()->subMonths(6))
+            ->where('created_at', '>=', now()->startOfMonth()->subMonths(5))
             ->groupBy('month')
-            ->orderBy('month', 'asc')
-            ->get();
+            ->get()
+            ->keyBy('month');
+
+        $months = collect([]);
+        for ($i = 5; $i >= 0; $i--) {
+            $months->push(now()->startOfMonth()->subMonths($i)->format('Y-m'));
+        }
+
+        $data['charts']['revenue_trend'] = $months->map(function ($month) use ($rawTrend) {
+            return (object) [
+                'month' => $month,
+                'total' => $rawTrend->get($month)->total ?? 0,
+            ];
+        });
 
         $data['lists'] = [
             'recent_activities' => Activity::with(['user', 'parent'])->latest()->take(10)->get(),
             'commercial_performance' => $this->getCommercialPerformance(),
-            'latest_opportunities' => Opportunity::with('contact')->latest()->take(6)->get(), // Added for the bottom table
+            'latest_opportunities' => Opportunity::with('contact')->latest()->take(6)->get(),
             'tasks' => \App\Models\Task::where('statut', '!=', 'done')->latest()->take(5)->get(),
             'overdue_tasks' => \App\Models\Task::with(['related', 'assignee'])
                 ->where('statut', '!=', 'done')
