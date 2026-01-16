@@ -108,4 +108,10 @@ class Contact extends Model
         // This is a basic mutator as requested.
         $this->attributes['telephone'] = preg_replace('/[^0-9+]/', '', $value);
     }
+
+    // Accessors
+    public function getNomCompletAttribute(): string
+    {
+        return trim("{$this->prenom} {$this->nom}");
+    }
 }
