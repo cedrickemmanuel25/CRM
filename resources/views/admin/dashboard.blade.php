@@ -1,280 +1,244 @@
 @extends('layouts.app')
 
-@section('title', 'Tableau de bord Administrateur')
+@section('title', 'Tableau de bord - Nexus CRM')
 
 @section('content')
-<div class="min-h-screen bg-gray-50/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<div class="min-h-screen bg-gray-50/50 p-6">
+    <div class="max-w-[1600px] mx-auto space-y-8">
         
         <!-- Header Section -->
-        <div class="md:flex md:items-center md:justify-between">
-            <div class="flex-1 min-w-0">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900">
                     Tableau de bord
                 </h2>
-                <p class="mt-2 text-sm text-gray-500">
-                    Performance globale, alertes et tendances du système.
-                </p>
+                <!-- Optional Subtitle if needed 
+                <p class="mt-1 text-sm text-gray-500">Vue d'ensemble de vos performances</p>
+                -->
             </div>
-            <div class="mt-4 flex md:mt-0 md:ml-4 space-x-3">
-                <a href="{{ route('reports.print') }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    <svg class="-ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            <div class="flex items-center gap-3">
+                <a href="{{ route('reports.pdf') }}" class="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all">
+                    <svg class="mr-2 h-4 w-4 text-gray-500" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
-                    Imprimer
+                    Exporter au format PDF
                 </a>
-                <a href="{{ route('reports.export', ['type' => 'opportunities']) }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                <a href="{{ route('reports.export', ['type' => 'opportunities']) }}" class="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all">
+                    <svg class="mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    Export CSV
+                    Exporter au format CSV
                 </a>
             </div>
         </div>
 
         <!-- KPIs Grid -->
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- KPIs from $data['kpis'] -->
-            <div class="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:shadow-md">
-                <dt>
-                    <div class="absolute rounded-xl bg-indigo-50 p-3">
-                        <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <!-- Revenu Total -->
+            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Revenu total</p>
+                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-indigo-50 transition-colors">
+                        <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <p class="ml-16 truncate text-sm font-medium text-gray-500">CA Prévisionnel Global</p>
-                </dt>
-                <dd class="ml-16 flex items-baseline">
-                    <p class="text-2xl font-bold text-gray-900">{{ format_currency($data['kpis']['global_forecast_revenue']) }}</p>
-                </dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <p class="text-3xl font-bold text-gray-900">{{ format_currency($data['kpis']['global_forecast_revenue']) }}</p>
+                </div>
             </div>
 
-            <div class="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:shadow-md">
-                <dt>
-                    <div class="absolute rounded-xl bg-purple-50 p-3">
-                        <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            <!-- Opportunités actives -->
+            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Opportunités actives</p>
+                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-blue-50 transition-colors">
+                        <svg class="h-5 w-5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                    <p class="ml-16 truncate text-sm font-medium text-gray-500">Total Leads/Opps</p>
-                </dt>
-                <dd class="ml-16 flex items-baseline">
-                    <p class="text-2xl font-bold text-gray-900">{{ $data['kpis']['total_leads_opps'] }}</p>
-                </dd>
+                </div>
+                 <div class="flex items-baseline gap-2">
+                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['total_leads_opps'] }}</p>
+                </div>
             </div>
 
-            <div class="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:shadow-md">
-                <dt>
-                    <div class="absolute rounded-xl bg-blue-50 p-3">
-                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <!-- Contacts -->
+            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Contacts</p>
+                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-emerald-50 transition-colors">
+                         <svg class="h-5 w-5 text-gray-400 group-hover:text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
-                    <p class="ml-16 truncate text-sm font-medium text-gray-500">Utilisateurs Actifs</p>
-                </dt>
-                <dd class="ml-16 flex items-baseline">
-                    <p class="text-2xl font-bold text-gray-900">{{ $data['kpis']['active_users_count'] }}</p>
-                </dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['contacts_count'] }}</p>
+                </div>
             </div>
 
-            <div class="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:shadow-md">
-                <dt>
-                    <div class="absolute rounded-xl bg-emerald-50 p-3">
-                         <svg class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <!-- Tâches en attente -->
+            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Tâches en attente</p>
+                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-amber-50 transition-colors">
+                         <svg class="h-5 w-5 text-gray-400 group-hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <p class="ml-16 truncate text-sm font-medium text-gray-500">Taux Conversion Moy.</p>
-                </dt>
-                <dd class="ml-16 flex items-baseline">
-                    <p class="text-2xl font-bold text-gray-900">{{ $data['kpis']['avg_conversion_rate'] }}%</p>
-                </dd>
-            </div>
-        </div>
-
-        <!-- Secondary KPIs -->
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-             <div class="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:shadow-md border-l-4 {{ $data['kpis']['overdue_tasks_all'] > 0 ? 'border-red-500' : 'border-emerald-500' }}">
-                <dt>
-                    <div class="absolute rounded-xl {{ $data['kpis']['overdue_tasks_all'] > 0 ? 'bg-red-50' : 'bg-emerald-50' }} p-3">
-                         <svg class="h-6 w-6 {{ $data['kpis']['overdue_tasks_all'] > 0 ? 'text-red-600' : 'text-emerald-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <p class="ml-16 truncate text-sm font-medium text-gray-500">Tâches en retard (Global)</p>
-                </dt>
-                <dd class="ml-16 flex items-baseline">
-                    <p class="text-2xl font-bold {{ $data['kpis']['overdue_tasks_all'] > 0 ? 'text-red-600' : 'text-gray-900' }}">{{ $data['kpis']['overdue_tasks_all'] }}</p>
-                </dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['pending_tasks_count'] }}</p>
+                </div>
             </div>
         </div>
 
+        <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left & Center: Pipeline and Performance (2 Cols) -->
-            <div class="lg:col-span-2 space-y-8">
-                <!-- Pipeline Visualization -->
-                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5">
-                    <h3 class="text-base font-semibold text-gray-900 mb-6">Pipeline Commercial Global</h3>
-                    <div class="space-y-4">
-                        @foreach($data['charts']['pipeline_by_stage'] as $stage)
-                            @php
-                                $totalOps = $data['kpis']['total_leads_opps'] ?: 1;
-                                $percentage = round(($stage->count / $totalOps) * 100);
-                                $colors = [
-                                    'prospection' => 'bg-indigo-500',
-                                    'qualification' => 'bg-purple-500',
-                                    'proposition' => 'bg-pink-500',
-                                    'negociation' => 'bg-amber-500',
-                                    'gagne' => 'bg-emerald-500',
-                                    'perdu' => 'bg-rose-500',
-                                ];
-                                $colorClass = $colors[$stage->stade] ?? 'bg-slate-500';
-                            @endphp
-                            <div>
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span class="font-medium text-slate-700 capitalize">{{ $stage->stade }}</span>
-                                    <span class="text-slate-500">{{ $stage->count }} opportunités • {{ format_currency($stage->total_amount) }}</span>
-                                </div>
-                                <div class="w-full bg-slate-100 rounded-full h-2">
-                                    <div class="{{ $colorClass }} h-2 rounded-full transition-all duration-1000" style="width: {{ $percentage }}%"></div>
-                                </div>
-                            </div>
-                        @endforeach
+            
+            <!-- Revenue Evolution (Left - 2/3) -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6 flex flex-col">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-lg font-bold text-gray-900">Évolution du Chiffre d'Affaires</h3>
+                    <div class="flex space-x-2 text-xs font-medium">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-500 rounded cursor-pointer hover:bg-gray-200">Mois</span>
+                        <span class="px-2 py-1 text-gray-400 cursor-pointer hover:text-gray-500">Année</span>
                     </div>
                 </div>
-
-                <!-- Revenue Trend -->
-                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5">
-                    <h3 class="text-base font-semibold text-gray-900 mb-6">Évolution Mensuelle du CA (Won)</h3>
-                    <div class="flex items-end justify-between h-48 space-x-2">
+                
+                <div class="flex-1 flex items-end justify-between space-x-4 h-64 mt-4">
+                    @php
+                        $maxRevenue = (float) $data['charts']['revenue_trend']->max('total') ?: 1;
+                    @endphp
+                    @foreach($data['charts']['revenue_trend'] as $trend)
                         @php
-                            $maxRevenue = (float) $data['charts']['revenue_trend']->max('total') ?: 1;
+                            $height = round(($trend->total / $maxRevenue) * 100);
                         @endphp
-                        @foreach($data['charts']['revenue_trend'] as $trend)
-                            @php
-                                $height = round(($trend->total / $maxRevenue) * 100);
-                            @endphp
-                            <div class="flex-1 flex flex-col items-center group">
-                                <div class="relative w-full bg-indigo-50 rounded-t-lg group-hover:bg-indigo-100 transition-colors" style="height: {{ $height }}%">
-                                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                                        {{ format_currency($trend->total) }}
-                                    </div>
-                                </div>
-                                <span class="text-[10px] text-gray-400 mt-2 rotate-45 origin-left truncate w-12">{{ \Carbon\Carbon::parse($trend->month . '-01')->translatedFormat('M Y') }}</span>
+                        <div class="flex-1 flex flex-col items-center group relative">
+                            <!-- Tooltip -->
+                             <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-bold py-1.5 px-2.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg pointer-events-none">
+                                {{ format_currency($trend->total) }}
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <!-- Commercial Performance -->
-                <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="text-base font-semibold text-gray-900">Performance des Commerciaux</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commercial</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ventes (Win)</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Pipeline Actif</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-100">
-                                @forelse($data['lists']['commercial_performance'] as $perf)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs">
-                                                {{ substr($perf->name, 0, 1) }}
-                                            </div>
-                                            <div class="ml-3">
-                                                <div class="text-sm font-medium text-gray-900">{{ $perf->name }}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold text-gray-900">
-                                        {{ $perf->won_deals_count }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-indigo-600">
-                                        {{ format_currency($perf->pipeline_value ?? 0) }}
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr><td colspan="3" class="px-6 py-4 text-center text-gray-500 italic text-sm">Pas de données.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            
+                            <!-- Bar -->
+                            <div class="w-full max-w-[40px] bg-[#6366f1] opacity-60 hover:opacity-100 transition-all duration-300 rounded-t-sm" style="height: {{ $height }}%"></div>
+                            
+                            <!-- Label -->
+                            <span class="text-[11px] font-medium text-gray-400 mt-3">{{ \Carbon\Carbon::parse($trend->month . '-01')->translatedFormat('M') }}</span>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 
-            <!-- Right Column: Sidebar Widgets -->
-            <div class="space-y-8">
-                <!-- Latest Users -->
-                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5">
-                    <h3 class="text-base font-semibold text-gray-900 mb-4">Derniers Utilisateurs</h3>
-                    <div class="space-y-4">
-                        @forelse($data['lists']['latest_users'] as $user)
-                        <div class="flex items-center">
-                            <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-xs">
-                                {{ substr($user->name, 0, 1) }}
+            <!-- Pipeline Funnel (Right - 1/3) -->
+            <div class="bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-8">Par Étape</h3>
+                <div class="space-y-6">
+                     @foreach($data['charts']['pipeline_by_stage'] as $stage)
+                        @php
+                            $totalOps = $data['kpis']['total_leads_opps'] ?: 1;
+                            $percentage = round(($stage->count / $totalOps) * 100);
+                            $colors = [
+                                'prospection' => 'bg-blue-500',
+                                'qualification' => 'bg-indigo-500',
+                                'proposition' => 'bg-orange-500', // Matches image style
+                                'negociation' => 'bg-emerald-500',
+                                'gagne' => 'bg-green-600',
+                                'perdu' => 'bg-gray-400',
+                            ];
+                            $dotColor = match($stage->stade) {
+                                'prospection' => 'text-blue-500',
+                                'qualification' => 'text-indigo-500',
+                                'proposition' => 'text-orange-500',
+                                'negociation' => 'text-emerald-500',
+                                'cloture' => 'text-purple-500',
+                                default => 'text-gray-400'
+                            };
+                             $barColor = match($stage->stade) {
+                                'prospection' => 'bg-blue-500',
+                                'qualification' => 'bg-indigo-500',
+                                'proposition' => 'bg-orange-500',
+                                'negociation' => 'bg-emerald-500',
+                                'cloture' => 'bg-purple-500',
+                                default => 'bg-gray-400'
+                            };
+                        @endphp
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full {{ $barColor }}"></span>
+                                    <span class="text-sm font-medium text-gray-600 capitalize">{{ $stage->stade }}</span>
+                                </div>
+                                <span class="text-sm font-bold text-gray-900">{{ $percentage }}%</span>
                             </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">{{ $user->name }}</p>
-                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">{{ $user->role }}</p>
+                            <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                                <div class="h-full {{ $barColor }} rounded-full" style="width: {{ $percentage }}%"></div>
                             </div>
                         </div>
-                        @empty
-                        <p class="text-xs text-gray-500 italic">Aucun utilisateur récent.</p>
-                        @endforelse
-                    </div>
+                    @endforeach
                 </div>
+            </div>
+        </div>
 
-                <!-- Recent Activities -->
-                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5">
-                    <h3 class="text-base font-semibold text-gray-900 mb-6">Activités Récentes</h3>
-                    <div class="flow-root">
-                        <ul class="-mb-8">
-                            @forelse($data['lists']['recent_activities'] as $activity)
-                            <li>
-                                <div class="relative pb-8">
-                                    @if(!$loop->last)
-                                    <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-100" aria-hidden="true"></span>
-                                    @endif
-                                    <div class="relative flex space-x-3">
-                                        <div class="h-8 w-8 rounded-full bg-slate-50 flex items-center justify-center border border-gray-100 font-bold text-slate-400 text-xs italic font-serif">
-                                            i
-                                        </div>
-                                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p class="text-xs text-gray-500">
-                                                    {{ $activity->description }}
-                                                </p>
-                                            </div>
-                                            <div class="text-right text-[10px] whitespace-nowrap text-gray-400">
-                                                {{ $activity->date_activite->diffForHumans() }}
-                                            </div>
-                                        </div>
+        <!-- Last Opportunities Table -->
+        <div class="bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">Dernières Opportunités</h3>
+                <a href="{{ route('opportunities.index') }}" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-600 rounded-lg transition-colors">
+                    Voir tout
+                </a>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-white border-b border-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Opportunité</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Client</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Montant</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Statut</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($data['lists']['latest_opportunities'] as $opp)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-semibold text-gray-900">{{ $opp->titre }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs ring-2 ring-white">
+                                        {{ substr($opp->contact->nom_complet ?? 'N', 0, 1) }}
                                     </div>
+                                    <span class="text-sm font-medium text-gray-600">{{ $opp->contact->nom_complet ?? 'N/A' }}</span>
                                 </div>
-                            </li>
-                            @empty
-                            <li class="text-xs text-gray-500 italic">Aucune activité récente.</li>
-                            @endforelse
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Critical Tasks -->
-                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5">
-                    <h3 class="text-base font-semibold text-gray-900 mb-4">Tâches Critiques</h3>
-                    <ul class="space-y-4">
-                        @forelse($data['lists']['tasks'] as $task)
-                        <li class="relative pl-4 border-l-2 {{ $task->due_date < now() ? 'border-red-500' : 'border-indigo-500' }}">
-                            <p class="text-sm font-medium text-gray-900 truncate">{{ $task->titre }}</p>
-                            <div class="flex items-center justify-between mt-1">
-                                <span class="text-[10px] {{ $task->due_date < now() ? 'text-red-600 font-bold' : 'text-gray-500' }}">
-                                    {{ \Carbon\Carbon::parse($task->due_date)->translatedFormat('d F Y') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-bold text-gray-900">{{ format_currency($opp->montant_estime) }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @php
+                                    $statusClasses = [
+                                        'prospection' => 'bg-blue-50 text-blue-700 border-blue-100',
+                                        'qualification' => 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                                        'proposition' => 'bg-orange-50 text-orange-700 border-orange-100',
+                                        'negociation' => 'bg-amber-50 text-amber-700 border-amber-100',
+                                        'gagne' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
+                                        'perdu' => 'bg-gray-50 text-gray-600 border-gray-100',
+                                    ];
+                                    $class = $statusClasses[$opp->stade] ?? 'bg-gray-50 text-gray-600 border-gray-100';
+                                @endphp
+                                <span class="px-3 py-1 rounded-full text-xs font-bold border {{ $class }} capitalize">
+                                    {{ $opp->stade }}
                                 </span>
-                                <span class="text-[10px] text-gray-400">{{ $task->assignee->name ?? 'N/A' }}</span>
-                            </div>
-                        </li>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $opp->created_at->translatedFormat('d F') }}
+                            </td>
+                        </tr>
                         @empty
-                        <li class="text-xs text-gray-500 italic">Aucune tâche critique.</li>
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500 italic">Aucune opportunité récente.</td>
+                        </tr>
                         @endforelse
-                    </ul>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

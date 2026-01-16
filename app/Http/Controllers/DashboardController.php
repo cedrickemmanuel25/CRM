@@ -51,13 +51,11 @@ class DashboardController extends Controller
     {
         // KPIs
         $data['kpis'] = [
-            'total_leads_opps' => Opportunity::count(),
+            'total_leads_opps' => Opportunity::inProgress()->count(), // Changed to active opportunities as per image
             'global_forecast_revenue' => Opportunity::inProgress()->sum('montant_estime'),
+            'contacts_count' => Contact::count(),
+            'pending_tasks_count' => \App\Models\Task::where('statut', '!=', 'done')->count(),
             'avg_conversion_rate' => $this->calculateConversionRate(),
-            'active_users_count' => User::count(), // Assuming all in DB are active for now
-            'overdue_tasks_all' => \App\Models\Task::where('statut', '!=', 'done')
-                ->where('due_date', '<', now())
-                ->count(),
         ];
 
         // Pipeline by Stage (Dynamic)
@@ -80,6 +78,7 @@ class DashboardController extends Controller
         $data['lists'] = [
             'recent_activities' => Activity::with(['user', 'parent'])->latest()->take(10)->get(),
             'commercial_performance' => $this->getCommercialPerformance(),
+            'latest_opportunities' => Opportunity::with('contact')->latest()->take(6)->get(), // Added for the bottom table
             'tasks' => \App\Models\Task::where('statut', '!=', 'done')->latest()->take(5)->get(),
             'overdue_tasks' => \App\Models\Task::with(['related', 'assignee'])
                 ->where('statut', '!=', 'done')
