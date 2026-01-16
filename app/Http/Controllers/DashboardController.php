@@ -211,6 +211,7 @@ class DashboardController extends Controller
                 ->take(5)
                 ->get(),
             'recent_activities' => Activity::with(['user', 'parent'])->whereDate('date_activite', today())->latest()->get(),
+            'daily_activities' => Activity::with(['user', 'parent'])->whereDate('date_activite', today())->latest()->get(),
         ];
         
         $data['contacts'] = Contact::orderBy('nom')->get();
