@@ -25,13 +25,13 @@ class DashboardController extends Controller
 
         if ($user->isAdmin()) {
             $data = $this->getAdminStats($data);
-            $viewName = 'dashboard';
+            $viewName = 'admin.dashboard';
         } elseif ($user->isCommercial()) {
             $data = $this->getCommercialStats($user, $data);
-            $viewName = 'dashboard';
+            $viewName = 'commercial.dashboard';
         } elseif ($user->isSupport()) {
             $data = $this->getSupportStats($user, $data);
-            $viewName = 'dashboard';
+            $viewName = 'support.dashboard';
         } else {
             $viewName = 'dashboard';
             // Default safe data to avoid crashes if role unknown
