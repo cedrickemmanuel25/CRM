@@ -265,7 +265,7 @@
                 }),
                 datasets: [{
                     label: "Chiffre d'Affaires",
-                    data: Object.values(revenueData).map(item => item.total),
+                    data: Object.values(revenueData).map(item => Number(item.total)), // Force numeric cast
                     backgroundColor: '#4F46E5', // Indigo 600
                     borderRadius: 4,
                     barThickness: 24,
@@ -299,8 +299,10 @@
                             font: { family: "'Inter', sans-serif", size: 11 },
                             color: '#9CA3AF',
                             callback: function(value) {
-                                if (value >= 1000) return (value/1000) + 'k';
-                                return value;
+                                // Ensure value is treated as number for formatting
+                                const num = Number(value);
+                                if (num >= 1000) return (num/1000) + 'k';
+                                return num;
                             }
                         },
                         border: { display: false }
