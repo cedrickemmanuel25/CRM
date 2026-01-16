@@ -95,7 +95,7 @@ class DashboardController extends Controller
                 'prospection' => 0, 'qualification' => 0, 'proposition' => 0, 
                 'negociation' => 0, 'gagne' => 0, 'perdu' => 0
             ]];
-        });
+        })->toArray();
 
         foreach ($rawTrend as $record) {
             if (isset($structuredTrend[$record->month])) {
