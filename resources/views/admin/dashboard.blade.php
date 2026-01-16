@@ -100,28 +100,8 @@
                     </div>
                 </div>
                 
-                <div class="flex-1 flex items-end justify-between space-x-4 h-64 mt-4">
-                    @php
-                        $maxRevenue = (float) $data['charts']['revenue_trend']->max('total') ?: 1;
-                    @endphp
-                    @foreach($data['charts']['revenue_trend'] as $trend)
-                        @php
-                            $height = round(($trend->total / $maxRevenue) * 100);
-                        @endphp
-                        <div class="flex-1 flex flex-col items-center group relative">
-                            <!-- Tooltip -->
-                             <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-bold py-1.5 px-2.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg pointer-events-none">
-                                {{ format_currency($trend->total) }}
-                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
-                            </div>
-                            
-                            <!-- Bar -->
-                            <div class="w-full max-w-[40px] bg-[#6366f1] opacity-60 hover:opacity-100 transition-all duration-300 rounded-t-sm" style="height: {{ $height }}%"></div>
-                            
-                            <!-- Label -->
-                            <span class="text-[11px] font-medium text-gray-400 mt-3">{{ \Carbon\Carbon::parse($trend->month . '-01')->translatedFormat('M') }}</span>
-                        </div>
-                    @endforeach
+                <div class="flex-1 mt-4 relative h-[300px]">
+                    <canvas id="revenueChart"></canvas>
                 </div>
             </div>
 
