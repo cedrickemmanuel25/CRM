@@ -93,7 +93,7 @@
             <!-- Revenue Evolution (Left - 2/3) -->
             <div class="lg:col-span-2 bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6 flex flex-col">
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-lg font-bold text-gray-900">Évolution du Chiffre d'Affaires</h3>
+                    <h3 class="text-lg font-bold text-gray-900">Évolution par Statut</h3>
                     <div class="flex space-x-2 text-xs font-medium">
                         <span class="px-2 py-1 bg-gray-100 text-gray-500 rounded cursor-pointer hover:bg-gray-200">Mois</span>
                         <span class="px-2 py-1 text-gray-400 cursor-pointer hover:text-gray-500">Année</span>
@@ -107,7 +107,7 @@
 
             <!-- Pipeline Funnel (Right - 1/3) -->
             <div class="bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-8">Par Étape</h3>
+                <h3 class="text-lg font-bold text-gray-900 mb-8">Par Statut</h3>
                 <div class="space-y-6">
                      @foreach($data['charts']['pipeline_by_stage'] as $stage)
                         @php
@@ -229,7 +229,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Revenue Chart (Stacked by Stage)
+        // Status Chart (Stacked by Status)
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
         const revenueRawData = @json($data['charts']['revenue_trend']);
         
@@ -290,7 +290,7 @@
                                     label += ': ';
                                 }
                                 if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(context.parsed.y);
+                                    label += context.parsed.y + ' opp.';
                                 }
                                 return label;
                             }
@@ -309,7 +309,6 @@
                             font: { family: "'Inter', sans-serif", size: 11 },
                             color: '#9CA3AF',
                             callback: function(value) {
-                                if (value >= 1000) return (value/1000) + 'k';
                                 return value;
                             }
                         },

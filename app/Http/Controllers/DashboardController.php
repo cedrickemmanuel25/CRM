@@ -74,11 +74,11 @@ class DashboardController extends Controller
             ];
         });
 
-        // 2. Revenue Trend (Last 6 months, breakdown by stage)
+        // 2. Trend by Status (Last 6 months, breakdown by stage)
         $rawTrend = Opportunity::select(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
                 'stade',
-                DB::raw('sum(montant_estime) as total')
+                DB::raw('count(*) as total')
             )
             ->where('created_at', '>=', now()->startOfMonth()->subMonths(5))
             ->groupBy('month', 'stade')
