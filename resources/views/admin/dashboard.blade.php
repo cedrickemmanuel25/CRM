@@ -249,47 +249,77 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Revenue Chart
+        // Revenue Chart (Stacked by Stage)
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueData = @json($data['charts']['revenue_trend']);
+        const revenueRawData = @json($data['charts']['revenue_trend']);
         
-        // Convert object logic to array if needed, but since it's a collection of objects:
-        // revenueData structure: [{"month": "2023-01", "total": 0}, ...]
+        // Extract Months (Keys)
+        const labels = Object.keys(revenueRawData).map(month => {
+             const date = new Date(month + '-01'); 
+             return date.toLocaleDateString('fr-FR', { month: 'short' });
+        });
+
+        // Prepare Datasets for each stage
+        const stagesConfig = [
+            { key: 'prospection', label: 'Prospection', color: '#3B82F6' }, // Blue 500
+            { key: 'qualification', label: 'Qualification', color: '#6366F1' }, // Indigo 500
+            { key: 'proposition', label: 'Proposition', color: '#F97316' }, // Orange 500
+            { key: 'negociation', label: 'Négociation', color: '#10B981' }, // Emerald 500
+            { key: 'gagne', label: 'Gagné', color: '#16A34A' }, // Green 600
+            { key: 'perdu', label: 'Perdu', color: '#9CA3AF' }  // Gray 400
+        ];
+
+        const datasets = stagesConfig.map(stage => {
+            return {
+                label: stage.label,
+                data: Object.values(revenueRawData).map(monthData => Number(monthData[stage.key] || 0)),
+                backgroundColor: stage.color,
+                borderRadius: 2, // Slight rounding
+                maxBarThickness: 32,
+            };
+        });
         
         const revenueChart = new Chart(revenueCtx, {
             type: 'bar',
             data: {
-                labels: Object.values(revenueData).map(item => {
-                    const date = new Date(item.month + '-01'); // Force first day
-                    return date.toLocaleDateString('fr-FR', { month: 'short' });
-                }),
-                datasets: [{
-                    label: "Chiffre d'Affaires",
-                    data: Object.values(revenueData).map(item => Number(item.total)), // Force numeric cast
-                    backgroundColor: '#4F46E5', // Indigo 600
-                    borderRadius: 4,
-                    barThickness: 24,
-                    hoverBackgroundColor: '#4338ca'
-                }]
+                labels: labels,
+                datasets: datasets
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
+                    legend: { 
+                        display: true,
+                        position: 'bottom',
+                        labels: { 
+                            usePointStyle: true,
+                            boxWidth: 8,
+                            padding: 20,
+                            font: { size: 11, family: "'Inter', sans-serif" }
+                        }
+                    },
                     tooltip: {
                         backgroundColor: '#1F2937',
                         padding: 12,
                         cornerRadius: 8,
                         callbacks: {
                             label: function(context) {
-                                return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(context.raw);
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(context.parsed.y);
+                                }
+                                return label;
                             }
                         }
                     }
                 },
                 scales: {
                     y: {
+                        stacked: true, // Enable Stacking
                         beginAtZero: true,
                         grid: {
                             color: '#F3F4F6',
@@ -299,15 +329,14 @@
                             font: { family: "'Inter', sans-serif", size: 11 },
                             color: '#9CA3AF',
                             callback: function(value) {
-                                // Ensure value is treated as number for formatting
-                                const num = Number(value);
-                                if (num >= 1000) return (num/1000) + 'k';
-                                return num;
+                                if (value >= 1000) return (value/1000) + 'k';
+                                return value;
                             }
                         },
                         border: { display: false }
                     },
                     x: {
+                        stacked: true, // Enable Stacking
                         grid: { display: false },
                         ticks: {
                             font: { family: "'Inter', sans-serif", size: 11 },

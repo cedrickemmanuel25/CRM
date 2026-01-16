@@ -74,28 +74,36 @@ class DashboardController extends Controller
             ];
         });
 
-        // 2. Revenue Trend (Last 6 months, fill missing with 0)
+        // 2. Revenue Trend (Last 6 months, breakdown by stage)
         $rawTrend = Opportunity::select(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+                'stade',
                 DB::raw('sum(montant_estime) as total')
             )
-            ->where('stade', 'gagne')
             ->where('created_at', '>=', now()->startOfMonth()->subMonths(5))
-            ->groupBy('month')
-            ->get()
-            ->keyBy('month');
+            ->groupBy('month', 'stade')
+            ->get();
 
         $months = collect([]);
         for ($i = 5; $i >= 0; $i--) {
             $months->push(now()->startOfMonth()->subMonths($i)->format('Y-m'));
         }
 
-        $data['charts']['revenue_trend'] = $months->map(function ($month) use ($rawTrend) {
-            return (object) [
-                'month' => $month,
-                'total' => $rawTrend->get($month)->total ?? 0,
-            ];
+        // Initialize structure: Month => [Stage => Total]
+        $structuredTrend = $months->mapWithKeys(function ($month) {
+            return [$month => [
+                'prospection' => 0, 'qualification' => 0, 'proposition' => 0, 
+                'negociation' => 0, 'gagne' => 0, 'perdu' => 0
+            ]];
         });
+
+        foreach ($rawTrend as $record) {
+            if (isset($structuredTrend[$record->month])) {
+                $structuredTrend[$record->month][$record->stade] = (float) $record->total;
+            }
+        }
+
+        $data['charts']['revenue_trend'] = $structuredTrend;
 
         $data['lists'] = [
             'recent_activities' => Activity::with(['user', 'parent'])->latest()->take(10)->get(),
