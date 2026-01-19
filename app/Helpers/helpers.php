@@ -14,6 +14,7 @@ if (!function_exists('currency_symbol')) {
             'USD' => '$',
             'EUR' => '€',
             'GBP' => '£',
+            'XOF', 'XAF' => 'FCFA',
             default => '€',
         };
     }

@@ -66,6 +66,7 @@
                             class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 block w-full p-2.5 transition-all duration-200 hover:border-slate-400 shadow-sm">
                             <option value="EUR" {{ ($settings['currency'] ?? '') == 'EUR' ? 'selected' : '' }}>EUR (€)</option>
                             <option value="USD" {{ ($settings['currency'] ?? '') == 'USD' ? 'selected' : '' }}>USD ($)</option>
+                            <option value="XOF" {{ ($settings['currency'] ?? '') == 'XOF' ? 'selected' : '' }}>Franc CFA (FCFA)</option>
                         </select>
                     </div>
 
