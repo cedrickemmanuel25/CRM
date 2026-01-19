@@ -68,14 +68,9 @@ class OpportunityController extends Controller
             $query->where('probabilite', '<=', $request->probabilite_max);
         }
         
-        // Sécurisation accès commercial
+        // Sécurisation accès commercial : Uniquement ses propres opportunités
         if (auth()->user()->isCommercial()) {
-            $query->where(function($q) {
-                $q->byCommercial(auth()->id())
-                  ->orWhereHas('commercial', function($qAdmin) {
-                      $qAdmin->where('role', 'admin');
-                  });
-            });
+            $query->byCommercial(auth()->id());
         }
 
         // Clone query for pipeline stats
@@ -213,9 +208,8 @@ class OpportunityController extends Controller
     public function show(Opportunity $opportunity, Request $request)
     {
         if (auth()->user()->isCommercial()) {
-            $isAdminOwned = $opportunity->commercial && $opportunity->commercial->isAdmin();
-            if ($opportunity->commercial_id !== auth()->id() && !$isAdminOwned) {
-                abort(403);
+            if ($opportunity->commercial_id !== auth()->id()) {
+                abort(403, 'Vous n\'êtes pas autorisé à voir cette opportunité.');
             }
         }
 

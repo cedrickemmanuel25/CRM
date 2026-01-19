@@ -18,6 +18,11 @@ class ContactController extends Controller
         // Relation Eager Loading
         $query->with('owner');
 
+        // Sécurisation accès commercial
+        if (auth()->user()->isCommercial()) {
+            $query->where('user_id_owner', auth()->id());
+        }
+
         // Search scope (nom, prenom, email, entreprise)
         if ($request->filled('search')) {
             $query->search($request->search);
@@ -147,6 +152,11 @@ class ContactController extends Controller
      */
     public function show(Contact $contact, Request $request)
     {
+        // Autorisation : Admin voit tout, Commercial voit seulement les siens
+        if (auth()->user()->isCommercial() && $contact->user_id_owner !== auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à voir ce contact.');
+        }
+
         // Chargement des relations pour la vue détaillée
         $contact->load([
             'owner',

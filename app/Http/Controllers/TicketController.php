@@ -28,12 +28,19 @@ class TicketController extends Controller
         }
 
         // Logic by role
-        if (!auth()->user()->isAdmin() && !auth()->user()->isSupport()) {
-             // Commercials/Others only see tickets they created or assigned to their contacts?
-             // For now, let's keep it Support-centric as per prompt.
-             // If not support/admin, only see own created tickets.
+        if (auth()->user()->isCommercial()) {
+             // Commercials see tickets they created OR tickets linked to THEIR contacts
+             $query->where(function($q) {
+                 $q->where('user_id', auth()->id())
+                   ->orWhereHas('contact', function($qContact) {
+                       $qContact->where('user_id_owner', auth()->id());
+                   });
+             });
+        } elseif (!auth()->user()->isAdmin() && !auth()->user()->isSupport()) {
+             // Other roles (visitor/etc) only see own created if any
              $query->where('user_id', auth()->id());
         }
+        // Admin and Support see everything
 
         $tickets = $query->latest()->paginate(15);
         $users = User::whereIn('role', ['admin', 'support'])->get();
@@ -85,6 +92,16 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
+        // Autorisation : Admin/Support voient tout. Commercial voit les siens ou ceux de ses contacts.
+        if (auth()->user()->isCommercial()) {
+            $isOwner = $ticket->user_id === auth()->id();
+            $isContactOwner = $ticket->contact && $ticket->contact->user_id_owner === auth()->id();
+            
+            if (!$isOwner && !$isContactOwner) {
+                abort(403, 'Vous n\'êtes pas autorisé à voir ce ticket.');
+            }
+        }
+
         $ticket->load(['contact', 'assignee', 'creator', 'activities.user']);
         $users = User::whereIn('role', ['admin', 'support'])->get();
         
@@ -129,6 +146,10 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
+        if (!auth()->user()->isAdmin() && $ticket->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $ticket->delete();
         return redirect()->route('tickets.index')->with('success', 'Ticket supprimé.');
     }

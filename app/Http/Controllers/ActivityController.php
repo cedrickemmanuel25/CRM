@@ -12,8 +12,14 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        $activities = Activity::with(['user', 'parent'])
-            ->latest('date_activite')
+        $query = Activity::with(['user', 'parent']);
+
+        // Sécurisation accès commercial
+        if (auth()->user()->isCommercial()) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $activities = $query->latest('date_activite')
             ->paginate(20);
 
         return view('activities.index', compact('activities'));

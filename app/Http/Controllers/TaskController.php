@@ -175,6 +175,11 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
+        // Autorisation : Admin voit tout, les autres voient seulement ce qui leur est assigné ou créé
+        if (!auth()->user()->isAdmin() && $task->assigned_to !== auth()->id() && $task->created_by !== auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à accéder à cette tâche.');
+        }
+
         $task->load(['assignee', 'creator', 'related']);
         return view('tasks.show', compact('task'));
     }
@@ -228,7 +233,10 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        // Policy check needed in real app
+        // Autorisation : Admin ou Assigné/Créateur
+        if (!auth()->user()->isAdmin() && $task->assigned_to !== auth()->id() && $task->created_by !== auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier cette tâche.');
+        }
 
         $validated = $request->validate([
             'titre' => 'sometimes|string|max:255',
@@ -245,6 +253,11 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        // Autorisation : Admin ou Créateur (Généralement seul le créateur peut supprimer)
+        if (!auth()->user()->isAdmin() && $task->created_by !== auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à supprimer cette tâche.');
+        }
+
         $task->delete();
         return redirect()->back()->with('success', 'Tâche supprimée.');
     }
