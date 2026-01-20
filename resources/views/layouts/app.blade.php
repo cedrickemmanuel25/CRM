@@ -109,9 +109,9 @@ x-init="sidebarOpen = false"
     <!-- Static Sidebar for Desktop -->
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-[18%] lg:flex-col">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-100 border-r border-gray-200 px-6 pb-4 custom-scrollbar">
-            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 mt-4 hover:opacity-80 transition-opacity">
-                <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
-                <span class="text-gray-900 font-black text-xl tracking-tight">{{ company_name() }}</span>
+            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 mt-4 hover:opacity-80 transition-opacity whitespace-nowrap overflow-hidden">
+                <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
+                <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
             <nav class="flex flex-1 flex-col mt-4">
@@ -201,10 +201,6 @@ x-init="sidebarOpen = false"
             @yield('content')
         </main>
     </div>
-
-    @stack('scripts')
-</body>
-</html>
 
     @stack('scripts')
 </body>
