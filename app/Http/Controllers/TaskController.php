@@ -17,160 +17,89 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Task::with(['assignee', 'related']);
-
-        // Filtres
-        if ($request->filled('assigned_to')) {
-            $query->byUser($request->assigned_to);
-        }
-        if ($request->filled('priority')) {
-            $query->where('priority', $request->priority);
-        }
-        if ($request->filled('due_date')) {
-            $query->whereDate('due_date', $request->due_date);
-        }
-
-        // Par défaut, voir ses propres tâches sauf si admin
-        if (!auth()->user()->isAdmin() && !$request->filled('assigned_to')) {
-             $query->byUser(auth()->id());
-        } elseif ($request->filled('assigned_to')) {
-            $query->byUser($request->assigned_to);
-        }
-
-        // Filter by Status if list view requested specific columns
-        if ($request->filled('statut')) {
-            $query->where('statut', $request->statut);
-        }
-
-        // Date Range Filtering
-        if ($request->filled('date_start')) {
-            $query->whereDate('due_date', '>=', $request->date_start);
-        }
-        if ($request->filled('date_end')) {
-            $query->whereDate('due_date', '<=', $request->date_end);
-        }
-        
-        // Quick Filters
-        // Filtre "En retard"
-        if ($request->filled('overdue') && $request->overdue == 1) {
-            $query->overdue();
-        }
-        
-        // Filtre "À venir"
-        if ($request->filled('upcoming') && $request->upcoming == 1) {
-            $query->where('due_date', '>=', now())
-                  ->where('statut', '!=', 'done');
-        }
-        
-        // Filtre "Mes tâches" (raccourci rapide)
-        if ($request->filled('my_tasks') && $request->my_tasks == 1) {
-            $query->byUser(auth()->id());
-        }
-        
-        // Fetch all matching tasks for Kanban grouping
-        $allTasks = $query->orderBy('due_date')->get();
-        
-        $tasks = [
-            'todo' => $allTasks->where('statut', 'todo'),
-            'in_progress' => $allTasks->where('statut', 'in_progress'),
-            'done' => $allTasks->where('statut', 'done'),
-        ];
-        
-        $users = User::all();
-        $contacts = \App\Models\Contact::orderBy('nom')->get();
-        $opportunities = \App\Models\Opportunity::active()->orderBy('titre')->get();
-
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('tasks._board', compact('tasks', 'users', 'contacts', 'opportunities'))->render(),
-                'total_tasks' => $tasks['todo']->count() + $tasks['in_progress']->count() + $tasks['done']->count(),
-                'tasks_due_today' => \App\Models\Task::whereDate('due_date', today())->count(),
-                'tasks_high_priority' => \App\Models\Task::where('priority', 'high')->where('statut', '!=', 'done')->count()
-            ]);
-        }
-
-        return view('tasks.index', compact('tasks', 'users', 'contacts', 'opportunities'));
+        return redirect()->route('calendar');
     }
 
     /**
-     * Vue Calendrier (Tâches + Activités)
+     * Vue Calendrier Unifiée (Calendrier + Tâches)
      */
     public function calendar(Request $request)
     {
         $currentUser = auth()->user();
         
-        // Tasks Query
-        $tasksQuery = Task::whereNotNull('due_date');
+        // 1. Get Categories/Users for filters
+        $users = User::all();
+        $contacts = \App\Models\Contact::orderBy('nom')->get();
+        $opportunities = \App\Models\Opportunity::active()->orderBy('titre')->get();
+
+        // 2. Fetch Tasks for the Board/List
+        $query = Task::with(['assignee', 'related']);
         
+        // Apply filters
+        if ($request->filled('assigned_to')) {
+            $query->byUser($request->assigned_to);
+        }
+        if (!auth()->user()->isAdmin() && !$request->filled('assigned_to')) {
+             $query->byUser(auth()->id());
+        }
+        
+        if ($request->filled('date')) {
+            $query->whereDate('due_date', $request->date);
+        }
+
+        $allTasks = $query->orderBy('due_date')->get();
+        $tasks = [
+            'todo' => $allTasks->where('statut', 'todo'),
+            'in_progress' => $allTasks->where('statut', 'in_progress'),
+            'done' => $allTasks->where('statut', 'done'),
+        ];
+
+        // 3. Events for the Calendar (Full view)
+        $tasksQuery = Task::whereNotNull('due_date');
         if (!$currentUser->isAdmin()) {
             $tasksQuery->where(function($q) use ($currentUser) {
                 $q->where('created_by', $currentUser->id)
-                  ->orWhere('assigned_to', $currentUser->id)
-                  ->orWhere(function($subQ) use ($currentUser) {
-                      $subQ->where('related_type', \App\Models\Contact::class)
-                           ->whereIn('related_id', $currentUser->contacts()->select('id'));
-                  });
+                  ->orWhere('assigned_to', $currentUser->id);
             });
         }
         
-        $tasks = $tasksQuery->get()->map(function ($task) {
-                return [
-                    'id' => $task->id,
-                    'title' => 'T: ' . $task->titre,
-                    'start' => $task->due_date->format('Y-m-d H:i:s'),
-                    'className' => 'bg-indigo-500 text-white border-indigo-600',
-                    'type' => 'task',
-                    'url' => route('tasks.index'), // Or open modal
-                    'extendedProps' => [
-                        'priority' => $task->priority,
-                        'statut' => $task->statut
-                    ]
-                ];
-            });
+        $calendarTasks = $tasksQuery->get()->map(function ($task) {
+            return [
+                'id' => $task->id,
+                'title' => 'T: ' . $task->titre,
+                'start' => $task->due_date->format('Y-m-d H:i:s'),
+                'className' => 'bg-indigo-500 text-white border-indigo-600',
+                'type' => 'task',
+                'extendedProps' => ['priority' => $task->priority, 'statut' => $task->statut]
+            ];
+        });
 
-        // Activities Query
         $activitiesQuery = Activity::query();
-
         if (!$currentUser->isAdmin()) {
-            $activitiesQuery->where(function($q) use ($currentUser) {
-               $q->where('user_id', $currentUser->id) // Created by
-                 ->orWhere(function($subQ) use ($currentUser) {
-                     $subQ->where('parent_type', \App\Models\Contact::class)
-                          ->whereIn('parent_id', $currentUser->contacts()->select('id'));
-                 });
-            });
+            $activitiesQuery->where('user_id', $currentUser->id);
         }
 
-        $activities = $activitiesQuery->get()->map(function ($act) {
-                $colorMap = [
-                    'appel' => 'bg-blue-500 text-white border-blue-600',
-                    'email' => 'bg-purple-500 text-white border-purple-600',
-                    'reunion' => 'bg-amber-500 text-white border-amber-600',
-                    'note' => 'bg-gray-500 text-white border-gray-600',
-                ];
+        $calendarActivities = $activitiesQuery->get()->map(function ($act) {
+            $colorMap = ['appel' => 'bg-blue-500', 'email' => 'bg-purple-500', 'reunion' => 'bg-amber-500', 'note' => 'bg-gray-500'];
+            return [
+                'id' => $act->id,
+                'title' => ucfirst($act->type) . ': ' . $act->description,
+                'start' => $act->date_activite->format('Y-m-d H:i:s'),
+                'className' => ($colorMap[$act->type] ?? 'bg-green-500') . ' text-white',
+                'type' => $act->type
+            ];
+        });
 
-                return [
-                    'id' => $act->id,
-                    'title' => ucfirst($act->type) . ': ' . $act->description,
-                    'start' => $act->date_activite->format('Y-m-d H:i:s'),
-                    'className' => $colorMap[$act->type] ?? 'bg-green-500 text-white border-green-600',
-                    'type' => 'activity',
-                    'activityType' => $act->type,
-                    'extendedProps' => [
-                        'parent' => $act->parent_type ? class_basename($act->parent_type) : null
-                    ]
-                ];
-            });
+        $events = $calendarTasks->concat($calendarActivities);
 
-        $events = $tasks->concat($activities);
-
-        if ($request->wantsJson()) {
-            return response()->json($events);
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('tasks._board', compact('tasks', 'users', 'contacts', 'opportunities'))->render(),
+                'events' => $events
+            ]);
         }
 
-        $users = User::all();
-
-        return view('calendar.index', compact('events', 'users'));
+        return view('calendar.index', compact('events', 'tasks', 'users', 'contacts', 'opportunities'));
     }
 
     public function show(Task $task)
