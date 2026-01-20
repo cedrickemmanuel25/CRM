@@ -11,7 +11,14 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
     <style>
         * { font-family: 'Inter', sans-serif; }
-        .iti { width: 100%; }
+        .iti { 
+            width: 100% !important; 
+            direction: ltr !important;
+        }
+        .iti__flag-container { 
+            left: 0 !important; 
+            right: auto !important;
+        }
         
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }

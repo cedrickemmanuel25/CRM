@@ -13,8 +13,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.css">
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
     <style>
-        .iti { width: 100%; }
-        .iti__flag-container { z-index: 10; }
+        .iti { 
+            width: 100% !important; 
+            direction: ltr !important;
+        }
+        .iti__flag-container { 
+            left: 0 !important; 
+            right: auto !important;
+            z-index: 10; 
+        }
         [x-cloak] { display: none !important; }
     </style>
 </head>
