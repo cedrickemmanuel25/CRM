@@ -264,6 +264,7 @@
                 countrySearch: false,
                 allowDropdown: false,
                 showSelectedDialCode: true,
+                separateDialCode: true,
                 utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
             });
 
