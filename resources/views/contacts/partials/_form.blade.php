@@ -259,14 +259,8 @@
         
         if (phoneInput && fullPhoneInput) {
             const iti = window.intlTelInput(phoneInput, {
-                initialCountry: "auto",
-                geoIpLookup: callback => {
-                    fetch("https://ipapi.co/json")
-                        .then(res => res.json())
-                        .then(data => callback(data.country_code))
-                        .catch(() => callback("fr"));
-                },
-                preferredCountries: ["fr", "be", "ch", "ca"],
+                initialCountry: "ci",
+                onlyCountries: ["ci"],
                 utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
             });
 

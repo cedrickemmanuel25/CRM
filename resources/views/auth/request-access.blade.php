@@ -174,8 +174,8 @@
         const input = document.querySelector("#telephone_input");
         const hiddenInput = document.querySelector("#telephone");
         const iti = window.intlTelInput(input, {
-            initialCountry: "fr",
-            preferredCountries: ["fr", "be", "ch", "ca"],
+            initialCountry: "ci",
+            onlyCountries: ["ci"],
             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
         });
 
