@@ -176,6 +176,7 @@
         const iti = window.intlTelInput(input, {
             initialCountry: "ci",
             onlyCountries: ["ci"],
+            countrySearch: false,
             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
         });
 
