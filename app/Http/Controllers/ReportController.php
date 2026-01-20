@@ -33,7 +33,13 @@ class ReportController extends Controller
             if ($type === 'opportunities') {
                 fputcsv($file, ['ID', 'Titre', 'Montant', 'Stade', 'Probabilité', 'Contact', 'Commercial', 'Date Création'], ';');
                 
-                Opportunity::with(['contact', 'commercial'])->chunk(100, function($opportunities) use ($file) {
+                $query = Opportunity::with(['contact', 'commercial']);
+
+                if (auth()->user()->isCommercial()) {
+                    $query->byCommercial(auth()->id());
+                }
+
+                $query->chunk(100, function($opportunities) use ($file) {
                     foreach ($opportunities as $opp) {
                         fputcsv($file, [
                             $opp->id,
@@ -53,6 +59,10 @@ class ReportController extends Controller
                 fputcsv($file, ['Contact', 'Entreprise', 'Email', 'Téléphone', 'Source', 'Propriétaire', 'Création', 'Statut'], ';');
 
                 $query = Contact::query()->with('owner');
+
+                if (auth()->user()->isCommercial()) {
+                    $query->ownedBy(auth()->id());
+                }
 
                 if (request('search')) {
                     $query->search(request('search'));
@@ -90,7 +100,13 @@ class ReportController extends Controller
             } elseif ($type === 'leads') {
                  fputcsv($file, ['ID', 'Nom', 'Prénom', 'Email', 'Téléphone', 'Entreprise', 'Statut', 'Date Création'], ';');
                  
-                 Contact::where('statut', 'lead')->chunk(100, function($contacts) use ($file) {
+                 $query = Contact::where('statut', 'lead');
+
+                 if (auth()->user()->isCommercial()) {
+                     $query->ownedBy(auth()->id());
+                 }
+
+                 $query->chunk(100, function($contacts) use ($file) {
                     foreach ($contacts as $contact) {
                         fputcsv($file, [
                             $contact->id,
@@ -114,12 +130,22 @@ class ReportController extends Controller
 
     public function printStats()
     {
+        $user = auth()->user();
+        
+        $oppQuery = Opportunity::query();
+        $contactQuery = Contact::where('statut', 'lead');
+
+        if ($user->isCommercial()) {
+            $oppQuery->byCommercial($user->id);
+            $contactQuery->ownedBy($user->id);
+        }
+
         // Reuse Dashboard logic but focused on global stats for print
         $stats = [
-             'pipeline_value' => Opportunity::where('stade', '!=', 'gagne')->where('stade', '!=', 'perdu')->sum('montant_estime'),
-             'won_count' => Opportunity::where('stade', 'gagne')->count(),
-             'lost_count' => Opportunity::where('stade', 'perdu')->count(),
-             'total_leads' => Contact::where('statut', 'lead')->count(),
+             'pipeline_value' => (clone $oppQuery)->whereNotIn('stade', ['gagne', 'perdu'])->sum('montant_estime'),
+             'won_count' => (clone $oppQuery)->where('stade', 'gagne')->count(),
+             'lost_count' => (clone $oppQuery)->where('stade', 'perdu')->count(),
+             'total_leads' => $contactQuery->count(),
              'date' => Carbon::now()->format('d/m/Y H:i'),
         ];
         
@@ -141,14 +167,23 @@ class ReportController extends Controller
     {
         $type = $request->query('type', 'opportunities');
         $date = Carbon::now()->format('d/m/Y');
+        $user = auth()->user();
         
         if ($type === 'opportunities') {
             $title = "Rapport des Opportunités - $date";
-            $data = Opportunity::with(['contact', 'commercial'])->latest()->get();
+            $query = Opportunity::with(['contact', 'commercial']);
+            if ($user->isCommercial()) {
+                $query->byCommercial($user->id);
+            }
+            $data = $query->latest()->get();
             $view = 'reports.pdf_opportunities';
         } else {
             $title = "Rapport des Prospects - $date";
-            $data = Contact::where('statut', 'lead')->latest()->get();
+            $query = Contact::where('statut', 'lead');
+            if ($user->isCommercial()) {
+                $query->ownedBy($user->id);
+            }
+            $data = $query->latest()->get();
             $view = 'reports.pdf_leads';
         }
 
