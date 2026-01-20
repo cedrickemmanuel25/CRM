@@ -339,7 +339,7 @@ class OpportunityController extends Controller
     /**
      * Supprime une opportunité.
      */
-    public function destroy(Opportunity $opportunity)
+    public function destroy(Opportunity $opportunity, Request $request)
     {
         if (auth()->user()->isCommercial() && $opportunity->commercial_id !== auth()->id()) {
             abort(403);
@@ -347,7 +347,7 @@ class OpportunityController extends Controller
 
         $opportunity->delete();
 
-        return redirect()->route('opportunities.index')->with('success', 'Opportunité supprimée.');
+        return redirect()->route('opportunities.index', ['view' => $request->query('view')])->with('success', 'Opportunité supprimée.');
     }
 
     /**
