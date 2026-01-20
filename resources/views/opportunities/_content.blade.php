@@ -56,7 +56,7 @@
                                             <h4 class="text-xs font-bold text-gray-900 hover:text-indigo-600 line-clamp-2">{{ $opp->titre }}</h4>
                                         </a>
                                         @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id === auth()->id()))
-                                        <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $event.currentTarget.querySelector('button'))" class="inline opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $el)" class="inline opacity-0 group-hover:opacity-100 transition-opacity">
                                             @csrf @method('DELETE')
                                             <input type="hidden" name="view" :value="viewMode">
                                             <button type="submit" class="text-gray-400 hover:text-red-600">
@@ -159,7 +159,7 @@
                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                             @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id === auth()->id()))
-                            <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $event.currentTarget.querySelector('button'))" class="inline">
+                            <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $el)" class="inline">
                                 @csrf @method('DELETE')
                                 <input type="hidden" name="view" :value="viewMode">
                                 <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
@@ -250,7 +250,7 @@
                                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </a>
                                         @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id === auth()->id()))
-                                        <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $event.currentTarget.querySelector('button'))" class="inline">
+                                        <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $el)" class="inline">
                                             @csrf @method('DELETE')
                                             <input type="hidden" name="view" :value="viewMode">
                                             <button type="submit" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">

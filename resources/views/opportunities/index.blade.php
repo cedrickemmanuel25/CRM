@@ -260,6 +260,11 @@
                         
                         this.$refs.contentArea.innerHTML = data.html;
                         
+                        // Re-initialize Alpine on the new content
+                        if (window.Alpine) {
+                            window.Alpine.initTree(this.$refs.contentArea);
+                        }
+                        
                         // Restore scroll positions after update
                         setTimeout(() => {
                             const newScrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
@@ -323,10 +328,10 @@
 <script>
     async function updateOpportunityStage(id, stage) {
         try {
-            const response = await axios.patch(`/opportunities/${id}/stage`, {
+            const response = await axios.patch(`{{ url('/opportunities') }}/${id}/stage`, {
                 stade: stage
             }, {
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') }
             });
 
             if (response.data.success) {
@@ -343,9 +348,10 @@
         if (!confirm('Êtes-vous sûr de vouloir supprimer cette opportunité ?')) return;
 
         try {
-            const response = await axios.delete(`/opportunities/${id}`, {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const response = await axios.delete(`{{ url('/opportunities') }}/${id}`, {
                 headers: { 
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-CSRF-TOKEN': token,
                     'Accept': 'application/json'
                 }
             });
@@ -369,7 +375,8 @@
             }
         } catch (error) {
             console.error('Erreur:', error);
-            alert('Erreur lors de la suppression.');
+            const msg = error.response?.data?.message || error.message;
+            alert('Erreur lors de la suppression : ' + msg);
         }
     }
 </script>
