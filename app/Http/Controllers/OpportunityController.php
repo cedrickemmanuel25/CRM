@@ -347,6 +347,10 @@ class OpportunityController extends Controller
 
         $opportunity->delete();
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Opportunité supprimée.']);
+        }
+
         return redirect()->route('opportunities.index', ['view' => $request->view])->with('success', 'Opportunité supprimée.');
     }
 

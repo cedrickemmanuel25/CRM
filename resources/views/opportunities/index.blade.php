@@ -330,22 +330,46 @@
             });
 
             if (response.data.success) {
-                // Optional: Show toast or just rely on polling/reload
-                // If we rely on polling, we don't strictly need to reload, but reloading ensures state consistency
-                // For smoother experience, we can suppress reload if we trust the drag
-                // But data updates (amounts etc) might need refresh.
-                // Let's trigger a manual refresh of the content area if possible, or just wait for poll.
-                // For now, reload is safest but disruptive.
-                // Let's NOT reload and let the drop stay, assume success. Polling will catch up details.
-                // BUT, if we don't reload, the stats in the header won't update immediately.
-                // Given the requirement "dynamically updated", maybe we should fetch fresh data immediately.
-                
-                // For now, let's keep the user comfortable without full reload
+                // assume success for smooth experience
             }
         } catch (error) {
             console.error('Erreur:', error);
             alert('Erreur lors de la mise à jour.');
             window.location.reload();
+        }
+    }
+
+    async function deleteOpportunity(id, button) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette opportunité ?')) return;
+
+        try {
+            const response = await axios.delete(`/opportunities/${id}`, {
+                headers: { 
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.data.success) {
+                // Find and remove the appropriate UI element
+                const card = button.closest('.kanban-card');
+                const row = button.closest('tr');
+                const mobileCard = button.closest('.bg-white.rounded-lg.border.border-gray-200.p-4');
+
+                if (card) {
+                    card.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => card.remove(), 300);
+                } else if (row) {
+                    row.classList.add('opacity-0');
+                    setTimeout(() => row.remove(), 300);
+                } else if (mobileCard) {
+                    mobileCard.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => mobileCard.remove(), 300);
+                }
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Erreur lors de la suppression.');
         }
     }
 </script>
