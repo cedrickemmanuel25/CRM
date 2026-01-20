@@ -347,7 +347,7 @@ class OpportunityController extends Controller
 
         $opportunity->delete();
 
-        return redirect()->route('opportunities.index', ['view' => $request->query('view')])->with('success', 'Opportunité supprimée.');
+        return redirect()->route('opportunities.index', ['view' => $request->view])->with('success', 'Opportunité supprimée.');
     }
 
     /**
