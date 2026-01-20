@@ -31,7 +31,7 @@ class EntityAssigned extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -39,10 +39,19 @@ class EntityAssigned extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        $subject = $this->message ?? "Un élément vous a été assigné";
+        $email = (new MailMessage)
+            ->subject($subject)
+            ->greeting("Bonjour " . $notifiable->name . ",")
+            ->line($this->message)
+            ->line("Type d'élément : " . ucfirst($this->entityType))
+            ->line("Assigné par : " . ($this->assigner ? $this->assigner->name : 'Système'));
+
+        if ($this->getActionUrl() !== '#') {
+            $email->action('Voir l\'élément', $this->getActionUrl());
+        }
+
+        return $email->line('Merci d\'utiliser notre application !');
     }
 
     /**
