@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             ]);
 
             $this->command->info('✓ Utilisateur admin créé avec succès');
-            $this->command->warn('Email: admin@crm.local');
+            $this->command->warn('Email: yaocedrickemmanuelk@gmail.com');
             $this->command->warn('Mot de passe: Admin@123');
             $this->command->error('⚠ IMPORTANT: Changez ces identifiants en production!');
         } else {
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             }
 
             // Support de test
-            if (!User::where('email', 'support@crm.local')->exists()) {
+            if (!User::where('email', 'yaocedrickemmanuelk+support@gmail.com')->exists()) {
                 User::create([
                     'name' => 'Support Test',
                     'email' => 'yaocedrickemmanuelk+support@gmail.com',
@@ -61,7 +61,7 @@ class UserSeeder extends Seeder
             }
 
             // Visiteur de test
-            if (!User::where('email', 'visitor@crm.local')->exists()) {
+            if (!User::where('email', 'yaocedrickemmanuelk+visitor@gmail.com')->exists()) {
                 User::create([
                     'name' => 'Visiteur Test',
                     'email' => 'yaocedrickemmanuelk+visitor@gmail.com',
