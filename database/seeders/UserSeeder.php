@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         if (!User::where('role', 'admin')->exists()) {
             User::create([
                 'name' => 'Administrateur',
-                'email' => 'admin@crm.local',
+                'email' => 'yaocedrickemmanuelk@gmail.com',
                 'password' => Hash::make('Admin@123'),
                 'role' => 'admin',
                 'telephone' => '+33 1 23 45 67 89',
@@ -35,10 +35,10 @@ class UserSeeder extends Seeder
         // Optionnel: Créer des utilisateurs de test pour les autres rôles
         if (app()->environment('local')) {
             // Commercial de test
-            if (!User::where('email', 'commercial@crm.local')->exists()) {
+            if (!User::where('email', 'yaocedrickemmanuelk+commercial@gmail.com')->exists()) {
                 User::create([
                     'name' => 'Commercial Test',
-                    'email' => 'commercial@crm.local',
+                    'email' => 'yaocedrickemmanuelk+commercial@gmail.com',
                     'password' => Hash::make('Commercial@123'),
                     'role' => 'commercial',
                     'telephone' => '+33 1 23 45 67 90',
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
             if (!User::where('email', 'support@crm.local')->exists()) {
                 User::create([
                     'name' => 'Support Test',
-                    'email' => 'support@crm.local',
+                    'email' => 'yaocedrickemmanuelk+support@gmail.com',
                     'password' => Hash::make('Support@123'),
                     'role' => 'support',
                     'telephone' => '+33 1 23 45 67 91',
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
             if (!User::where('email', 'visitor@crm.local')->exists()) {
                 User::create([
                     'name' => 'Visiteur Test',
-                    'email' => 'visitor@crm.local',
+                    'email' => 'yaocedrickemmanuelk+visitor@gmail.com',
                     'password' => Hash::make('Visitor@123'),
                     'role' => 'visitor',
                     'telephone' => '+33 1 23 45 67 92',
