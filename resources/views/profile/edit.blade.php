@@ -10,11 +10,35 @@
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => { this.avatarPreview = e.target.result; };
+            reader.onload = (e) => { 
+                this.avatarPreview = e.target.result;
+                // Update header avatar if it exists
+                const headerAvatar = document.querySelector('.header-user-avatar');
+                if (headerAvatar) {
+                    headerAvatar.style.backgroundImage = 'url(' + e.target.result + ')';
+                    headerAvatar.style.backgroundSize = 'cover';
+                    headerAvatar.textContent = '';
+                }
+            };
             reader.readAsDataURL(file);
         }
     }
-}">
+}" x-init="
+    // Initialize intl-tel-input for phone field
+    setTimeout(() => {
+        const phoneInput = document.querySelector('#telephone');
+        if (phoneInput && window.intlTelInput) {
+            window.iti = intlTelInput(phoneInput, {
+                initialCountry: 'ci',
+                preferredCountries: ['ci', 'fr'],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: false
+            });
+        }
+    }, 100);
+">
     
     <!-- Page Header -->
     <div class="mb-8">

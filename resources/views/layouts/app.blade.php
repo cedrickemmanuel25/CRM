@@ -159,8 +159,8 @@ x-init="sidebarOpen = false"
                     <div class="relative" x-data="{ userOpen: false }">
                         <button type="button" @click="userOpen = !userOpen" @click.away="userOpen = false" class="-m-1.5 flex items-center p-1.5" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                             <span class="sr-only">Open user menu</span>
-                            <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200">
-                                {{ substr(auth()->user()->name, 0, 1) }}
+                            <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200 header-user-avatar" style="{{ auth()->user()->avatar ? 'background-image: url(' . asset('storage/' . auth()->user()->avatar) . '); background-size: cover;' : '' }}">
+                                {{ auth()->user()->avatar ? '' : substr(auth()->user()->name, 0, 1) }}
                             </div>
                             <span class="hidden lg:flex lg:items-center">
                                 <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{ auth()->user()->name }}</span>
