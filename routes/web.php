@@ -25,6 +25,7 @@ use App\Http\Controllers\ReportController;
 Route::middleware('auth')->group(function () {
     // Déconnexion
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logout']);
     
     // Rapports et Exports (Accessibles Admin, Commercial, Visiteur)
     Route::middleware('role:admin,commercial,visitor')->group(function () {
