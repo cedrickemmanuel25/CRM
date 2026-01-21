@@ -162,7 +162,7 @@ class DashboardController extends Controller
                 ->take(5)
                 ->get(),
             'next_meetings' => Activity::where('user_id', $user->id)
-                ->where('type', 'meeting')
+                ->where('type', 'reunion')
                 ->where('date_activite', '>', now())
                 ->orderBy('date_activite', 'asc')
                 ->take(5)

@@ -246,11 +246,15 @@
                 
                 const url = new URL(window.location.href);
                 fetch(url, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    credentials: 'same-origin'
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Request failed');
+                })
                 .then(data => {
-                    if (!this.isDragging) { // Double check
+                    if (!this.isDragging && data.html) { // Double check
                         // Save scroll position before updating
                         const scrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
                         const scrollPositions = Array.from(scrollContainers).map(container => ({
@@ -283,7 +287,8 @@
                         
                         this.initKanban();
                     }
-                });
+                })
+                .catch(error => console.warn('Polling error:', error));
             }, 5000);
         }
     }" x-init="initKanban(); startPolling();" 

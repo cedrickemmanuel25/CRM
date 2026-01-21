@@ -338,12 +338,18 @@ window.unifiedTaskApp = function() {
             url.searchParams.set('date', this.selectedDate);
             
             try {
-                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                const response = await fetch(url, { 
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    credentials: 'same-origin'
+                });
+                if (!response.ok) throw new Error('Unauthenticated or server error');
                 const data = await response.json();
-                this.$refs.taskBoard.innerHTML = data.html;
-                this.events = data.events;
+                if (data.html) {
+                    this.$refs.taskBoard.innerHTML = data.html;
+                    this.events = data.events;
+                }
             } catch (error) {
-                console.error('Error fetching tasks:', error);
+                console.warn('Polling error:', error);
             }
         },
         

@@ -133,14 +133,21 @@
                     setInterval(() => {
                         const url = new URL(window.location.href);
                         fetch(url, {
-                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            credentials: 'same-origin'
                         })
-                        .then(response => response.json())
+                        .then(response => {
+                            if (response.ok) return response.json();
+                            throw new Error('Request failed');
+                        })
                         .then(data => {
-                            this.$el.innerHTML = data.html;
-                            const countEl = document.getElementById('contact-count');
-                            if (countEl) countEl.innerText = data.total;
-                        });
+                            if (data.html) {
+                                this.$el.innerHTML = data.html;
+                                const countEl = document.getElementById('contact-count');
+                                if (countEl) countEl.innerText = data.total;
+                            }
+                        })
+                        .catch(error => console.warn('Polling error:', error));
                     }, 5000);
                 }
             }" x-init="startPolling()" class="bg-white divide-y divide-slate-100">

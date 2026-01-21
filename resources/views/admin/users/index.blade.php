@@ -75,12 +75,19 @@
                             startPolling() {
                                 setInterval(() => {
                                     fetch(window.location.href, {
-                                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                                        credentials: 'same-origin'
                                     })
-                                    .then(response => response.text())
+                                    .then(response => {
+                                        if (response.ok) return response.text();
+                                        throw new Error('Request failed');
+                                    })
                                     .then(html => {
-                                        this.$el.innerHTML = html;
-                                    });
+                                        if (html.trim().startsWith('<') || html.trim().length > 0) {
+                                            this.$el.innerHTML = html;
+                                        }
+                                    })
+                                    .catch(error => console.warn('Polling error:', error));
                                 }, 5000);
                             }
                         }" x-init="startPolling()" class="divide-y divide-gray-200 bg-white">
