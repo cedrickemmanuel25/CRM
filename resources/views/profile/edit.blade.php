@@ -18,17 +18,9 @@
     
     <!-- Page Header -->
     <div class="mb-8">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-semibold text-gray-900">Paramètres du profil</h1>
-                <p class="mt-1 text-sm text-gray-500">Gérez vos informations personnelles et vos préférences de compte</p>
-            </div>
-            <a href="{{ route($user->getDashboardRoute()) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Retour au tableau de bord
-            </a>
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">Paramètres du profil</h1>
+            <p class="mt-1 text-sm text-gray-500">Gérez vos informations personnelles et vos préférences de compte</p>
         </div>
     </div>
 
@@ -136,20 +128,21 @@
                         </div>
                         
                         <div class="px-6 py-6 space-y-6">
-                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                <div class="sm:col-span-2">
-                                    <label for="name" class="block text-sm font-medium text-gray-700">Nom complet</label>
-                                    <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom complet <span class="text-red-500">*</span></label>
+                                    <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors sm:text-sm" placeholder="Entrez votre nom complet">
                                 </div>
 
                                 <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
-                                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adresse e-mail <span class="text-red-500">*</span></label>
+                                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors sm:text-sm" placeholder="votre.email@exemple.com">
                                 </div>
 
                                 <div>
-                                    <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
-                                    <input type="tel" name="telephone" id="telephone" value="{{ old('telephone', $user->telephone) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="+225 00 00 00 00">
+                                    <label for="telephone" class="block text-sm font-medium text-gray-700 mb-1">Numéro de téléphone</label>
+                                    <input type="tel" name="telephone" id="telephone" value="{{ old('telephone', $user->telephone) }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors sm:text-sm" placeholder="+225 00 00 00 00">
+                                    <p class="mt-1 text-xs text-gray-500">Format international recommandé</p>
                                 </div>
                             </div>
 
@@ -204,19 +197,22 @@
                             </div>
 
                             <div>
-                                <label for="current_password" class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
-                                <input type="password" name="current_password" id="current_password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Saisissez votre mot de passe actuel">
+                                <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe actuel <span class="text-red-500">*</span></label>
+                                <input type="password" name="current_password" id="current_password" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors sm:text-sm" placeholder="Saisissez votre mot de passe actuel">
+                                <p class="mt-1 text-xs text-gray-500">Requis pour toute modification de sécurité</p>
                             </div>
 
                             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
-                                    <label for="new_password" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-                                    <input type="password" name="new_password" id="new_password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Minimum 8 caractères">
+                                    <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                                    <input type="password" name="new_password" id="new_password" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors sm:text-sm" placeholder="Minimum 8 caractères">
+                                    <p class="mt-1 text-xs text-gray-500">Au moins 8 caractères</p>
                                 </div>
 
                                 <div>
-                                    <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
-                                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Confirmez votre mot de passe">
+                                    <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+                                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors sm:text-sm" placeholder="Confirmez votre mot de passe">
+                                    <p class="mt-1 text-xs text-gray-500">Doit correspondre au nouveau mot de passe</p>
                                 </div>
                             </div>
                         </div>
