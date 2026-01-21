@@ -65,13 +65,7 @@ class UserManagementController extends Controller
             return redirect()->back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
         }
 
-        $user->delete(); // Soft delete if trait uses SoftDeletes, here strictly delete based on Model?
-        // Spec said "désactiver compte (soft delete)". Does User model have SoftDeletes?
-        // Assuming standard delete for now unless I add SoftDeletes to User model.
-        // Let's assume standard delete or I'd need to update User model. 
-        // For now, let's just delete. If user wanted SoftDeletes they should have asked for migration update on User.
-        // Wait, spec requirement: "destroy() : désactiver compte (soft delete)".
-        // I should probably add SoftDeletes trait to User model if not present.
+        $user->delete(); // Permanent deletion from the database
         
         AuditLog::log('delete_user', $user);
 
