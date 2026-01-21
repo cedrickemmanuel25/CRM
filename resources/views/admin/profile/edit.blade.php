@@ -329,7 +329,7 @@
                                 <div class="ml-4 flex-1">
                                     <p class="text-sm font-medium text-gray-900">{{ $activity->description }}</p>
                                     <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
-                                        <span>{{ $activity->user->name }}</span>
+                                        <span>{{ $activity->user ? $activity->user->name : 'Système' }}</span>
                                         <span>•</span>
                                         <span>{{ $activity->created_at->translatedFormat('d F Y à H:i') }}</span>
                                     </div>
