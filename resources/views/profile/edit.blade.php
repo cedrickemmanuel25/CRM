@@ -30,11 +30,12 @@
         if (phoneInput && window.intlTelInput) {
             window.iti = intlTelInput(phoneInput, {
                 initialCountry: 'ci',
-                preferredCountries: ['ci', 'fr'],
+                onlyCountries: ['ci'],
+                countrySearch: false,
+                allowDropdown: false,
+                showSelectedDialCode: true,
                 separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: false
+                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js'
             });
         }
     }, 100);
