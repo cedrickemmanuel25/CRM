@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8 py-8">
@@ -26,16 +26,30 @@
                             </tr>
                         </thead>
                         <tbody x-data="{
+                            pollingInterval: null,
                             startPolling() {
-                                setInterval(() => {
+                                this.pollingInterval = setInterval(() => {
                                     fetch(window.location.href, {
-                                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                                        credentials: 'same-origin'
                                     })
-                                    .then(response => response.text())
+                                    .then(response => {
+                                        if (response.status === 401) {
+                                            clearInterval(this.pollingInterval);
+                                            return;
+                                        }
+                                        if (!response.ok) throw new Error('Network response was not ok');
+                                        return response.text();
+                                    })
                                     .then(html => {
-                                        this.$el.innerHTML = html;
+                                        if (html) {
+                                            this.$el.innerHTML = html;
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.warn('Polling error:', error);
                                     });
-                                }, 5000);
+                                }, 10000);
                             }
                         }" x-init="startPolling()" class="divide-y divide-gray-200 bg-white" x-ref="tbody">
                             @include('admin.access_requests._table_rows')
