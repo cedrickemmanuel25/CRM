@@ -173,9 +173,7 @@ x-init="sidebarOpen = false"
                             <div class="px-3 py-2 border-b border-gray-100 text-center">
                                 <p class="text-xs text-gray-500">Compte</p>
                             </div>
-                            @if(!auth()->user()->isAdmin())
-                            <a href="{{ route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Mon Profil</a>
-                            @endif
+                            <a href="{{ auth()->user()->isAdmin() ? route('admin.profile.edit') : route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Mon Profil</a>
                             <a href="{{ route('notifications.settings') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Préférences Notifications</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
