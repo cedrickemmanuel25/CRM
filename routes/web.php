@@ -105,6 +105,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
+        // Admin Profile
+        Route::get('/profile', [App\Http\Controllers\AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [App\Http\Controllers\AdminProfileController::class, 'update'])->name('profile.update');
+        
         // Users Management
         Route::resource('users', App\Http\Controllers\UserManagementController::class)->except(['create', 'edit', 'show']); 
         Route::post('users/{user}/reset-password', [App\Http\Controllers\UserManagementController::class, 'resetPassword'])->name('users.reset-password');
