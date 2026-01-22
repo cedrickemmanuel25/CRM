@@ -278,11 +278,14 @@
         const form = document.getElementById('create-ticket-form');
         if (!form) return;
 
+        // Find submit button - could be inside form or outside with form attribute
+        const submitBtn = form.querySelector('button[type="submit"]') || document.querySelector('button[form="create-ticket-form"]');
+        if (!submitBtn) return;
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(form);
-            const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             
             submitBtn.disabled = true;
@@ -296,7 +299,14 @@
                     'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Erreur lors de la création');
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     window.location.href = data.redirect;
@@ -307,13 +317,21 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Fallback: submit normally
-                form.submit();
+                // Reload page to show validation errors
+                window.location.reload();
             })
             .finally(() => {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
             });
+        });
+
+        // Also handle button click outside form
+        submitBtn.addEventListener('click', function(e) {
+            if (submitBtn.form !== form && submitBtn.getAttribute('form') === 'create-ticket-form') {
+                e.preventDefault();
+                form.requestSubmit();
+            }
         });
     });
 </script>

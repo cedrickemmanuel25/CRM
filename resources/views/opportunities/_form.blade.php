@@ -143,10 +143,10 @@
                         <label for="montant_estime" class="text-sm font-semibold text-slate-700">Montant estimé <span class="text-rose-500">*</span></label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <span class="text-slate-500 font-bold sm:text-sm">{{ currency_symbol() }}</span>
+                                <span class="text-slate-500 font-bold sm:text-sm whitespace-nowrap">{{ currency_symbol() }}&nbsp;</span>
                             </div>
                             <input type="number" name="montant_estime" id="montant_estime" x-model.number="montant" required step="0.01"
-                                class="block w-full pl-10 pr-12 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-black transition-all duration-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 placeholder:text-slate-400" 
+                                class="block w-full pl-20 pr-12 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-black transition-all duration-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 placeholder:text-slate-400" 
                                 placeholder="0.00">
                         </div>
                         @error('montant_estime')
@@ -169,7 +169,7 @@
 
                         <div class="pt-2 border-t border-slate-200 mt-2">
                             <p class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Valeur pondérée</p>
-                            <p class="text-xl font-black text-slate-900" x-text="new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(weightedValue())"></p>
+                            <p class="text-xl font-black text-slate-900" x-text="new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(weightedValue()) + ' {{ currency_symbol() }}'"></p>
                         </div>
                     </div>
 
