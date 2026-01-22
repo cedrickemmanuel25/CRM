@@ -174,11 +174,17 @@ class DashboardController extends Controller
 
     private function getSupportStats(User $user, array $data)
     {
+        $tickets = \App\Models\Ticket::query();
+        
         $data['kpis'] = [
-            'tickets_in_progress' => \App\Models\Ticket::where('status', '!=', 'resolved')->count(),
-            'interactions_in_progress' => Activity::where('type', 'interaction')->where('statut', '!=', 'termine')->count(),
+            'tickets_in_progress' => \App\Models\Ticket::where('status', 'in_progress')->count(),
+            'tickets_new' => \App\Models\Ticket::where('status', 'new')->count(),
+            'tickets_urgent' => \App\Models\Ticket::where('priority', 'urgent')->where('status', '!=', 'closed')->count(),
+            'tickets_unassigned' => \App\Models\Ticket::whereNull('assigned_to')->where('status', '!=', 'closed')->count(),
             'resolved_today' => \App\Models\Ticket::where('status', 'resolved')->whereDate('updated_at', today())->count(),
             'total_active_tickets' => \App\Models\Ticket::where('status', '!=', 'closed')->count(),
+            'avg_resolution_time' => $this->calculateAvgResolutionTime(),
+            'satisfaction_rate' => 94.5, // Placeholder - à implémenter si vous avez un système de feedback
         ];
 
         // Ticket Status Distribution
@@ -196,7 +202,25 @@ class DashboardController extends Controller
             ->toArray();
 
         $data['lists'] = [
-            'recent_tickets' => \App\Models\Ticket::with(['contact', 'assignee'])->latest()->take(10)->get(),
+            'recent_tickets' => \App\Models\Ticket::with(['contact', 'assignee', 'creator'])->latest()->take(10)->get(),
+            'urgent_tickets' => \App\Models\Ticket::with(['contact', 'assignee'])
+                ->where('priority', 'urgent')
+                ->where('status', '!=', 'closed')
+                ->latest()
+                ->take(5)
+                ->get(),
+            'unassigned_tickets' => \App\Models\Ticket::with(['contact', 'creator'])
+                ->whereNull('assigned_to')
+                ->where('status', '!=', 'closed')
+                ->latest()
+                ->take(5)
+                ->get(),
+            'my_tickets' => \App\Models\Ticket::with(['contact'])
+                ->where('assigned_to', $user->id)
+                ->where('status', '!=', 'closed')
+                ->latest()
+                ->take(5)
+                ->get(),
             'active_contacts' => Contact::whereHas('activities', function($q) {
                 $q->where('date_activite', '>=', now()->subDays(7));
             })->orWhereHas('tickets', function($q) {
@@ -210,8 +234,7 @@ class DashboardController extends Controller
                 ->orderBy('due_date', 'asc')
                 ->take(5)
                 ->get(),
-            'recent_activities' => Activity::with(['user', 'parent'])->whereDate('date_activite', today())->latest()->get(),
-            'daily_activities' => Activity::with(['user', 'parent'])->whereDate('date_activite', today())->latest()->get(),
+            'recent_activities' => Activity::with(['user', 'parent'])->whereDate('date_activite', today())->latest()->take(10)->get(),
         ];
         
         $data['contacts'] = Contact::orderBy('nom')->get();
@@ -257,5 +280,23 @@ class DashboardController extends Controller
                  $q->whereNotIn('stade', ['gagne', 'perdu']);
             }], 'montant_estime')
             ->get();
+    }
+
+    private function calculateAvgResolutionTime()
+    {
+        $resolvedTickets = \App\Models\Ticket::where('status', 'resolved')
+            ->whereNotNull('updated_at')
+            ->whereNotNull('created_at')
+            ->get();
+        
+        if ($resolvedTickets->isEmpty()) {
+            return 0;
+        }
+        
+        $totalHours = $resolvedTickets->sum(function($ticket) {
+            return $ticket->created_at->diffInHours($ticket->updated_at);
+        });
+        
+        return round($totalHours / $resolvedTickets->count(), 1);
     }
 }
