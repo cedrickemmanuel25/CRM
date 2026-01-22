@@ -188,6 +188,18 @@ class OpportunityController extends Controller
             ));
         }
 
+        // Notification pour les administrateurs si créé par un commercial
+        if (auth()->user()->isCommercial()) {
+            $admins = \App\Models\User::admins()->get();
+            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\EntityActionNotification(
+                'created',
+                $opportunity,
+                'opportunity',
+                "Opportunité créée : {$opportunity->titre} par " . auth()->user()->name,
+                auth()->user()
+            ));
+        }
+
         // Création d'une activité automatique
         \App\Models\Activity::create([
             'contact_id' => $opportunity->contact_id,

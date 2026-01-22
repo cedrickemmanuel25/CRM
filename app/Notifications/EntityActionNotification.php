@@ -26,9 +26,35 @@ class EntityActionNotification extends Notification
         $this->performer = $performer;
     }
 
-    // ... via ...
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
+     */
+    public function via(object $notifiable): array
+    {
+        return ['database'];
+    }
 
-    // ... toMail ...
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        $subject = match($this->action) {
+            'created' => 'Nouvel élément créé',
+            'updated' => 'Élément mis à jour',
+            'deleted' => 'Élément supprimé',
+            default => 'Action sur un élément',
+        };
+
+        return (new MailMessage)
+            ->subject($subject)
+            ->greeting('Bonjour ' . $notifiable->name . ',')
+            ->line($this->message)
+            ->action('Voir les détails', $this->getUrl())
+            ->line('Merci d\'utiliser notre application !');
+    }
 
     /**
      * Get the array representation of the notification.
@@ -44,6 +70,7 @@ class EntityActionNotification extends Notification
             'message' => $this->message,
             'performer_name' => $this->performer ? $this->performer->name : 'Système',
             'url' => $this->getUrl(),
+            'action_url' => $this->getUrl(),
         ];
     }
 
@@ -52,6 +79,7 @@ class EntityActionNotification extends Notification
          switch($this->entityType) {
             case 'contact': return route('contacts.show', $this->entity);
             case 'opportunity': return route('opportunities.show', $this->entity);
+            case 'ticket': return route('tickets.show', $this->entity);
             case 'task': return route('tasks.index'); 
             default: return '#';
         }

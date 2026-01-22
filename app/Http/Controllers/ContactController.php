@@ -140,8 +140,17 @@ class ContactController extends Controller
             }
         }
         
-        // Notification action globale (pour admins si besoin, ou logging)
-        // Ici on notifie seulement si assignation différente
+        // Notification pour les administrateurs si créé par un commercial
+        if (auth()->user()->isCommercial()) {
+            $admins = \App\Models\User::admins()->get();
+            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\EntityActionNotification(
+                'created',
+                $contact,
+                'contact',
+                "Contact créé : {$contact->prenom} {$contact->nom} par " . auth()->user()->name,
+                auth()->user()
+            ));
+        }
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact créé avec succès.');

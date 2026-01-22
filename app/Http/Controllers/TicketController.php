@@ -84,6 +84,18 @@ class TicketController extends Controller
 
         $ticket = Ticket::create($validated);
 
+        // Notification pour les administrateurs si créé par le support
+        if (auth()->user()->isSupport()) {
+            $admins = \App\Models\User::admins()->get();
+            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\EntityActionNotification(
+                'created',
+                $ticket,
+                'ticket',
+                "Ticket créé : {$ticket->subject} par " . auth()->user()->name,
+                auth()->user()
+            ));
+        }
+
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
