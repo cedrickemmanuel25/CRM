@@ -193,10 +193,9 @@
         </div>
         @endif
     </div>
-</div>
 
-<!-- Modal Nouveau Ticket -->
-<div x-show="openTicketModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+    <!-- Modal Nouveau Ticket -->
+    <div x-show="openTicketModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <!-- Backdrop -->
         <div x-show="openTicketModal" 
@@ -258,6 +257,7 @@
                 </button>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

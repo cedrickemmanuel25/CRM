@@ -32,7 +32,7 @@
         <!-- Client -->
         <div class="space-y-2" x-data="contactCombobox({
             items: [
-                @foreach($contacts as $c)
+                @foreach(($contacts ?? []) as $c)
                     { id: '{{ $c->id }}', label: @js($c->nom_complet) },
                 @endforeach
             ],
@@ -42,7 +42,7 @@
             <label for="contact_id" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Client concerné <span class="text-rose-600">*</span></label>
             <select id="contact_id" name="contact_id" required class="hidden">
                 <option value="">-- Sélectionner un client --</option>
-                @foreach($contacts as $contact)
+                @foreach(($contacts ?? []) as $contact)
                     <option value="{{ $contact->id }}" {{ (string) old('contact_id') === (string) $contact->id ? 'selected' : '' }}>{{ $contact->nom_complet }}</option>
                 @endforeach
             </select>
