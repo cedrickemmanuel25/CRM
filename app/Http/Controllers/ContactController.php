@@ -20,7 +20,7 @@ class ContactController extends Controller
 
         // Sécurisation accès commercial
         if (auth()->user()->isCommercial()) {
-            $query->where('user_id_owner', auth()->id());
+            $query->where('user_id_owner', (int)auth()->id());
         }
 
         // Search scope (nom, prenom, email, entreprise)
@@ -164,7 +164,7 @@ class ContactController extends Controller
     public function show(Contact $contact, Request $request)
     {
         // Autorisation : Admin voit tout, Commercial voit seulement les siens
-        if (auth()->user()->isCommercial() && $contact->user_id_owner !== auth()->id()) {
+        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
             abort(403, 'Vous n\'êtes pas autorisé à voir ce contact.');
         }
 
@@ -214,7 +214,7 @@ class ContactController extends Controller
         if ($user->isAdmin()) {
             $canEdit = true;
         } elseif ($user->isCommercial()) {
-            $canEdit = $contact->user_id_owner === $user->id;
+            $canEdit = (int)$contact->user_id_owner === (int)$user->id;
         }
         
         return view('contacts.show', compact('contact', 'potentialValue', 'tickets', 'notes', 'allActivities', 'tasks', 'canEdit'));
@@ -226,7 +226,7 @@ class ContactController extends Controller
     public function edit(Contact $contact)
     {
         // Autorisation
-        if (auth()->user()->isCommercial() && $contact->user_id_owner !== auth()->id()) {
+        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
             abort(403, 'Vous n\'avez pas les droits de modification sur ce contact.');
         }
 
@@ -239,8 +239,8 @@ class ContactController extends Controller
     public function update(Request $request, Contact $contact)
     {
         // Autorisation
-        if (auth()->user()->isCommercial() && $contact->user_id_owner !== auth()->id()) {
-            abort(403);
+        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier ce contact.');
         }
 
         $validated = $request->validate([
@@ -306,10 +306,9 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        // Autorisation (seul admin peut supprimer ou le owner ?) 
-        // Pour l'instant on garde la logique stricte owner ou admin
-        if (auth()->user()->isCommercial() && $contact->user_id_owner !== auth()->id()) {
-            abort(403);
+        // Autorisation : Admin ou propriétaire du contact
+        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à supprimer ce contact.');
         }
 
         $contact->delete();
