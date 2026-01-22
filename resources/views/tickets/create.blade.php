@@ -48,10 +48,10 @@
         </div>
 
         <!-- Sticky action bar -->
-        <div class="sticky top-16 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 mb-6 bg-white/80 backdrop-blur border-y border-slate-200">
+        <div class="sticky top-16 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 mb-6 bg-white/85 backdrop-blur border-y border-slate-200">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <div class="h-9 w-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                    <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center shadow-sm shadow-indigo-500/20">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                         </svg>
@@ -66,7 +66,7 @@
                         Annuler
                     </a>
                     <button type="submit" form="create-ticket-form"
-                        class="inline-flex items-center justify-center px-6 py-2.5 bg-slate-900 border border-transparent shadow-md text-sm font-black rounded-lg text-white hover:bg-slate-800 focus:outline-none transition-all">
+                        class="inline-flex items-center justify-center px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 border border-transparent shadow-md shadow-indigo-500/20 text-sm font-black rounded-lg text-white hover:from-indigo-700 hover:to-blue-700 focus:outline-none transition-all">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                         Créer le ticket
                     </button>
@@ -82,7 +82,7 @@
                 <!-- MAIN CONTENT AREA -->
                 <div class="lg:col-span-2 space-y-6">
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100/50 px-6 py-4 border-b border-slate-200">
+                        <div class="bg-gradient-to-br from-indigo-50 via-white to-blue-50/60 px-6 py-4 border-b border-slate-200">
                             <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wide">Détails de la demande</h3>
                             <p class="mt-1 text-xs font-medium text-slate-500">Décrivez le contexte, l’impact, et comment reproduire si possible.</p>
                         </div>
@@ -92,7 +92,7 @@
                             <div class="space-y-2">
                                 <label for="subject" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Sujet du ticket <span class="text-rose-600">*</span></label>
                                 <input type="text" name="subject" id="subject" value="{{ old('subject') }}" required
-                                    class="block w-full px-4 py-3 border rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all shadow-sm {{ $errors->has('subject') ? 'border-rose-300 bg-rose-50/30' : 'border-slate-300' }}"
+                                    class="block w-full px-4 py-3 border rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm {{ $errors->has('subject') ? 'border-rose-300 bg-rose-50/30' : 'border-slate-300' }}"
                                     placeholder="Ex: Impossible de se connecter / Erreur 500 lors de l’export PDF">
                                 <div class="flex items-center justify-between gap-4">
                                     <p class="text-xs text-slate-500 font-medium">Conseil: commencez par un verbe (“Impossible…”, “Erreur…”, “Demande…”).</p>
@@ -105,7 +105,7 @@
                             <div class="space-y-2">
                                 <label for="description" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Description <span class="text-rose-600">*</span></label>
                                 <textarea id="description" name="description" rows="12" required
-                                    class="block w-full px-4 py-3 border rounded-lg text-sm font-medium text-slate-700 leading-relaxed focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all shadow-sm {{ $errors->has('description') ? 'border-rose-300 bg-rose-50/30' : 'border-slate-300' }}"
+                                    class="block w-full px-4 py-3 border rounded-lg text-sm font-medium text-slate-700 leading-relaxed focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm {{ $errors->has('description') ? 'border-rose-300 bg-rose-50/30' : 'border-slate-300' }}"
                                     placeholder="Contexte\n- Client / dossier concerné\n- Étapes pour reproduire\n- Résultat attendu / obtenu\n- Urgence et impact">{{ old('description') }}</textarea>
                                 <div class="flex items-center justify-between gap-4">
                                     <p class="text-xs text-slate-500 font-medium">Astuce: ajoutez des étapes de reproduction et une capture si possible.</p>
@@ -147,14 +147,14 @@
                 <div class="space-y-6">
                     <!-- Properties -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100/50 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <div class="bg-gradient-to-br from-indigo-50 via-white to-blue-50/60 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
                             <span class="text-xs font-bold text-slate-700 uppercase tracking-widest">Paramètres</span>
                             <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
 
                         <div class="p-5 space-y-6">
                             <!-- Quick Summary -->
-                            <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+                            <div class="rounded-xl border border-slate-200 bg-gradient-to-br from-indigo-50/60 via-white to-blue-50/40 p-4">
                                 <p class="text-[11px] font-black text-slate-600 uppercase tracking-widest">Aperçu</p>
                                 <p id="summary-subject" class="mt-2 text-sm font-black text-slate-900 leading-snug">—</p>
                                 <div class="mt-2 flex items-center gap-2 text-xs text-slate-600">
@@ -172,7 +172,7 @@
                             <div class="space-y-2">
                                 <label for="category" class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight">Catégorie <span class="text-rose-600">*</span></label>
                                 <select id="category" name="category" required
-                                    class="block w-full pl-3 pr-10 py-2.5 text-sm font-semibold border rounded-lg focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50 {{ $errors->has('category') ? 'border-rose-300' : 'border-slate-300' }}">
+                                    class="block w-full pl-3 pr-10 py-2.5 text-sm font-semibold border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-slate-50/50 {{ $errors->has('category') ? 'border-rose-300' : 'border-slate-300' }}">
                                     <option value="technical" {{ old('category') === 'technical' ? 'selected' : '' }}>🛠️ Support Technique</option>
                                     <option value="commercial" {{ old('category') === 'commercial' ? 'selected' : '' }}>💼 Administratif & Commercial</option>
                                     <option value="billing" {{ old('category') === 'billing' ? 'selected' : '' }}>💳 Facturation & Paiement</option>
@@ -188,7 +188,7 @@
                                 <div class="grid grid-cols-1 gap-2">
                                     @php($priorityOld = old('priority', 'medium'))
                                     @foreach(['low' => 'Basse', 'medium' => 'Normale', 'high' => 'Haute', 'urgent' => 'Critique'] as $value => $label)
-                                        <label class="relative flex items-center p-3 cursor-pointer rounded-xl border transition-all group {{ $priorityOld === $value ? 'border-indigo-400 bg-indigo-50/30' : 'border-slate-200 hover:bg-slate-50' }}">
+                                        <label class="relative flex items-center p-3 cursor-pointer rounded-xl border transition-all group {{ $priorityOld === $value ? 'border-indigo-400 bg-gradient-to-r from-indigo-50/60 to-blue-50/60' : 'border-slate-200 hover:bg-slate-50' }}">
                                             <input type="radio" name="priority" value="{{ $value }}" {{ $priorityOld === $value ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300">
                                             <div class="ml-3 flex flex-col">
                                                 <span class="text-xs font-bold {{ $priorityOld === $value ? 'text-indigo-700' : 'text-slate-700' }}">{{ $label }}</span>
@@ -237,7 +237,7 @@
                                             @keydown.arrow-down.prevent="highlightNext()"
                                             @keydown.arrow-up.prevent="highlightPrev()"
                                             @keydown.enter.prevent="commitHighlighted()"
-                                            class="block w-full pl-10 pr-10 py-2.5 text-sm font-semibold border rounded-lg focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50 {{ $errors->has('contact_id') ? 'border-rose-300' : 'border-slate-300' }}"
+                                            class="block w-full pl-10 pr-10 py-2.5 text-sm font-semibold border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-slate-50/50 {{ $errors->has('contact_id') ? 'border-rose-300' : 'border-slate-300' }}"
                                             :placeholder="placeholder"
                                         >
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
@@ -307,7 +307,7 @@
                                             @keydown.arrow-down.prevent="highlightNext()"
                                             @keydown.arrow-up.prevent="highlightPrev()"
                                             @keydown.enter.prevent="commitHighlighted()"
-                                            class="block w-full pl-10 pr-10 py-2.5 text-sm font-semibold border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50"
+                                            class="block w-full pl-10 pr-10 py-2.5 text-sm font-semibold border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-slate-50/50"
                                             :placeholder="placeholder"
                                         >
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
