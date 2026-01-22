@@ -83,7 +83,7 @@
                     </a>
                     @endif
                     
-                    @if(auth()->user()->isAdmin())
+                    @if($canEdit)
                     <form action="{{ route('contacts.destroy', $contact) }}" method="POST" class="inline" onsubmit="return confirm('Supprimer définitivement ce contact ?');">
                         @csrf
                         @method('DELETE')
