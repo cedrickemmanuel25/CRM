@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['interactions_in_progress'] }}</p>
+                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['interactions_in_progress'] ?? 0 }}</p>
                 </div>
             </div>
 
