@@ -215,6 +215,7 @@ class DashboardController extends Controller
         ];
         
         $data['contacts'] = Contact::orderBy('nom')->get();
+        $data['users'] = User::whereIn('role', ['admin', 'support'])->get();
 
         return $data;
     }
