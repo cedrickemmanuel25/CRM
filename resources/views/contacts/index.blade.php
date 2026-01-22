@@ -33,12 +33,14 @@
                 </div>
             </div>
             <div class="mt-5 flex lg:mt-0 lg:ml-4 gap-3">
+                @if(!auth()->user()->isSupport())
                 <a href="{{ route('reports.export', ['type' => 'contacts'] + request()->all()) }}" class="inline-flex items-center px-4 py-2.5 border border-slate-300 shadow-sm text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-400 transition-all duration-200">
                     <svg class="-ml-1 mr-2 h-4 w-4 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
                     Exporter
                 </a>
+                @endif
                 
                 @if(!auth()->user()->isSupport())
                 <a href="{{ route('contacts.create') }}" class="inline-flex items-center px-5 py-2.5 border border-transparent shadow-md text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200">

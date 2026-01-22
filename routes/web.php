@@ -163,6 +163,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:support')->group(function () {
         Route::get('/support/dashboard', [DashboardController::class, 'index'])->name('support.dashboard');
         Route::get('/support/tickets', [ReportController::class, 'supportTickets'])->name('support.tickets');
+        Route::get('/support/reports', [App\Http\Controllers\SupportReportController::class, 'index'])->name('support.reports');
     });
 });
 

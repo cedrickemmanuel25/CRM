@@ -21,6 +21,7 @@
     @php
         $showLink = true;
         if (auth()->user()->isSupport() && $link['route'] === 'opportunities.index') $showLink = false;
+        if (auth()->user()->isSupport() && $link['route'] === 'reports.export') $showLink = false;
         if (auth()->user()->isCommercial() && $link['route'] === 'tickets.index') $showLink = false;
         if (auth()->user()->isAdmin() && in_array($link['route'], ['tickets.index', 'reports.export'])) $showLink = false;
     @endphp
