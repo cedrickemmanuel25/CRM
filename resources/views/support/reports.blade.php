@@ -3,10 +3,6 @@
 @section('title', 'Rapports Support - Nexus CRM')
 
 @section('content')
-@php
-    $contacts = $data['contacts'] ?? [];
-    $users = $data['users'] ?? [];
-@endphp
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 p-6">
     <div class="max-w-[1800px] mx-auto space-y-8">
         
