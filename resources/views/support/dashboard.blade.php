@@ -197,13 +197,20 @@
                                 'medium' => 'bg-blue-500',
                                 'low' => 'bg-gray-400',
                             ];
+                            $priorityLabels = [
+                                'urgent' => 'Urgent',
+                                'high' => 'Haute',
+                                'medium' => 'Moyenne',
+                                'low' => 'Basse',
+                            ];
                             $barColor = $colors[$priority] ?? 'bg-gray-400';
+                            $priorityLabel = $priorityLabels[$priority] ?? ucfirst($priority);
                         @endphp
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center gap-2">
                                     <span class="w-2 h-2 rounded-full {{ $barColor }}"></span>
-                                    <span class="text-sm font-medium text-gray-600 capitalize">{{ $priority }}</span>
+                                    <span class="text-sm font-medium text-gray-600">{{ $priorityLabel }}</span>
                                 </div>
                                 <span class="text-sm font-bold text-gray-900">{{ $percentage }}%</span>
                             </div>
@@ -280,10 +287,17 @@
                                                 'medium' => 'bg-blue-50 text-blue-700 border-blue-200',
                                                 'low' => 'bg-gray-50 text-gray-600 border-gray-200',
                                             ];
+                                            $priorityLabels = [
+                                                'urgent' => 'Urgent',
+                                                'high' => 'Haute',
+                                                'medium' => 'Moyenne',
+                                                'low' => 'Basse',
+                                            ];
                                             $priorityClass = $priorityClasses[$ticket->priority] ?? 'bg-gray-50 text-gray-600 border-gray-200';
+                                            $priorityLabel = $priorityLabels[$ticket->priority] ?? ucfirst($ticket->priority);
                                         @endphp
-                                        <span class="px-2.5 py-1 rounded-full text-xs font-bold border {{ $priorityClass }} capitalize">
-                                            {{ $ticket->priority }}
+                                        <span class="px-2.5 py-1 rounded-full text-xs font-bold border {{ $priorityClass }}">
+                                            {{ $priorityLabel }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
