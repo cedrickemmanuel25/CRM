@@ -140,10 +140,17 @@
                                     'medium' => 'bg-blue-500',
                                     default => 'bg-slate-400'
                                 };
+                                $priorityLabels = [
+                                    'urgent' => 'Urgent',
+                                    'high' => 'Haute',
+                                    'medium' => 'Moyenne',
+                                    'low' => 'Basse',
+                                ];
+                                $priorityLabel = $priorityLabels[$ticket->priority] ?? ucfirst($ticket->priority);
                             @endphp
                             <div class="flex items-center gap-2">
                                 <span class="h-2 w-2 rounded-full {{ $dotColor }} {{ $ticket->priority === 'urgent' ? 'animate-pulse' : '' }}"></span>
-                                <span class="text-xs font-bold uppercase {{ $priorityColor }}">{{ $ticket->priority }}</span>
+                                <span class="text-xs font-bold uppercase {{ $priorityColor }}">{{ $priorityLabel }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">

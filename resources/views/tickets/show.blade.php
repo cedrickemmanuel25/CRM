@@ -170,12 +170,36 @@
                         <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                     </div>
                     <div class="p-5 space-y-6">
+                        @php
+                            $statusClasses = match($ticket->status) {
+                                'new' => 'bg-blue-50 text-blue-700 border-blue-200',
+                                'in_progress' => 'bg-amber-50 text-amber-700 border-amber-200',
+                                'resolved' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                'waiting_client' => 'bg-purple-50 text-purple-700 border-purple-200',
+                                'closed' => 'bg-gray-50 text-gray-600 border-gray-200',
+                                default => 'bg-gray-50 text-gray-600 border-gray-200',
+                            };
+                            $priorityColor = match($ticket->priority) {
+                                'urgent' => 'text-rose-600',
+                                'high' => 'text-orange-500',
+                                'medium' => 'text-blue-500',
+                                'low' => 'text-slate-400',
+                                default => 'text-slate-400',
+                            };
+                            $priorityLabels = [
+                                'urgent' => 'Urgent',
+                                'high' => 'Haute',
+                                'medium' => 'Moyenne',
+                                'low' => 'Basse',
+                            ];
+                            $priorityLabel = $priorityLabels[$ticket->priority] ?? ucfirst($ticket->priority);
+                        @endphp
                         <!-- Status Pills -->
                         <div class="space-y-2">
                              <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Statut du ticket</p>
                              <div class="flex">
                                 <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-[10px] font-black border {{ $statusClasses }} uppercase tracking-tighter shadow-sm w-full justify-center">
-                                    {{ $ticket->status }}
+                                    {{ str_replace('_', ' ', $ticket->status) }}
                                 </span>
                              </div>
                         </div>
@@ -185,7 +209,7 @@
                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Niveau d'urgence</p>
                             <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/50 shadow-inner">
                                 <div class="h-3 w-3 rounded-full {{ $ticket->priority === 'urgent' ? 'bg-rose-600 animate-pulse' : ($ticket->priority === 'high' ? 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.3)]' : 'bg-blue-500') }}"></div>
-                                <span class="text-xs font-black uppercase tracking-wide {{ $priorityColor }}">{{ $ticket->priority }}</span>
+                                <span class="text-xs font-black uppercase tracking-wide {{ $priorityColor }}">{{ $priorityLabel }}</span>
                             </div>
                         </div>
 
