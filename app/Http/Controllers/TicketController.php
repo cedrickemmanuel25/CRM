@@ -44,8 +44,9 @@ class TicketController extends Controller
 
         $tickets = $query->latest()->paginate(15);
         $users = User::whereIn('role', ['admin', 'support'])->get();
+        $contacts = Contact::orderBy('nom')->get();
 
-        return view('tickets.index', compact('tickets', 'users'));
+        return view('tickets.index', compact('tickets', 'users', 'contacts'));
     }
 
     /**
@@ -82,6 +83,14 @@ class TicketController extends Controller
         $validated['status'] = 'new';
 
         $ticket = Ticket::create($validated);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ticket créé avec succès.',
+                'redirect' => route('tickets.show', $ticket)
+            ]);
+        }
 
         return redirect()->route('tickets.show', $ticket)
             ->with('success', 'Ticket créé avec succès.');
