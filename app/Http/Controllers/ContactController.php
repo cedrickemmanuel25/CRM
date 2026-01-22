@@ -68,7 +68,9 @@ class ContactController extends Controller
         $owners = \App\Models\User::whereHas('contacts')->get();
         $entreprises = Contact::distinct()->whereNotNull('entreprise')->pluck('entreprise');
 
-        if ($request->ajax()) {
+        // Vérifier si c'est une vraie requête AJAX qui accepte JSON
+        // On vérifie à la fois ajax() et wantsJson() pour éviter les faux positifs
+        if ($request->ajax() && ($request->wantsJson() || $request->expectsJson())) {
             return response()->json([
                 'html' => view('contacts._table_rows', compact('contacts'))->render(),
                 'total' => $contacts->total()

@@ -132,25 +132,31 @@
             </thead>
             <tbody x-data="{
                 startPolling() {
-                    setInterval(() => {
-                        const url = new URL(window.location.href);
-                        fetch(url, {
-                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                            credentials: 'same-origin'
-                        })
-                        .then(response => {
-                            if (response.ok) return response.json();
-                            throw new Error('Request failed');
-                        })
-                        .then(data => {
-                            if (data.html) {
-                                this.$el.innerHTML = data.html;
-                                const countEl = document.getElementById('contact-count');
-                                if (countEl) countEl.innerText = data.total;
-                            }
-                        })
-                        .catch(error => console.warn('Polling error:', error));
-                    }, 5000);
+                    // Démarrer le polling après un court délai pour éviter les conflits avec le chargement initial
+                    setTimeout(() => {
+                        setInterval(() => {
+                            const url = new URL(window.location.href);
+                            fetch(url, {
+                                headers: { 
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json'
+                                },
+                                credentials: 'same-origin'
+                            })
+                            .then(response => {
+                                if (response.ok) return response.json();
+                                throw new Error('Request failed');
+                            })
+                            .then(data => {
+                                if (data.html) {
+                                    this.$el.innerHTML = data.html;
+                                    const countEl = document.getElementById('contact-count');
+                                    if (countEl) countEl.innerText = data.total;
+                                }
+                            })
+                            .catch(error => console.warn('Polling error:', error));
+                        }, 5000);
+                    }, 1000);
                 }
             }" x-init="startPolling()" class="bg-white divide-y divide-slate-100">
                 @include('contacts._table_rows')
