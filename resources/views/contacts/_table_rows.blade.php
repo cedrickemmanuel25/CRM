@@ -1,6 +1,6 @@
 @forelse($contacts as $contact)
     @php
-        $isOwner = auth()->id() === $contact->user_id_owner;
+        $isOwner = (int)auth()->id() === (int)$contact->user_id_owner;
         $canEdit = auth()->user()->isAdmin() || (auth()->user()->isCommercial() && $isOwner);
     @endphp
 <tr class="hover:bg-slate-50/50 transition-colors group align-top">
