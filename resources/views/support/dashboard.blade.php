@@ -234,88 +234,138 @@
                     
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="bg-slate-50/50 border-b border-slate-200">
+                            <thead class="bg-gradient-to-r from-slate-50 via-blue-50/30 to-slate-50 border-b-2 border-slate-200">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-xs font-black text-slate-500 uppercase tracking-wider">Sujet</th>
-                                    <th class="px-6 py-4 text-left text-xs font-black text-slate-500 uppercase tracking-wider">Client</th>
-                                    <th class="px-6 py-4 text-left text-xs font-black text-slate-500 uppercase tracking-wider">Assigné à</th>
-                                    <th class="px-6 py-4 text-left text-xs font-black text-slate-500 uppercase tracking-wider">Priorité</th>
-                                    <th class="px-6 py-4 text-left text-xs font-black text-slate-500 uppercase tracking-wider">Statut</th>
-                                    <th class="px-6 py-4 text-right text-xs font-black text-slate-500 uppercase tracking-wider">Action</th>
+                                    <th class="px-6 py-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">Ticket</th>
+                                    <th class="px-6 py-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">Client</th>
+                                    <th class="px-6 py-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">Assigné</th>
+                                    <th class="px-6 py-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">Priorité</th>
+                                    <th class="px-6 py-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">Statut</th>
+                                    <th class="px-6 py-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">Temps</th>
+                                    <th class="px-6 py-4 text-right text-[10px] font-black text-slate-600 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-slate-100 bg-white">
                                 @forelse($data['lists']['recent_tickets'] as $ticket)
-                                <tr class="hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50/30 transition-colors group">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="max-w-[200px]">
-                                             <p class="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">{{ $ticket->subject }}</p>
-                                             <p class="text-[11px] text-slate-400 font-semibold uppercase mt-1">{{ $ticket->created_at->diffForHumans() }}</p>
+                                <tr class="hover:bg-gradient-to-r hover:from-indigo-50/50 hover:via-blue-50/30 hover:to-slate-50 transition-all duration-200 group border-l-4 border-transparent hover:border-indigo-500">
+                                    <td class="px-6 py-5">
+                                        <div class="flex items-start gap-3">
+                                            <div class="flex-shrink-0 mt-0.5">
+                                                <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 text-xs font-black ring-2 ring-white shadow-sm group-hover:from-indigo-600 group-hover:to-blue-600 group-hover:text-white transition-all">
+                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <a href="{{ route('tickets.show', $ticket) }}" class="block">
+                                                    <p class="text-sm font-black text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight mb-1">
+                                                        {{ $ticket->subject }}
+                                                    </p>
+                                                    <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                                        <span>#{{ $ticket->id }}</span>
+                                                        <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+                                                        <span>{{ $ticket->category ?? 'N/A' }}</span>
+                                                    </div>
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-5">
                                         <div class="flex items-center gap-3">
-                                            <div class="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 text-xs font-black ring-2 ring-white shadow-sm">
+                                            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 text-sm font-black ring-2 ring-white shadow-sm flex-shrink-0">
                                                 {{ substr($ticket->contact->nom ?? 'C', 0, 1) }}
                                             </div>
-                                            <span class="text-sm font-semibold text-slate-700">{{ $ticket->contact->nom_complet ?? 'Inconnu' }}</span>
+                                            <div class="min-w-0">
+                                                <p class="text-sm font-bold text-slate-900 truncate">{{ $ticket->contact->nom_complet ?? 'Inconnu' }}</p>
+                                                <p class="text-[10px] text-slate-400 font-semibold truncate">{{ $ticket->contact->email ?? '' }}</p>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-5">
                                         @if($ticket->assignee)
-                                        <div class="flex items-center gap-2">
-                                            <div class="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs font-bold">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="h-8 w-8 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-700 text-xs font-black ring-2 ring-white shadow-sm">
                                                 {{ substr($ticket->assignee->name ?? 'U', 0, 1) }}
                                             </div>
-                                            <span class="text-sm font-semibold text-slate-700">{{ $ticket->assignee->name ?? 'N/A' }}</span>
+                                            <span class="text-sm font-bold text-slate-700">{{ $ticket->assignee->name ?? 'N/A' }}</span>
                                         </div>
                                         @else
-                                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">Non assigné</span>
+                                        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg">
+                                            <svg class="h-4 w-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span class="text-xs font-black text-amber-700 uppercase tracking-wider">Non assigné</span>
+                                        </div>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-5">
                                         @php
-                                            $priorityColors = [
-                                                'urgent' => 'bg-gradient-to-r from-rose-100 to-red-100 text-rose-800 border-rose-200',
-                                                'high' => 'bg-gradient-to-r from-orange-100 to-amber-100 text-orange-800 border-orange-200',
-                                                'medium' => 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-blue-200',
-                                                'low' => 'bg-slate-100 text-slate-800 border-slate-200',
+                                            $priorityConfig = [
+                                                'urgent' => ['bg' => 'bg-rose-500', 'text' => 'text-white', 'dot' => 'bg-rose-600', 'pulse' => true, 'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'],
+                                                'high' => ['bg' => 'bg-orange-500', 'text' => 'text-white', 'dot' => 'bg-orange-600', 'pulse' => false, 'icon' => 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+                                                'medium' => ['bg' => 'bg-blue-500', 'text' => 'text-white', 'dot' => 'bg-blue-600', 'pulse' => false, 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
+                                                'low' => ['bg' => 'bg-slate-400', 'text' => 'text-white', 'dot' => 'bg-slate-500', 'pulse' => false, 'icon' => 'M5 13l4 4L19 7'],
                                             ];
-                                            $colorClass = $priorityColors[$ticket->priority] ?? 'bg-slate-100 text-slate-800 border-slate-200';
+                                            $priority = $priorityConfig[$ticket->priority] ?? $priorityConfig['low'];
                                         @endphp
-                                        <span class="px-3 py-1.5 inline-flex text-[10px] font-black uppercase tracking-widest rounded-full border {{ $colorClass }}">
-                                            {{ $ticket->priority }}
-                                        </span>
+                                        <div class="inline-flex items-center gap-2 px-3 py-1.5 {{ $priority['bg'] }} {{ $priority['text'] }} rounded-lg shadow-sm">
+                                            <span class="h-2 w-2 rounded-full {{ $priority['dot'] }} {{ $priority['pulse'] ? 'animate-pulse' : '' }}"></span>
+                                            <span class="text-[10px] font-black uppercase tracking-widest">{{ $ticket->priority }}</span>
+                                        </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-5">
                                         @php
-                                            $statusColors = [
-                                                'new' => 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border-blue-100',
-                                                'in_progress' => 'bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 border-amber-100',
-                                                'resolved' => 'bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 border-emerald-100',
-                                                'waiting_client' => 'bg-gradient-to-r from-purple-50 to-violet-50 text-purple-700 border-purple-100',
-                                                'closed' => 'bg-slate-50 text-slate-600 border-slate-100',
+                                            $statusConfig = [
+                                                'new' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'border' => 'border-blue-200', 'icon' => 'M12 4v16m8-8H4'],
+                                                'in_progress' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800', 'border' => 'border-amber-200', 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
+                                                'resolved' => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-800', 'border' => 'border-emerald-200', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+                                                'waiting_client' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800', 'border' => 'border-purple-200', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
+                                                'closed' => ['bg' => 'bg-slate-100', 'text' => 'text-slate-700', 'border' => 'border-slate-200', 'icon' => 'M6 18L18 6M6 6l12 12'],
                                             ];
-                                            $statusClass = $statusColors[$ticket->status] ?? 'bg-slate-50 text-slate-600 border-slate-100';
+                                            $status = $statusConfig[$ticket->status] ?? $statusConfig['closed'];
                                         @endphp
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-black uppercase border {{ $statusClass }}">
-                                            {{ str_replace('_', ' ', $ticket->status) }}
-                                        </span>
+                                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 {{ $status['bg'] }} {{ $status['text'] }} border {{ $status['border'] }} rounded-lg">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="{{ $status['icon'] }}" />
+                                            </svg>
+                                            <span class="text-[10px] font-black uppercase tracking-wider">{{ str_replace('_', ' ', $ticket->status) }}</span>
+                                        </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right">
-                                        <a href="{{ route('tickets.show', $ticket) }}" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-xs font-bold rounded-lg hover:from-indigo-700 hover:to-blue-700 transition-all shadow-sm">
-                                            Ouvrir
-                                        </a>
+                                    <td class="px-6 py-5">
+                                        <div class="flex flex-col">
+                                            <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                                                <svg class="h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>{{ $ticket->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <span class="text-[9px] text-slate-400 font-semibold uppercase tracking-tight mt-0.5">{{ $ticket->created_at->format('d/m/Y H:i') }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-5">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="{{ route('tickets.show', $ticket) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-xs font-black rounded-lg hover:from-indigo-700 hover:to-blue-700 transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                Ouvrir
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-12 text-center">
+                                    <td colspan="7" class="px-6 py-16 text-center">
                                         <div class="flex flex-col items-center justify-center">
-                                            <svg class="h-12 w-12 text-slate-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                            </svg>
-                                            <p class="text-slate-500 font-semibold">Aucun ticket récent</p>
+                                            <div class="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                                                <svg class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-slate-600 font-bold text-sm mb-1">Aucun ticket récent</p>
+                                            <p class="text-slate-400 text-xs font-semibold">Les nouveaux tickets apparaîtront ici</p>
                                         </div>
                                     </td>
                                 </tr>
