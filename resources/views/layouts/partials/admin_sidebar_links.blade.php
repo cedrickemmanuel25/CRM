@@ -29,7 +29,7 @@
     <li>
         <a href="{{ route($link['route']) }}" 
            class="group flex items-center gap-x-2.5 rounded-lg py-1.5 px-2.5 text-xs font-medium leading-6 transition-all duration-200 
-           {{ request()->routeIs($link['route']) || request()->routeIs($link['route'].'*') 
+           {{ request()->routeIs($link['route']) || request()->routeIs(explode('.', $link['route'])[0] . '.*') 
                 ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20 translate-x-1' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200' }}">
             <svg class="h-5 w-5 shrink-0 transition-transform duration-200 {{ request()->routeIs($link['route']) ? 'scale-110' : 'group-hover:scale-110' }}" 
