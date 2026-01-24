@@ -19,7 +19,7 @@
             <div class="p-6">
                 <!-- Photo Upload Section -->
                 <div class="mb-8 flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-slate-100">
-                    <div class="relative group" x-data="{ photoPreview: '{{ $isEdit ? $contact->avatar_url : 'https://ui-avatars.com/api/?name=N+A&background=6366f1&color=fff&size=256' }}' }">
+                    <div class="relative group" x-data="{ photoPreview: '{{ $isEdit ? $contact->avatar_url : 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%2394a3b8\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z\'%3E%3C/path%3E%3C/svg%3E' }}' }">
                         <div class="h-24 w-24 rounded-full border-4 border-white shadow-md overflow-hidden bg-slate-100 ring-1 ring-slate-200">
                             <img :src="photoPreview" alt="Aperçu" class="h-full w-full object-cover">
                         </div>
