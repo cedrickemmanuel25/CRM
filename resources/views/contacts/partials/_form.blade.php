@@ -7,9 +7,9 @@
     <div class="lg:col-span-8 space-y-6">
         
         <!-- Document Section: Identity & Company -->
-        <div class="bg-white border border-slate-200 shadow-sm rounded-lg overflow-hidden">
-            <div class="px-6 py-3 border-b border-slate-100 bg-slate-50/50">
-                <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">Identité et Structure</h2>
+        <div class="bg-white border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+            <div class="px-6 py-3 border-b border-gray-100 bg-gray-50/50">
+                <h2 class="text-[11px] font-bold text-gray-800 uppercase tracking-widest">Identité et Structure</h2>
             </div>
             <div class="p-8">
                 <div class="flex flex-col md:flex-row gap-10">
@@ -44,15 +44,15 @@
                     <!-- Core Fields: High Density -->
                     <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
                         <div class="col-span-1 space-y-1">
-                            <label for="prenom" class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Prénom Officiel</label>
+                            <label for="prenom" class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Prénom Officiel</label>
                             <input type="text" name="prenom" id="prenom" value="{{ old('prenom', $isEdit ? $contact->prenom : '') }}" required 
-                                class="block w-full px-3 py-2 border border-slate-300 rounded text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-0 transition-colors" placeholder="Obligatoire">
+                                class="block w-full px-3 py-2 border border-gray-300 rounded text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-0 transition-colors" placeholder="Obligatoire">
                         </div>
                         
                         <div class="col-span-1 space-y-1">
-                            <label for="nom" class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Nom de Famille</label>
+                            <label for="nom" class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Nom de Famille</label>
                             <input type="text" name="nom" id="nom" value="{{ old('nom', $isEdit ? $contact->nom : '') }}" required 
-                                class="block w-full px-3 py-2 border border-slate-300 rounded text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-0 transition-colors" placeholder="Obligatoire">
+                                class="block w-full px-3 py-2 border border-gray-300 rounded text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-0 transition-colors" placeholder="Obligatoire">
                         </div>
 
                         <div class="col-span-2 space-y-1">
@@ -249,18 +249,17 @@
 </script>
 
 <style>
-    /* Professional CRM density styling */
+    /* Integrated CRM density styling */
     .iti { width: 100% !important; display: block !important; }
-    .iti__selected-dial-code { font-weight: 900 !important; color: #1e293b !important; font-size: 0.75rem !important; }
+    .iti__selected-dial-code { font-weight: 700 !important; color: #111827 !important; font-size: 0.75rem !important; }
     .iti__country-list { 
-        border-radius: 4px !important; 
-        border: 1px solid #cbd5e1 !important; 
+        border-radius: 6px !important; 
+        border: 1px solid #e5e7eb !important; 
         box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important; 
         font-size: 0.75rem !important;
     }
     
     [x-cloak] { display: none !important; }
     
-    label { pointer-events: none; }
-    input::placeholder { font-weight: 300; opacity: 0.5; font-style: italic; }
+    input::placeholder { font-weight: 400; opacity: 0.4; }
 </style>
