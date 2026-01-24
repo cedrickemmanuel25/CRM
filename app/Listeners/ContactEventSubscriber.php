@@ -18,7 +18,7 @@ class ContactEventSubscriber
         NotificationService::send('contact_created', new ContactCRUDNotification('created', [
             'id' => $event->contact->id,
             'name' => $event->contact->nom_complet ?? $event->contact->nom
-        ]));
+        ]), $event->contact);
     }
 
     /**
@@ -28,7 +28,7 @@ class ContactEventSubscriber
         NotificationService::send('contact_updated', new ContactCRUDNotification('updated', [
             'id' => $event->contact->id,
             'name' => $event->contact->nom_complet ?? $event->contact->nom
-        ]));
+        ]), $event->contact);
     }
 
     /**

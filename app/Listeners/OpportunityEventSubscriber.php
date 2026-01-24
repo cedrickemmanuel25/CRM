@@ -18,7 +18,7 @@ class OpportunityEventSubscriber
             'titre' => $event->opportunity->titre,
             'montant' => $event->opportunity->montant_estime,
             'link' => "/opportunities/{$event->opportunity->id}"
-        ]));
+        ]), $event->opportunity);
     }
 
     public function handleOpportunityUpdated(OpportunityUpdated $event): void {
@@ -26,7 +26,7 @@ class OpportunityEventSubscriber
             'id' => $event->opportunity->id,
             'titre' => $event->opportunity->titre,
             'link' => "/opportunities/{$event->opportunity->id}"
-        ]));
+        ]), $event->opportunity);
     }
 
     public function handleOpportunityWon(OpportunityWon $event): void {
@@ -35,7 +35,7 @@ class OpportunityEventSubscriber
             'titre' => $event->opportunity->titre,
             'montant' => $event->opportunity->montant_estime,
             'link' => "/opportunities/{$event->opportunity->id}"
-        ]));
+        ]), $event->opportunity);
     }
 
     public function handleOpportunityLost(OpportunityLost $event): void {
@@ -43,7 +43,7 @@ class OpportunityEventSubscriber
             'id' => $event->opportunity->id,
             'titre' => $event->opportunity->titre,
             'link' => "/opportunities/{$event->opportunity->id}"
-        ]));
+        ]), $event->opportunity);
     }
 
     public function subscribe(Dispatcher $events): array

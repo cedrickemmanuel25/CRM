@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             // ContactSeeder (déjà appelé implicitement ou à ajouter si besoin)
             DashboardSeeder::class, // Pour les data de base
             OpportunitySeeder::class,
+            NotificationSeeder::class,
         ]);
     }
 }
