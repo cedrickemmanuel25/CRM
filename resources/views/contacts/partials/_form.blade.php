@@ -46,17 +46,16 @@
                     </div>
 
                     <!-- Core Fields: Aligned with App Palette -->
-                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
                         <div class="col-span-1 space-y-1.5">
                             <label for="prenom" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prénom</label>
                             <input type="text" name="prenom" id="prenom" value="{{ old('prenom', $isEdit ? $contact->prenom : '') }}" required 
-                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none" placeholder="Ex: Marc">
+                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
                         </div>
                         
                         <div class="col-span-1 space-y-1.5">
                             <label for="nom" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nom de Famille</label>
                             <input type="text" name="nom" id="nom" value="{{ old('nom', $isEdit ? $contact->nom : '') }}" required 
-                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none" placeholder="Ex: Dubois">
+                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
                         </div>
 
                         <div class="col-span-2 space-y-1.5 pt-2">
@@ -66,14 +65,14 @@
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                 </span>
                                 <input type="text" name="entreprise" id="entreprise" value="{{ old('entreprise', $isEdit ? $contact->entreprise : '') }}" required
-                                    class="block w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none" placeholder="Désignation sociale complète">
+                                    class="block w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
                             </div>
                         </div>
 
                         <div class="col-span-2 space-y-1.5 border-t border-gray-100 pt-6 mt-2">
                             <label for="poste" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Intitulé de Poste / Fonction</label>
                             <input type="text" name="poste" id="poste" value="{{ old('poste', $isEdit ? $contact->poste : '') }}" 
-                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none" placeholder="Ex: Directeur Commercial, Responsable Achats...">
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
                         </div>
                     </div>
                 </div>
@@ -217,8 +216,7 @@
             </div>
             <div class="p-0">
                 <textarea name="notes_internes" id="notes_internes" rows="10" 
-                    class="block w-full border-none p-6 text-sm text-gray-300 bg-transparent placeholder-gray-600 focus:ring-0 outline-none h-[280px] resize-none leading-relaxed"
-                    placeholder="Saisissez ici les informations sensibles, enjeux commerciaux ou historiques d'échanges...">{{ old('notes_internes', $isEdit ? $contact->notes_internes : '') }}</textarea>
+                    class="block w-full border-none p-6 text-sm text-gray-300 bg-transparent placeholder-gray-600 focus:ring-0 outline-none h-[280px] resize-none leading-relaxed">{{ old('notes_internes', $isEdit ? $contact->notes_internes : '') }}</textarea>
                 <div class="px-6 py-3 bg-black/40 text-[9px] font-black text-gray-500 uppercase flex items-center gap-2">
                     <div class="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
                     Interne uniquement (Hautement confidentiel)
