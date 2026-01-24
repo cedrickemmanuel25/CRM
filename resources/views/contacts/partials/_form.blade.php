@@ -45,7 +45,8 @@
                         </div>
                     </div>
 
-                    <!-- Core Fields: Aligned with App Palette -->
+                    <!-- Core Fields: Restored Grid for Perfect Alignment -->
+                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
                         <div class="col-span-1 space-y-1.5">
                             <label for="prenom" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prénom</label>
                             <input type="text" name="prenom" id="prenom" value="{{ old('prenom', $isEdit ? $contact->prenom : '') }}" required 
@@ -90,7 +91,7 @@
                     <div class="space-y-1.5">
                         <label for="email" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email Professionnel</label>
                         <input type="email" name="email" id="email" value="{{ old('email', $isEdit ? $contact->email : '') }}" required 
-                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-gray-50/20 focus:bg-white focus:border-indigo-600 transition-all outline-none" placeholder="contact@expertise.com">
+                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-gray-50/20 focus:bg-white focus:border-indigo-600 transition-all outline-none">
                     </div>
                     <div class="space-y-1.5">
                         <label for="telephone" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Ligne Directe / GSM</label>
@@ -109,7 +110,7 @@
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </span>
                         <input type="text" name="adresse" id="adresse" value="{{ old('adresse', $isEdit ? $contact->adresse : '') }}" 
-                            class="block w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all" placeholder="Ville, Code Postal, Pays">
+                            class="block w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
                     </div>
                 </div>
 
@@ -201,8 +202,7 @@
                 <div class="space-y-2 pt-2">
                     <label for="tags" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Segmentation Tags</label>
                     <input type="text" name="tags_input" id="tags" value="{{ old('tags_input', ($isEdit && $contact->tags) ? implode(', ', $contact->tags) : '') }}" 
-                        class="block w-full h-12 px-4 border border-gray-300 rounded-lg text-xs bg-white focus:border-indigo-600 outline-none transition-all"
-                        placeholder="VIP, INDUSTRIE, URGENT">
+                        class="block w-full h-12 px-4 border border-gray-300 rounded-lg text-xs bg-white focus:border-indigo-600 outline-none transition-all">
                     <p class="text-[8px] font-medium text-gray-400 uppercase italic mt-2 tracking-tight">Séparez les mots-clés par des virgules</p>
                 </div>
             </div>
