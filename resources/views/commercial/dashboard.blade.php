@@ -153,7 +153,12 @@
                                     </td>
                                     <td class="px-8 py-4">
                                         @if($opp->contact)
-                                        <a href="{{ route('contacts.show', $opp->contact) }}" class="text-slate-500 font-medium hover:text-indigo-600">{{ $opp->contact->nom_complet }}</a>
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-8 w-8 rounded-full border border-slate-200 overflow-hidden shadow-sm bg-slate-100 italic shrink-0">
+                                                <img src="{{ $opp->contact->avatar_url }}" alt="{{ $opp->contact->nom_complet }}" class="h-full w-full object-cover">
+                                            </div>
+                                            <a href="{{ route('contacts.show', $opp->contact) }}" class="text-slate-500 font-medium hover:text-indigo-600 truncate">{{ $opp->contact->nom_complet }}</a>
+                                        </div>
                                         @else
                                         <span class="text-slate-400 italic">N/A</span>
                                         @endif

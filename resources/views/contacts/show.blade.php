@@ -35,8 +35,8 @@
                 <div class="flex items-center gap-4">
                     <!-- Avatar Circle -->
                     <div class="relative">
-                        <div class="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                            {{ strtoupper(substr($contact->prenom, 0, 1)) }}{{ strtoupper(substr($contact->nom, 0, 1)) }}
+                        <div class="h-16 w-16 rounded-full border-2 border-white shadow-lg overflow-hidden bg-slate-100 ring-1 ring-slate-200">
+                            <img src="{{ $contact->avatar_url }}" alt="{{ $contact->nom_complet }}" class="h-full w-full object-cover">
                         </div>
                         @php
                             $statusIcon = match($contact->statut) {

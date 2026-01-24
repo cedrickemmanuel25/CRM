@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <form id="edit-contact-form" action="{{ route('contacts.update', $contact) }}" method="POST">
+    <form id="edit-contact-form" action="{{ route('contacts.update', $contact) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         @include('contacts.partials._form')

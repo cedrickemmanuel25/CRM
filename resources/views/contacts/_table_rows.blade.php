@@ -7,8 +7,8 @@
     <td class="px-3 py-4 break-words">
         <div class="flex items-center">
             <div class="relative flex-shrink-0">
-                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                    {{ strtoupper(substr($contact->prenom, 0, 1)) }}{{ strtoupper(substr($contact->nom, 0, 1)) }}
+                <div class="h-10 w-10 rounded-full border border-slate-200 overflow-hidden shadow-sm bg-slate-100 italic">
+                    <img src="{{ $contact->avatar_url }}" alt="{{ $contact->nom_complet }}" class="h-full w-full object-cover">
                 </div>
             </div>
             <div class="ml-3 min-w-0">

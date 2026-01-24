@@ -109,7 +109,14 @@ class ContactController extends Controller
             'tags_input' => 'nullable|string',
             'statut' => 'required|in:lead,prospect,client,inactif',
             'notes_internes' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
+
+        // Process photo upload
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('contacts/photos', 'public');
+            $validated['photo'] = $path;
+        }
 
         // Process tags
         if ($request->filled('tags_input')) {
@@ -242,7 +249,18 @@ class ContactController extends Controller
             'tags_input' => 'nullable|string',
             'statut' => 'required|in:lead,prospect,client,inactif',
             'notes_internes' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
+
+        // Process photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($contact->photo) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($contact->photo);
+            }
+            $path = $request->file('photo')->store('contacts/photos', 'public');
+            $validated['photo'] = $path;
+        }
 
         // Process tags
         if ($request->filled('tags_input')) {
@@ -279,6 +297,12 @@ class ContactController extends Controller
         }
 
         $contactName = $contact->prenom . ' ' . $contact->nom;
+        
+        // Delete photo from storage if exists
+        if ($contact->photo) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($contact->photo);
+        }
+        
         $contact->delete();
 
         // Fire Event for Notifications

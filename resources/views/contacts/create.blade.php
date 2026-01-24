@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <form id="create-contact-form" action="{{ route('contacts.store') }}" method="POST">
+    <form id="create-contact-form" action="{{ route('contacts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @include('contacts.partials._form')
     </form>

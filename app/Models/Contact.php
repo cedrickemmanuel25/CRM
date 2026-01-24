@@ -26,6 +26,7 @@ class Contact extends Model
         'poste',
         'tags',
         'statut',
+        'photo',
         'notes_internes',
     ];
 
@@ -36,6 +37,19 @@ class Contact extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Obtenir l'URL de l'avatar (photo ou initiale par défaut)
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->photo) {
+            return asset('storage/' . $this->photo);
+        }
+
+        $seed = urlencode($this->nom_complet);
+        return "https://ui-avatars.com/api/?name={$seed}&background=6366f1&color=fff&size=256";
+    }
 
     // Relations
     public function owner(): BelongsTo
