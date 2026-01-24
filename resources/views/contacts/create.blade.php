@@ -10,7 +10,7 @@
             <div class="h-16 flex items-center justify-between">
                 <!-- Left: Entity Context -->
                 <div class="flex items-center gap-4">
-                    <div class="h-9 w-9 rounded bg-gray-900 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                    <div class="h-9 w-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-indigo-500/20">
                         C
                     </div>
                     <div class="flex flex-col">
