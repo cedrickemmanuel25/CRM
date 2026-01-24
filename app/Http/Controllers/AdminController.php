@@ -36,7 +36,11 @@ class AdminController extends Controller
     public function settings()
     {
         $settings = Setting::all()->pluck('value', 'key');
-        return view('admin.settings', compact('settings'));
+        $notificationPreferences = \App\Models\NotificationPreference::whereNull('user_id')
+            ->get()
+            ->keyBy('event_type');
+            
+        return view('admin.settings', compact('settings', 'notificationPreferences'));
     }
 
     /**
@@ -46,10 +50,46 @@ class AdminController extends Controller
     {
         $data = $request->except('_token');
         
+        // Handle logo file upload
+        if ($request->hasFile('company_logo')) {
+            $logoFile = $request->file('company_logo');
+            $logoPath = $logoFile->store('logos', 'public');
+            
+            Setting::updateOrCreate(
+                ['key' => 'company_logo'],
+                ['value' => $logoPath]
+            );
+            unset($data['company_logo']);
+        }
+
+        // Handle Notification Preferences
+        $notificationEvents = [
+            'contact_created', 'contact_updated', 'contact_deleted',
+            'opportunity_created', 'opportunity_updated', 'opportunity_won', 'opportunity_lost',
+            'task_created', 'task_completed', 'task_overdue',
+            'user_created', 'error'
+        ];
+
+        foreach ($notificationEvents as $event) {
+            $emailKey = "notif_{$event}_email";
+            $pushKey = "notif_{$event}_push";
+
+            \App\Models\NotificationPreference::updateOrCreate(
+                ['user_id' => null, 'event_type' => $event],
+                [
+                    'email_enabled' => $request->has($emailKey),
+                    'push_enabled' => $request->has($pushKey),
+                ]
+            );
+
+            // Remove from data to not save in Settings table
+            unset($data[$emailKey], $data[$pushKey]);
+        }
+        
         foreach ($data as $key => $value) {
             Setting::updateOrCreate(
                 ['key' => $key],
-                ['value' => $value]
+                ['value' => (string) $value]
             );
         }
 

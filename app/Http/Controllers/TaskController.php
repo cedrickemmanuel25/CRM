@@ -137,18 +137,8 @@ class TaskController extends Controller
             'related_type' => $validated['related_type'] ?? null,
         ]);
         
-        // Notification
-        if ($task->assigned_to && $task->assigned_to !== auth()->id()) {
-            $assignee = User::find($task->assigned_to);
-            if ($assignee) {
-                $assignee->notify(new \App\Notifications\EntityAssigned(
-                    'task',
-                    $task,
-                    auth()->user(),
-                    "Nouvelle tâche assignée : {$task->titre}"
-                ));
-            }
-        }
+        // Fire Event for Notifications
+        event(new \App\Events\Task\TaskCreated($task));
 
         $redirect = redirect()->back();
         

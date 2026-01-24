@@ -111,6 +111,15 @@ class Opportunity extends Model
             // Log sensitive action in AuditLog
             \App\Models\AuditLog::log('opportunity_stage_change', $this, ['stade' => $oldStage], ['stade' => $newStage]);
 
+            // Fire Events for Notifications
+            if ($newStage === 'gagne') {
+                event(new \App\Events\Opportunity\OpportunityWon($this));
+            } elseif ($newStage === 'perdu') {
+                event(new \App\Events\Opportunity\OpportunityLost($this));
+            } else {
+                event(new \App\Events\Opportunity\OpportunityUpdated($this));
+            }
+
             return true;
         }
         return false;

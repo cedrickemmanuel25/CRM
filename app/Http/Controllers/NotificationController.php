@@ -71,8 +71,16 @@ class NotificationController extends Controller
         $preferences = NotificationPreference::where('user_id', Auth::id())->get()->keyBy('event_type');
         
         $eventTypes = [
-            'task_assigned' => 'Nouvelle tâche assignée',
-            'task_reminder' => 'Rappel de tâche',
+            'contact_created' => 'Contact créé',
+            'contact_updated' => 'Contact modifié',
+            'contact_deleted' => 'Contact supprimé',
+            'opportunity_created' => 'Opportunité créée',
+            'opportunity_updated' => 'Opportunité modifiée',
+            'opportunity_won' => 'Opportunité gagnée',
+            'opportunity_lost' => 'Opportunité perdue',
+            'task_created' => 'Tâche créée',
+            'task_completed' => 'Tâche terminée',
+            'task_overdue' => 'Tâche en retard',
         ];
 
         return view('profile.notifications', compact('preferences', 'eventTypes'));
@@ -81,14 +89,18 @@ class NotificationController extends Controller
     public function updateSettings(Request $request)
     {
         $user = Auth::user();
-        $types = ['task_assigned', 'task_reminder']; // Allowed types
+        $types = [
+            'contact_created', 'contact_updated', 'contact_deleted',
+            'opportunity_created', 'opportunity_updated', 'opportunity_won', 'opportunity_lost',
+            'task_created', 'task_completed', 'task_overdue'
+        ];
 
         foreach ($types as $type) {
             NotificationPreference::updateOrCreate(
                 ['user_id' => $user->id, 'event_type' => $type],
                 [
-                    'mail' => $request->has("preferences.$type.mail"),
-                    'database' => $request->has("preferences.$type.database"),
+                    'email_enabled' => $request->has("preferences.$type.email"),
+                    'push_enabled' => $request->has("preferences.$type.push"),
                 ]
             );
         }

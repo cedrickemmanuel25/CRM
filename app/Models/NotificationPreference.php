@@ -10,15 +10,13 @@ class NotificationPreference extends Model
     protected $fillable = [
         'user_id',
         'event_type',
-        'mail',
-        'database',
+        'email_enabled',
+        'push_enabled',
     ];
 
-    protected $casts = [
-        'mail' => 'boolean',
-        'database' => 'boolean',
-    ];
-
+    /**
+     * Get the user that owns the preference.
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

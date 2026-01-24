@@ -56,5 +56,11 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         );
+
+        // Notification Subscribers
+        \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\ContactEventSubscriber::class);
+        \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\OpportunityEventSubscriber::class);
+        \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\TaskEventSubscriber::class);
+        \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\SystemEventSubscriber::class);
     }
 }

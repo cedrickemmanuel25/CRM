@@ -178,27 +178,8 @@ class OpportunityController extends Controller
             ]);
         }
 
-        // Notify the assigned commercial if it's not the creator
-        if ($opportunity->commercial_id !== auth()->id()) {
-            $opportunity->commercial->notify(new \App\Notifications\EntityAssigned(
-                'opportunity',
-                $opportunity,
-                auth()->user(),
-                "Une nouvelle opportunité vous a été assignée : {$opportunity->titre}"
-            ));
-        }
-
-        // Notification pour les administrateurs si créé par un commercial
-        if (auth()->user()->isCommercial()) {
-            $admins = \App\Models\User::admins()->get();
-            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\EntityActionNotification(
-                'created',
-                $opportunity,
-                'opportunity',
-                "Opportunité créée : {$opportunity->titre} par " . auth()->user()->name,
-                auth()->user()
-            ));
-        }
+        // Fire Event for Notifications
+        event(new \App\Events\Opportunity\OpportunityCreated($opportunity));
 
         // Création d'une activité automatique
         \App\Models\Activity::create([
@@ -297,18 +278,9 @@ class OpportunityController extends Controller
         // 3. Update other fields (excluding already handled ones to avoid overwriting or duplicates)
         $opportunity->update(collect($validated)->except(['stade', 'commercial_id'])->toArray());
 
-        // Notify owner if updated by someone else
-        if ($opportunity->commercial_id && $opportunity->commercial_id !== auth()->id()) {
-            $owner = \App\Models\User::find($opportunity->commercial_id);
-            if ($owner) {
-                $owner->notify(new \App\Notifications\EntityActionNotification(
-                    'updated',
-                    $opportunity,
-                    'opportunity',
-                    "L'opportunité {$opportunity->titre} a été mise à jour par " . auth()->user()->name,
-                    auth()->user()
-                ));
-            }
+        // Fire Event for Notifications (unless already fired by moveToStage)
+        if (!$request->has('stade') || $validated['stade'] === $opportunity->stade) {
+            event(new \App\Events\Opportunity\OpportunityUpdated($opportunity));
         }
 
         return redirect()->route('opportunities.index')->with('success', 'Opportunité mise à jour.');

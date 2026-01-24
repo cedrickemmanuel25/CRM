@@ -13,6 +13,7 @@ class UserObserver
     public function created(User $user): void
     {
         AuditLog::log('user_created', $user, null, $user->toArray());
+        event(new \App\Events\System\UserCreated($user));
     }
 
     /**

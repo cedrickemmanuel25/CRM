@@ -129,30 +129,8 @@ class ContactController extends Controller
 
         $contact = Contact::create($validated);
 
-        // Notification d'assignation
-        if ($contact->user_id_owner && $contact->user_id_owner !== auth()->id()) {
-            $owner = \App\Models\User::find($contact->user_id_owner);
-            if ($owner) {
-                $owner->notify(new \App\Notifications\EntityAssigned(
-                    'contact', 
-                    $contact, 
-                    auth()->user(),
-                    "Un nouveau contact vous a été assigné : {$contact->prenom} {$contact->nom}"
-                ));
-            }
-        }
-        
-        // Notification pour les administrateurs si créé par un commercial
-        if (auth()->user()->isCommercial()) {
-            $admins = \App\Models\User::admins()->get();
-            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\EntityActionNotification(
-                'created',
-                $contact,
-                'contact',
-                "Contact créé : {$contact->prenom} {$contact->nom} par " . auth()->user()->name,
-                auth()->user()
-            ));
-        }
+        // Fire Event for Notifications
+        event(new \App\Events\Contact\ContactCreated($contact));
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact créé avec succès.');
@@ -283,19 +261,8 @@ class ContactController extends Controller
 
         $contact->update($validated);
 
-        // Notifier le propriétaire si modifié par quelqu'un d'autre
-        if ($contact->user_id_owner && $contact->user_id_owner !== auth()->id()) {
-             $owner = \App\Models\User::find($contact->user_id_owner);
-             if ($owner) {
-                 $owner->notify(new \App\Notifications\EntityActionNotification(
-                     'updated',
-                     $contact,
-                     'contact',
-                     "Votre contact {$contact->prenom} {$contact->nom} a été modifié par " . auth()->user()->name,
-                     auth()->user()
-                 ));
-             }
-        }
+        // Fire Event for Notifications
+        event(new \App\Events\Contact\ContactUpdated($contact));
 
         return redirect()->route('contacts.show', $contact)
             ->with('success', 'Contact mis à jour avec succès.');
@@ -311,7 +278,11 @@ class ContactController extends Controller
             abort(403, 'Vous n\'êtes pas autorisé à supprimer ce contact.');
         }
 
+        $contactName = $contact->prenom . ' ' . $contact->nom;
         $contact->delete();
+
+        // Fire Event for Notifications
+        event(new \App\Events\Contact\ContactDeleted($contactName, auth()->user()->name));
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact supprimé avec succès.');

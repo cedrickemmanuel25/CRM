@@ -69,5 +69,6 @@ class Task extends Model
     public function markAsDone()
     {
         $this->update(['statut' => 'done']);
+        event(new \App\Events\Task\TaskCompleted($this));
     }
 }
