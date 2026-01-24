@@ -36,9 +36,28 @@ class AdminController extends Controller
     public function settings()
     {
         $settings = Setting::all()->pluck('value', 'key');
+        
+        // Système (global)
         $notificationPreferences = \App\Models\NotificationPreference::whereNull('user_id')
             ->get()
             ->keyBy('event_type');
+            
+        // Personnel (pour l'admin connecté)
+        $personalPreferences = \App\Models\NotificationPreference::where('user_id', auth()->id())
+            ->get()
+            ->keyBy('event_type');
+
+        $eventTypes = [
+            'contact_created' => 'Contact créé',
+            'contact_updated' => 'Contact modifié',
+            'opportunity_created' => 'Opportunité créée',
+            'opportunity_updated' => 'Opportunité modifiée',
+            'opportunity_won' => 'Opportunité gagnée',
+            'opportunity_lost' => 'Opportunité perdue',
+            'task_created' => 'Tâche créée',
+            'task_completed' => 'Tâche terminée',
+            'task_overdue' => 'Tâche en retard',
+        ];
             
         $users = User::all();
             
@@ -48,7 +67,7 @@ class AdminController extends Controller
             ->take(10)
             ->get();
             
-        return view('admin.settings', compact('settings', 'notificationPreferences', 'users', 'recentExports'));
+        return view('admin.settings', compact('settings', 'notificationPreferences', 'personalPreferences', 'eventTypes', 'users', 'recentExports'));
     }
 
     /**
@@ -70,7 +89,7 @@ class AdminController extends Controller
             unset($data['company_logo']);
         }
 
-        // Handle Notification Preferences
+        // Handle Global Notification Preferences
         $notificationEvents = [
             'contact_created', 'contact_updated', 'contact_deleted',
             'opportunity_created', 'opportunity_updated', 'opportunity_won', 'opportunity_lost',
@@ -89,8 +108,27 @@ class AdminController extends Controller
                     'push_enabled' => $request->has($pushKey),
                 ]
             );
+            unset($data[$emailKey], $data[$pushKey]);
+        }
 
-            // Remove from data to not save in Settings table
+        // Handle Personal Notification Preferences
+        $personalEvents = [
+            'contact_created', 'contact_updated', 'opportunity_created', 
+            'opportunity_updated', 'opportunity_won', 'opportunity_lost',
+            'task_created', 'task_completed', 'task_overdue'
+        ];
+
+        foreach ($personalEvents as $event) {
+            $emailKey = "personal_notif_{$event}_email";
+            $pushKey = "personal_notif_{$event}_push";
+
+            \App\Models\NotificationPreference::updateOrCreate(
+                ['user_id' => auth()->id(), 'event_type' => $event],
+                [
+                    'email_enabled' => $request->has($emailKey),
+                    'push_enabled' => $request->has($pushKey),
+                ]
+            );
             unset($data[$emailKey], $data[$pushKey]);
         }
         

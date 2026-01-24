@@ -174,7 +174,12 @@ x-init="sidebarOpen = false"
                                 <p class="text-xs text-gray-500">Compte</p>
                             </div>
                             <a href="{{ auth()->user()->isAdmin() ? route('admin.profile.edit') : route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Mon Profil</a>
-                            <a href="{{ route('notifications.settings') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Préférences Notifications</a>
+                            @if(!auth()->user()->isAdmin())
+                                <a href="{{ route('notifications.settings') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Préférences Notifications</a>
+                            @endif
+                            @if(auth()->user()->isAdmin())
+                                <a href="{{ route('admin.settings') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50 font-bold border-t border-gray-100" role="menuitem" tabindex="-1">Paramètres Système</a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="block w-full text-left px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Déconnexion</button>
