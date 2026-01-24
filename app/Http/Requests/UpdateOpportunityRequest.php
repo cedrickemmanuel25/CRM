@@ -11,7 +11,7 @@ class UpdateOpportunityRequest extends FormRequest
         $opportunity = $this->route('opportunity');
         
         // Commercials can only update their own opportunities
-        if ($this->user()->isCommercial() && $opportunity->commercial_id !== $this->user()->id) {
+        if ($this->user()->isCommercial() && $opportunity->commercial_id != $this->user()->id) {
             return false;
         }
 

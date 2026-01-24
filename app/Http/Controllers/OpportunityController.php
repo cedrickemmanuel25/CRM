@@ -201,7 +201,7 @@ class OpportunityController extends Controller
     public function show(Opportunity $opportunity, Request $request)
     {
         if (auth()->user()->isCommercial()) {
-            if ($opportunity->commercial_id !== auth()->id()) {
+            if ($opportunity->commercial_id != auth()->id()) {
                 abort(403, 'Vous n\'êtes pas autorisé à voir cette opportunité.');
             }
         }
@@ -231,7 +231,7 @@ class OpportunityController extends Controller
      */
     public function edit(Opportunity $opportunity)
     {
-        if (auth()->user()->isCommercial() && $opportunity->commercial_id !== auth()->id()) {
+        if (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id()) {
             abort(403);
         }
 
@@ -296,7 +296,7 @@ class OpportunityController extends Controller
             return response()->json(['error' => 'Non autorisé.'], 403);
         }
 
-        if (auth()->user()->isCommercial() && $opportunity->commercial_id !== auth()->id()) {
+        if (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id()) {
             return response()->json(['error' => 'Non autorisé.'], 403);
         }
 
@@ -325,7 +325,7 @@ class OpportunityController extends Controller
      */
     public function destroy(Opportunity $opportunity, Request $request)
     {
-        if (auth()->user()->isCommercial() && $opportunity->commercial_id !== auth()->id()) {
+        if (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id()) {
             abort(403);
         }
 
@@ -347,7 +347,7 @@ class OpportunityController extends Controller
             return redirect()->back()->with('error', 'Non autorisé.');
         }
 
-        if (auth()->user()->isCommercial() && $opportunity->commercial_id !== auth()->id()) {
+        if (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id()) {
             return redirect()->back()->with('error', 'Non autorisé.');
         }
 
@@ -365,7 +365,7 @@ class OpportunityController extends Controller
             return redirect()->back()->with('error', 'Non autorisé.');
         }
 
-        if (auth()->user()->isCommercial() && $opportunity->commercial_id !== auth()->id()) {
+        if (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id()) {
             return redirect()->back()->with('error', 'Non autorisé.');
         }
 

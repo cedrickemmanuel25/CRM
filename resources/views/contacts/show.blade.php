@@ -361,13 +361,14 @@
                                         <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Montant</th>
                                         <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Stade</th>
                                         <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Commercial</th>
+                                        <th class="px-5 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100">
                                     @forelse($contact->opportunities as $opp)
                                     <tr class="hover:bg-slate-50 transition-colors">
                                         <td class="px-5 py-4">
-                                            <a href="{{ route('opportunities.show', $opp) }}" class="text-sm font-medium text-slate-900 hover:text-indigo-600">{{ $opp->titre }}</a>
+                                            <a href="{{ route('opportunities.show', $opp) }}" class="text-sm font-medium text-slate-900 hover:text-indigo-600 truncate block">{{ $opp->titre }}</a>
                                             <div class="flex items-center gap-2 mt-1">
                                                 <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                                     <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $opp->probabilite }}%"></div>
@@ -398,10 +399,25 @@
                                                 <span class="text-sm text-slate-900">{{ $opp->commercial->name ?? 'Non assigné' }}</span>
                                             </div>
                                         </td>
+                                        <td class="px-5 py-4 text-right whitespace-nowrap">
+                                            @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id == auth()->id()))
+                                            <div class="flex justify-end gap-2 text-slate-400">
+                                                <a href="{{ route('opportunities.edit', $opp) }}" class="hover:text-amber-600 transition-colors" title="Modifier">
+                                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                                </a>
+                                                <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" onsubmit="return confirm('Supprimer cette opportunité ?');" class="inline">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="hover:text-rose-600 transition-colors" title="Supprimer">
+                                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4" class="px-5 py-12 text-center">
+                                        <td colspan="5" class="px-5 py-12 text-center">
                                             <p class="text-sm text-slate-400">Aucune opportunité rattachée</p>
                                         </td>
                                     </tr>

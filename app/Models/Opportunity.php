@@ -29,6 +29,8 @@ class Opportunity extends Model
     ];
 
     protected $casts = [
+        'commercial_id' => 'integer',
+        'contact_id' => 'integer',
         'montant_estime' => 'decimal:2',
         'date_cloture_prev' => 'date',
         'probabilite' => 'integer',
