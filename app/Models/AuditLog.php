@@ -74,6 +74,12 @@ class AuditLog extends Model
             // Access Requests
             'approve_access_request' => 'Validation demande accès',
             'reject_access_request' => 'Rejet demande accès',
+
+            // Exports
+            'data_export_csv' => 'Extraction CSV',
+            'data_export_pdf' => 'Génération PDF',
+            'gdpr_export' => 'Archive RGPD',
+            'system_backup' => 'Sauvegarde Système',
         ];
         return $map[$this->action] ?? ucfirst(str_replace('_', ' ', $this->action));
     }

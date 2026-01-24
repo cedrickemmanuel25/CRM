@@ -40,7 +40,15 @@ class AdminController extends Controller
             ->get()
             ->keyBy('event_type');
             
-        return view('admin.settings', compact('settings', 'notificationPreferences'));
+        $users = User::all();
+            
+        $recentExports = AuditLog::whereIn('action', ['data_export_csv', 'data_export_pdf', 'gdpr_export', 'system_backup'])
+            ->with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+            
+        return view('admin.settings', compact('settings', 'notificationPreferences', 'users', 'recentExports'));
     }
 
     /**

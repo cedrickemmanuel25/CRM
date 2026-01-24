@@ -24,11 +24,24 @@ class ReportController extends Controller
             "Expires" => "0"
         ];
 
-        $callback = function() use ($type) {
+        $callback = function() use ($type, $request) {
             $file = fopen('php://output', 'w');
             
             // Add BOM for Excel UTF-8 compatibility
             fputs($file, "\xEF\xBB\xBF");
+
+            // Common filters logic
+            $applyFilters = function($query, $ownerColumn) use ($request) {
+                if ($request->filled('owner_id')) {
+                    $query->where($ownerColumn, $request->owner_id);
+                }
+                if ($request->filled('date_from')) {
+                    $query->whereDate('created_at', '>=', $request->date_from);
+                }
+                if ($request->filled('date_to')) {
+                    $query->whereDate('created_at', '<=', $request->date_to);
+                }
+            };
 
             if ($type === 'opportunities') {
                 fputcsv($file, ['ID', 'Titre', 'Montant', 'Stade', 'Probabilité', 'Contact', 'Commercial', 'Date Création'], ';');
@@ -38,6 +51,8 @@ class ReportController extends Controller
                 if (auth()->user()->isCommercial()) {
                     $query->byCommercial(auth()->id());
                 }
+                
+                $applyFilters($query, 'commercial_id');
 
                 $query->chunk(100, function($opportunities) use ($file) {
                     foreach ($opportunities as $opp) {
@@ -53,35 +68,26 @@ class ReportController extends Controller
                         ], ';');
                     }
                 });
-            } elseif ($type === 'contacts') {
-                // Columns matching the View: Contact, Entreprise, Coordonnées (Email, Phone), Source, Propriétaire, Création
-                // We split Coordonnées into Email and Phone for utility
+            } elseif ($type === 'contacts' || $type === 'leads') {
                 fputcsv($file, ['Contact', 'Entreprise', 'Email', 'Téléphone', 'Source', 'Propriétaire', 'Création', 'Statut'], ';');
 
                 $query = Contact::query()->with('owner');
+                if ($type === 'leads') {
+                    $query->where('statut', 'lead');
+                }
 
                 if (auth()->user()->isCommercial()) {
                     $query->ownedBy(auth()->id());
                 }
 
-                if (request('search')) {
-                    $query->search(request('search'));
+                if ($request->filled('search')) {
+                    $query->search($request->search);
                 }
-                if (request('entreprise')) {
-                    $query->where('entreprise', 'like', "%" . request('entreprise') . "%");
+                if ($request->filled('source')) {
+                    $query->where('source', $request->source);
                 }
-                if (request('source')) {
-                    $query->where('source', request('source'));
-                }
-                if (request('owner_id')) {
-                    $query->where('user_id_owner', request('owner_id'));
-                }
-                if (request('date_from')) {
-                    $query->whereDate('created_at', '>=', request('date_from'));
-                }
-                if (request('date_to')) {
-                    $query->whereDate('created_at', '<=', request('date_to'));
-                }
+                
+                $applyFilters($query, 'user_id_owner');
 
                 $query->latest()->chunk(100, function($contacts) use ($file) {
                     foreach ($contacts as $contact) {
@@ -97,31 +103,9 @@ class ReportController extends Controller
                         ], ';');
                     }
                 });
-            } elseif ($type === 'leads') {
-                 fputcsv($file, ['ID', 'Nom', 'Prénom', 'Email', 'Téléphone', 'Entreprise', 'Statut', 'Date Création'], ';');
-                 
-                 $query = Contact::where('statut', 'lead');
-
-                 if (auth()->user()->isCommercial()) {
-                     $query->ownedBy(auth()->id());
-                 }
-
-                 $query->chunk(100, function($contacts) use ($file) {
-                    foreach ($contacts as $contact) {
-                        fputcsv($file, [
-                            $contact->id,
-                            $contact->nom,
-                            $contact->prenom,
-                            $contact->email,
-                            $contact->telephone,
-                            $contact->entreprise,
-                            $contact->statut,
-                            $contact->created_at->format('Y-m-d')
-                        ], ';');
-                    }
-                 });
             }
 
+            \App\Models\AuditLog::log('data_export_csv', null, null, ['type' => $type, 'filters' => $request->all()]);
             fclose($file);
         };
 
@@ -169,23 +153,43 @@ class ReportController extends Controller
         $date = Carbon::now()->format('d/m/Y');
         $user = auth()->user();
         
+        // Common Filter Logic
+        $applyFilters = function($query, $ownerColumn) use ($request) {
+            if ($request->filled('owner_id')) {
+                $query->where($ownerColumn, $request->owner_id);
+            }
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+        };
+
         if ($type === 'opportunities') {
             $title = "Rapport des Opportunités - $date";
             $query = Opportunity::with(['contact', 'commercial']);
             if ($user->isCommercial()) {
                 $query->byCommercial($user->id);
             }
+            $applyFilters($query, 'commercial_id');
             $data = $query->latest()->get();
             $view = 'reports.pdf_opportunities';
         } else {
             $title = "Rapport des Prospects - $date";
-            $query = Contact::where('statut', 'lead');
+            $query = Contact::query();
+            if ($type === 'leads') {
+                $query->where('statut', 'lead');
+            }
             if ($user->isCommercial()) {
                 $query->ownedBy($user->id);
             }
+            $applyFilters($query, 'user_id_owner');
             $data = $query->latest()->get();
             $view = 'reports.pdf_leads';
         }
+
+        \App\Models\AuditLog::log('data_export_pdf', null, null, ['type' => $type, 'filters' => $request->all()]);
 
         $pdf = Pdf::loadView($view, [
             'title' => $title,
