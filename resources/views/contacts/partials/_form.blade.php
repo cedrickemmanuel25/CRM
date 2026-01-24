@@ -28,9 +28,9 @@
                                     </div>
                                 </template>
                             </div>
-                            <!-- Robust Clickable Trigger -->
+                            <!-- Robust Clickable Trigger: Harmonie Indigo -->
                             <button type="button" @click="$refs.photoInput.click()" 
-                                class="absolute -bottom-3 inset-x-4 h-10 bg-white border border-gray-200 rounded-lg shadow-lg flex items-center justify-center gap-2 text-[10px] font-bold text-gray-700 hover:bg-gray-900 hover:text-white transition-all active:scale-95 z-30">
+                                class="absolute -bottom-3 inset-x-4 h-10 bg-white border border-gray-200 rounded-lg shadow-lg flex items-center justify-center gap-2 text-[10px] font-bold text-gray-700 hover:bg-indigo-700 hover:text-white transition-all active:scale-95 z-30">
                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /></svg>
                                 CHARGER PHOTO
                             </button>
@@ -208,18 +208,18 @@
             </div>
         </div>
 
-        <!-- Sticky Note: Internal Perspective -->
-        <div class="bg-gray-900 border border-gray-800 shadow-2xl rounded-xl overflow-hidden relative">
-            <div class="px-5 py-4 border-b border-gray-800 bg-gray-800/80 flex items-center justify-between">
+        <!-- Sticky Note: Internal Perspective (Deep Indigo/Blue Night Harmony) -->
+        <div class="bg-[#0f172a] border border-indigo-900/30 shadow-2xl rounded-xl overflow-hidden relative">
+            <div class="px-5 py-4 border-b border-indigo-900/20 bg-white/5 flex items-center justify-between">
                 <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-300">Notes Stratégiques</h3>
                 <svg class="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
             </div>
             <div class="p-0">
                 <textarea name="notes_internes" id="notes_internes" rows="10" 
-                    class="block w-full border-none p-6 text-sm text-gray-300 bg-transparent placeholder-gray-600 focus:ring-0 outline-none h-[280px] resize-none leading-relaxed">{{ old('notes_internes', $isEdit ? $contact->notes_internes : '') }}</textarea>
-                <div class="px-6 py-3 bg-black/40 text-[9px] font-black text-gray-500 uppercase flex items-center gap-2">
+                    class="block w-full border-none p-6 text-sm text-indigo-50 bg-transparent placeholder-indigo-900/50 focus:ring-0 outline-none h-[280px] resize-none leading-relaxed">{{ old('notes_internes', $isEdit ? $contact->notes_internes : '') }}</textarea>
+                <div class="px-6 py-3 bg-black/20 text-[9px] font-black text-indigo-400 uppercase flex items-center gap-2">
                     <div class="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
-                    Interne uniquement (Hautement confidentiel)
+                    Contenu Sensible (Accès Restreint)
                 </div>
             </div>
         </div>
