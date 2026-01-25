@@ -50,13 +50,19 @@
                         <div class="col-span-1 space-y-1.5">
                             <label for="prenom" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Prénom</label>
                             <input type="text" name="prenom" id="prenom" value="{{ old('prenom', $isEdit ? $contact->prenom : '') }}" required 
-                                class="block w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
+                                class="block w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none @error('prenom') border-red-500 ring-2 ring-red-500/20 @enderror">
+                            @error('prenom')
+                                <p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>
+                            @enderror
                         </div>
                         
                         <div class="col-span-1 space-y-1.5">
                             <label for="nom" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nom de Famille</label>
                             <input type="text" name="nom" id="nom" value="{{ old('nom', $isEdit ? $contact->nom : '') }}" required 
-                                class="block w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
+                                class="block w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none @error('nom') border-red-500 ring-2 ring-red-500/20 @enderror">
+                            @error('nom')
+                                <p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="col-span-2 space-y-1.5 pt-2">
@@ -66,8 +72,11 @@
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                 </span>
                                 <input type="text" name="entreprise" id="entreprise" value="{{ old('entreprise', $isEdit ? $contact->entreprise : '') }}" required
-                                    class="block w-full px-4 py-3 pl-10 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
+                                    class="block w-full px-4 py-3 pl-10 border border-slate-300 rounded-lg text-sm text-slate-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none @error('entreprise') border-red-500 ring-2 ring-red-500/20 @enderror">
                             </div>
+                            @error('entreprise')
+                                <p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="col-span-2 space-y-1.5 border-t border-slate-100 pt-6 mt-2">
@@ -91,7 +100,10 @@
                     <div class="space-y-1.5">
                         <label for="email" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Professionnel</label>
                         <input type="email" name="email" id="email" value="{{ old('email', $isEdit ? $contact->email : '') }}" required 
-                            class="block w-full px-4 py-3 border border-slate-300 rounded-lg text-sm bg-slate-50/20 focus:bg-white focus:border-indigo-600 transition-all outline-none">
+                            class="block w-full px-4 py-3 border border-slate-300 rounded-lg text-sm bg-slate-50/20 focus:bg-white focus:border-indigo-600 transition-all outline-none @error('email') border-red-500 ring-2 ring-red-500/20 @enderror">
+                        @error('email')
+                            <p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="space-y-1.5">
                         <label for="telephone" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ligne Directe / GSM</label>
@@ -100,6 +112,9 @@
                                 class="block w-full px-4 py-3 border border-slate-300 rounded-lg text-sm focus:border-indigo-600 focus:ring-0 outline-none">
                             <input type="hidden" name="telephone" id="telephone_full" value="{{ old('telephone', $isEdit ? $contact->telephone : '') }}">
                         </div>
+                        @error('telephone')
+                            <p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
