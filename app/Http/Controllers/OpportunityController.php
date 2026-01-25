@@ -103,12 +103,12 @@ class OpportunityController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('opportunities._content', compact('opportunities', 'pipeline', 'totalPipelineValue', 'weightedPipelineValue', 'users'))->render(),
+                'html' => base64_encode(view('opportunities._content', compact('opportunities', 'pipeline', 'totalPipelineValue', 'weightedPipelineValue', 'users'))->render()),
                 'total_opportunities' => $opportunities->total(),
                 'total_pipeline_value' => format_currency($totalPipelineValue),
                 'weighted_pipeline_value' => format_currency($weightedPipelineValue),
                 'win_rate' => $winRate . '%'
-            ]);
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         }
 
         return view('opportunities.index', compact('opportunities', 'pipeline', 'totalPipelineValue', 'weightedPipelineValue', 'users'));

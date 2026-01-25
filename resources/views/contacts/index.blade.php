@@ -149,7 +149,7 @@
                             })
                             .then(data => {
                                 if (data.html) {
-                                    this.$el.innerHTML = data.html;
+                                    this.$el.innerHTML = atob(data.html);
                                     const countEl = document.getElementById('contact-count');
                                     if (countEl) countEl.innerText = data.total;
                                 }

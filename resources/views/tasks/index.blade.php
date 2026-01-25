@@ -131,7 +131,7 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        this.$el.innerHTML = data.html;
+                        this.$el.innerHTML = atob(data.html);
                         
                         // Update metrics
                         document.getElementById('total-tasks').innerText = data.total_tasks;

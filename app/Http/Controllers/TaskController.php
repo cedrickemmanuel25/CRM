@@ -94,9 +94,9 @@ class TaskController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('tasks._board', compact('tasks', 'users', 'contacts', 'opportunities'))->render(),
+                'html' => base64_encode(view('tasks._board', compact('tasks', 'users', 'contacts', 'opportunities'))->render()),
                 'events' => $events
-            ]);
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         }
 
         return view('calendar.index', compact('events', 'tasks', 'users', 'contacts', 'opportunities'));

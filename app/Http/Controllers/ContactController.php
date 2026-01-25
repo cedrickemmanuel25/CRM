@@ -72,9 +72,9 @@ class ContactController extends Controller
         // On vérifie à la fois ajax() et wantsJson() pour éviter les faux positifs
         if ($request->ajax() && ($request->wantsJson() || $request->expectsJson())) {
             return response()->json([
-                'html' => view('contacts._table_rows', compact('contacts'))->render(),
+                'html' => base64_encode(view('contacts._table_rows', compact('contacts'))->render()),
                 'total' => $contacts->total()
-            ]);
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         }
 
         return view('contacts.index', compact('contacts', 'sources', 'owners', 'entreprises'));

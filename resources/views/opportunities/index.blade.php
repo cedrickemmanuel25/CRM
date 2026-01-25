@@ -262,7 +262,7 @@
                             scrollLeft: container.scrollLeft
                         }));
                         
-                        this.$refs.contentArea.innerHTML = data.html;
+                        this.$refs.contentArea.innerHTML = atob(data.html);
                         
                         // Re-initialize Alpine on the new content
                         if (window.Alpine) {
