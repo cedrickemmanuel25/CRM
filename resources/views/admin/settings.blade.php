@@ -66,6 +66,28 @@
                         <span class="truncate">Notifications</span>
                     </button>
 
+                    <button type="button" @click="activeTab = 'exports'"
+                        :class="activeTab === 'exports' ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
+                        class="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group">
+                        <svg :class="activeTab === 'exports' ? 'text-indigo-500' : 'text-slate-400 group-hover:text-slate-500'" 
+                             class="flex-shrink-0 -ml-1 mr-3 h-5 w-5 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        <span class="truncate">Exports & Rapports</span>
+                    </button>
+
+                    @if(auth()->user()->isAdmin())
+                    <button type="button" @click="activeTab = 'maintenance'"
+                        :class="activeTab === 'maintenance' ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
+                        class="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group">
+                        <svg :class="activeTab === 'maintenance' ? 'text-indigo-500' : 'text-slate-400 group-hover:text-slate-500'" 
+                             class="flex-shrink-0 -ml-1 mr-3 h-5 w-5 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
+                        </svg>
+                        <span class="truncate">Maintenance</span>
+                    </button>
+                    @endif
+
 
                     
                     <!-- Save button moved to header -->
@@ -322,6 +344,170 @@
 
                 </div>
 
+                <!-- SECTION: EXPORTS (Integrated Professional Dashboard) -->
+                <div x-show="activeTab === 'exports'" style="display: none;" class="space-y-8 animate-fade-in" x-data="{ exportType: 'opportunities', loading: false }">
+                    <div class="bg-indigo-900 rounded-2xl p-6 text-white relative overflow-hidden mb-6">
+                        <div class="relative z-10">
+                            <h2 class="text-xl font-bold mb-2">Centre d'Exports</h2>
+                            <p class="text-indigo-200 text-sm">Générez des rapports et exportez vos données en toute sécurité.</p>
+                        </div>
+                        <svg class="absolute -right-6 -bottom-6 h-32 w-32 text-indigo-800 blur-sm opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+                            <h3 class="text-lg font-bold text-slate-900">Configuration de l'Export</h3>
+                        </div>
+                        
+                        <div class="p-8">
+                            <!-- Use the route('reports.export') which handles the download -->
+                            <div class="space-y-8">
+                                <!-- 1. Type -->
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">1. Type de Données</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <label class="relative cursor-pointer group">
+                                            <input type="radio" name="exportType" value="opportunities" x-model="exportType" class="sr-only peer" checked>
+                                            <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 transition-all shadow-sm">
+                                                <span class="font-bold text-slate-900 block mb-1">Opportunités</span>
+                                                <span class="text-xs text-slate-500">Pipeline & Ventes</span>
+                                            </div>
+                                        </label>
+                                        <label class="relative cursor-pointer group">
+                                            <input type="radio" name="exportType" value="contacts" x-model="exportType" class="sr-only peer">
+                                            <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 transition-all shadow-sm">
+                                                <span class="font-bold text-slate-900 block mb-1">Contacts</span>
+                                                <span class="text-xs text-slate-500">Clients & Prospects</span>
+                                            </div>
+                                        </label>
+                                        <label class="relative cursor-pointer group">
+                                            <input type="radio" name="exportType" value="leads" x-model="exportType" class="sr-only peer">
+                                            <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 transition-all shadow-sm">
+                                                <span class="font-bold text-slate-900 block mb-1">Leads</span>
+                                                <span class="text-xs text-slate-500">Nouveaux Entrants</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Filters & Actions contained in a real form now -->
+                                <!-- We need a form tailored to the export type. To simplify, we use one form with hidden input updated by x-model but standard HTML forms don't bind x-model to name. 
+                                     So we use Alpine to bind the hidden input value. -->
+                                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                                    <div class="flex flex-col sm:flex-row items-end gap-4">
+                                        <div class="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-medium text-slate-700 mb-1">Période (Début)</label>
+                                                <input type="date" name="date_from" form="export-form-real" class="block w-full rounded-lg border-slate-200 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-slate-700 mb-1">Propriétaire</label>
+                                                <select name="owner_id" form="export-form-real" class="block w-full rounded-lg border-slate-200 text-sm">
+                                                    <option value="">Tous</option>
+                                                    @foreach($users as $u)
+                                                    <option value="{{ $u->id }}">{{ $u->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button type="submit" form="export-form-real" name="format" value="csv" class="px-6 py-2.5 bg-indigo-600 text-white font-bold text-sm rounded-lg hover:bg-indigo-700 shadow-sm">
+                                                Export CSV
+                                            </button>
+                                            <button type="button" @click="const q = new URLSearchParams(new FormData(document.getElementById('export-form-real'))).toString(); window.location.href='{{ route('reports.pdf') }}?' + q" class="px-6 py-2.5 bg-white border border-slate-300 text-slate-700 font-bold text-sm rounded-lg hover:bg-slate-50 shadow-sm">
+                                                PDF
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- The Actual Form (Hidden logic) -->
+                                <form id="export-form-real" action="{{ route('reports.export') }}" method="GET">
+                                    <input type="hidden" name="type" :value="exportType">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+                            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Historique Récent</h3>
+                        </div>
+                        <ul class="divide-y divide-slate-100">
+                            @forelse($recentExports as $exp)
+                            <li class="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-800">Export {{ $exp->new_values['type'] ?? 'données' }} <span class="text-slate-400 text-xs">({{ str_contains($exp->action, 'pdf') ? 'PDF' : 'CSV' }})</span></p>
+                                    <p class="text-xs text-slate-500">{{ $exp->created_at->diffForHumans() }} par {{ $exp->user->name ?? 'Système' }}</p>
+                                </div>
+                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                            </li>
+                            @empty
+                            <li class="px-6 py-4 text-center text-xs text-slate-400">Aucun historique.</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- SECTION: MAINTENANCE (Integrated) -->
+                @if(auth()->user()->isAdmin())
+                <div x-show="activeTab === 'maintenance'" style="display: none;" class="space-y-8 animate-fade-in">
+                    
+                    <div class="bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden">
+                        <div class="px-6 py-5 border-b border-slate-200 bg-slate-50">
+                            <h3 class="text-lg leading-6 font-medium text-slate-900">Sauvegarde du Système</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-slate-500">Téléchargez une copie complète de la base de données (JSON).</p>
+                        </div>
+                        <div class="px-6 py-5">
+                            <form action="{{ route('admin.backup.run') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Lancer une sauvegarde complète
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden">
+                        <div class="px-6 py-5 border-b border-slate-200 bg-slate-50">
+                            <h3 class="text-lg leading-6 font-medium text-slate-900">Portabilité RGPD</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-slate-500">Exportez toutes les données liées à un utilisateur spécifique.</p>
+                        </div>
+                        <div class="px-6 py-5">
+                            <form action="{{ route('admin.gdpr.export') }}" method="POST" class="flex flex-col sm:flex-row gap-4 items-center">
+                                @csrf
+                                <select name="user_id" required class="block w-full sm:w-auto rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <option value="">Sélectionner un utilisateur</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                    @endforeach
+                                </select>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                                    Exporter données (JSON)
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="bg-red-50 shadow-sm border border-red-100 rounded-2xl overflow-hidden">
+                         <div class="px-6 py-5 border-b border-red-200 bg-red-100/50">
+                            <h3 class="text-lg leading-6 font-medium text-red-800">Zone de Danger</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-red-600">Suppression définitive des éléments dans la corbeille (Soft Deleted).</p>
+                        </div>
+                        <div class="px-6 py-5">
+                            <form action="{{ route('admin.maintenance.cleanup') }}" method="POST" onsubmit="return confirm('Êtes-vous sûr ? C\'est irréversible.');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Vidanger la corbeille
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @endif
 
 
             </main>

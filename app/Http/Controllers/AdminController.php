@@ -61,7 +61,7 @@ class AdminController extends Controller
             
         $users = User::all();
             
-        $recentExports = AuditLog::whereIn('action', ['data_export_csv', 'data_export_pdf', 'gdpr_export', 'system_backup'])
+        $recentExports = AuditLog::whereIn('action', ['data_export_csv', 'data_export_pdf', 'gdpr_export'])
             ->with('user')
             ->latest()
             ->take(10)
