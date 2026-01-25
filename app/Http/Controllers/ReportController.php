@@ -11,6 +11,19 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
+    public function index()
+    {
+        $users = \App\Models\User::all();
+        
+        $recentExports = \App\Models\AuditLog::whereIn('action', ['data_export_csv', 'data_export_pdf', 'gdpr_export'])
+            ->with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('reports.index', compact('users', 'recentExports'));
+    }
+
     public function exportCsv(Request $request)
     {
         $type = $request->query('type', 'opportunities');

@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     
     // Rapports et Exports (Accessibles Admin, Commercial, Visiteur)
     Route::middleware('role:admin,commercial,visitor')->group(function () {
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/csv', [ReportController::class, 'exportCsv'])->name('reports.export');
         Route::get('/reports/pdf', [ReportController::class, 'exportPdf'])->name('reports.pdf');
         Route::get('/reports/print', [ReportController::class, 'printStats'])->name('reports.print');
