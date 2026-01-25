@@ -50,6 +50,18 @@ class AccessRequestController extends Controller
         return view('admin.access_requests.index', compact('requests'));
     }
 
+    public function stats()
+    {
+        // Check admin permissions (though route middleware should handle this)
+        if (!auth()->user()->isAdmin()) {
+            return response()->json(['count' => 0], 403);
+        }
+        
+        return response()->json([
+            'count' => AccessRequest::where('status', 'pending')->count()
+        ]);
+    }
+
     public function approve($id)
     {
         $accessRequest = AccessRequest::findOrFail($id);

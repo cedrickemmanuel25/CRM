@@ -132,6 +132,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/maintenance/cleanup', [App\Http\Controllers\AdminController::class, 'cleanup'])->name('maintenance.cleanup');
         
         // Access Requests Management
+        Route::get('/access-requests/stats', [App\Http\Controllers\AccessRequestController::class, 'stats'])->name('access-requests.stats');
         Route::get('/access-requests', [App\Http\Controllers\AccessRequestController::class, 'index'])->name('access-requests.index');
         Route::post('/access-requests/{id}/approve', [App\Http\Controllers\AccessRequestController::class, 'approve'])->name('access-requests.approve');
         Route::post('/access-requests/{id}/reject', [App\Http\Controllers\AccessRequestController::class, 'reject'])->name('access-requests.reject');

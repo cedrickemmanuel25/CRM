@@ -62,11 +62,9 @@
         </div>
         
         @if($link['route'] === 'admin.access-requests.index')
-            @if(isset($pendingAccessCount) && $pendingAccessCount > 0)
-                <span class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-rose-500 text-[10px] font-bold text-white ring-2 ring-white">
-                    {{ $pendingAccessCount }}
-                </span>
-            @endif
+            <span x-show="pendingAccessCount > 0" x-text="pendingAccessCount" class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-rose-500 text-[10px] font-bold text-white ring-2 ring-white" style="display: none;">
+                {{ isset($pendingAccessCount) ? $pendingAccessCount : '' }}
+            </span>
         @endif
     </a>
 </li>
