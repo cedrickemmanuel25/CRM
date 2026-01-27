@@ -245,6 +245,7 @@
                 if (this.isDragging) return;
                 
                 const url = new URL(window.location.href);
+                url.searchParams.set('polling', '1');
                 fetch(url, {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     credentials: 'same-origin'

@@ -101,7 +101,7 @@ class OpportunityController extends Controller
         $totalStats = collect($pipeline)->flatten()->count();
         $winRate = $totalStats > 0 ? round(($wonCount / $totalStats) * 100, 1) : 0;
 
-        if ($request->ajax()) {
+        if ($request->ajax() && $request->has('polling')) {
             return response()->json([
                 'html' => base64_encode(view('opportunities._content', compact('opportunities', 'pipeline', 'totalPipelineValue', 'weightedPipelineValue', 'users'))->render()),
                 'total_opportunities' => $opportunities->total(),
