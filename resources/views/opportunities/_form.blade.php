@@ -1,12 +1,12 @@
 @php
     $isEdit = isset($opportunity);
     $stades = [
-        'prospection' => ['label' => 'Prospection', 'color' => 'bg-gray-400'],
-        'qualification' => ['label' => 'Qualification', 'color' => 'bg-blue-500'],
-        'proposition' => ['label' => 'Proposition', 'color' => 'bg-indigo-600'],
-        'negociation' => ['label' => 'Négociation', 'color' => 'bg-purple-600'],
-        'gagne' => ['label' => 'Gagné', 'color' => 'bg-emerald-600'],
-        'perdu' => ['label' => 'Perdu', 'color' => 'bg-rose-600']
+        'prospection'   => ['label' => 'Prospection',   'color' => 'bg-slate-500',   'icon' => 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
+        'qualification' => ['label' => 'Qualification', 'color' => 'bg-blue-500',    'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+        'proposition'   => ['label' => 'Proposition',   'color' => 'bg-purple-600',  'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+        'negociation'   => ['label' => 'Négociation',   'color' => 'bg-amber-500',   'icon' => 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4'],
+        'gagne'         => ['label' => 'Gagné',         'color' => 'bg-emerald-600', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+        'perdu'         => ['label' => 'Perdu',         'color' => 'bg-rose-500',    'icon' => 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z']
     ];
 @endphp
 
@@ -21,252 +21,242 @@
         if (this.probabilite < 30) return 'bg-rose-500';
         if (this.probabilite < 70) return 'bg-amber-500';
         return 'bg-indigo-600';
+    },
+    getSliderTextColor() {
+        if (this.probabilite < 30) return 'text-rose-600';
+        if (this.probabilite < 70) return 'text-amber-600';
+        return 'text-indigo-600';
     }
-}" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+}" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-    <!-- Primary Content Area: The Core Data (Left 70%) -->
+    <!-- Main Content (Left Column) -->
     <div class="lg:col-span-8 space-y-6">
         
-        <!-- Document Section: Opportunity Identity -->
+        <!-- 1. General Information Card -->
         <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                <div class="h-4 w-1 bg-indigo-600 rounded-full"></div>
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest">Descriptor & Source</h2>
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
+                <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Informations Générales</h2>
             </div>
-            <div class="p-8 space-y-8">
-                <!-- Titre -->
-                <div class="space-y-2">
-                    <label for="titre" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center">
-                        Intitulé de l'Opportunité
-                        <span class="text-rose-500 ml-1">*</span>
-                    </label>
-                    <input type="text" name="titre" id="titre" required
-                        value="{{ old('titre', $opportunity->titre ?? '') }}"
-                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none @error('titre') border-rose-300 ring-4 ring-rose-500/10 @enderror">
-                    @error('titre')
-                        <p class="text-[10px] font-bold text-rose-600 mt-1 flex items-center">
-                            <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0118 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                            {{ $message }}
-                        </p>
-                    @enderror
+            
+            <div class="p-6 space-y-6">
+                <!-- Titre de l'opportunité -->
+                <div>
+                    <label for="titre" class="block text-xs font-bold text-gray-700 uppercase mb-2">Titre de l'opportunité <span class="text-rose-500">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        </div>
+                        <input type="text" name="titre" id="titre" required
+                            value="{{ old('titre', $opportunity->titre ?? '') }}"
+                            placeholder="Ex: Contrat de maintenance 2026 - Société X"
+                            class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none">
+                    </div>
                 </div>
 
-                <!-- Contact Associé (Double Entry Design) -->
+                <!-- Contact Selector -->
                 <div x-data="{ 
                     search: '', 
                     open: false, 
                     selectedId: '{{ old('contact_id', $opportunity->contact_id ?? '') }}', 
-                    selectedName: '{{ $isEdit && $opportunity->contact ? str_replace("'", "\'", $opportunity->contact->prenom . ' ' . $opportunity->contact->nom) : '' }}' 
-                }" class="space-y-2">
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center">
-                        Contact / Décideur Assigné
-                        <span class="text-rose-500 ml-1">*</span>
-                    </label>
+                    selectedName: '{{ $isEdit && $opportunity->contact ? str_replace("'", "\'", $opportunity->contact->prenom . ' ' . $opportunity->contact->nom) : '' }}',
+                    contacts: {{ $contacts->map(function($c) { return ['id' => $c->id, 'name' => $c->prenom . ' ' . $c->nom, 'company' => $c->entreprise ?? 'Particulier', 'initials' => strtoupper(substr($c->prenom,0,1).substr($c->nom,0,1))]; })->toJson() }},
+                    get filteredContacts() {
+                        if (this.search === '') return this.contacts;
+                        return this.contacts.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.company.toLowerCase().includes(this.search.toLowerCase()));
+                    }
+                }" class="relative">
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Contact Principal / Décideur <span class="text-rose-500">*</span></label>
+                    <input type="hidden" name="contact_id" :value="selectedId">
+                    
                     <div class="relative">
-                        <input type="hidden" name="contact_id" :value="selectedId">
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-300 transition-colors group-focus-within:text-indigo-600">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            </div>
-                            <input type="text" x-model="selectedName" @focus="open = true" @click.away="open = false" 
-                                class="block w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none"
-                                autocomplete="off">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         </div>
+                        <input type="text" x-model="selectedName" @input="open = true; search = selectedName" @focus="open = true" @click.away="open = false" 
+                            placeholder="Rechercher un contact..."
+                            class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none"
+                            autocomplete="off">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                    </div>
 
-                        <!-- Professional Dropdown -->
-                        <div x-show="open" 
-                            x-transition:enter="transition ease-out duration-100"
-                            x-transition:enter-start="opacity-0 translate-y-2"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            class="absolute z-50 mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden py-1">
-                            <div class="max-h-60 overflow-y-auto custom-scrollbar">
-                                @foreach($contacts as $contact)
-                                <div @click="selectedId = '{{ $contact->id }}'; selectedName = '{{ $contact->prenom }} {{ $contact->nom }}'; open = false;"
-                                    class="flex items-center px-4 py-3 hover:bg-indigo-50/50 cursor-pointer transition-colors border-b last:border-0 border-gray-50 group">
-                                    <div class="h-9 w-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-[10px] mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
-                                        {{ strtoupper(substr($contact->prenom, 0, 1)) }}{{ strtoupper(substr($contact->nom, 0, 1)) }}
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold text-gray-900 truncate">{{ $contact->prenom }} {{ $contact->nom }}</p>
-                                        <p class="text-[10px] text-gray-500 font-medium uppercase truncate tracking-tight">{{ $contact->entreprise ?? 'PARTICULIER' }}</p>
-                                    </div>
-                                    <template x-if="selectedId == '{{ $contact->id }}'">
-                                        <svg class="h-4 w-4 text-indigo-600 ml-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                                    </template>
+                    <!-- Dropdown Results -->
+                    <div x-show="open" x-transition class="absolute z-50 mt-1 w-full bg-white rounded-lg shadow-xl border border-gray-100 max-h-60 overflow-y-auto">
+                        <template x-for="contact in filteredContacts" :key="contact.id">
+                            <div @click="selectedId = contact.id; selectedName = contact.name; open = false"
+                                class="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0 transition-colors">
+                                <div class="h-8 w-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold mr-3" x-text="contact.initials"></div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-900" x-text="contact.name"></p>
+                                    <p class="text-xs text-gray-500" x-text="contact.company"></p>
                                 </div>
-                                @endforeach
                             </div>
+                        </template>
+                        <div x-show="filteredContacts.length === 0" class="px-4 py-3 text-sm text-gray-500 text-center">
+                            Aucun contact trouvé.
                         </div>
                     </div>
                 </div>
 
-                <!-- Description (High Power Textarea) -->
-                <div class="space-y-2 pt-2 border-t border-gray-50 mt-4">
-                    <label for="description" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Contexte & Objectifs de la Vente</label>
-                    <textarea id="description" name="description" rows="6"
-                        class="block w-full px-4 py-4 border border-gray-300 rounded-xl text-sm text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none resize-none">{{ old('description', $opportunity->description ?? '') }}</textarea>
+                <!-- Description -->
+                <div>
+                    <label for="description" class="block text-xs font-bold text-gray-700 uppercase mb-2">Description & Contexte</label>
+                    <textarea name="description" id="description" rows="4"
+                        placeholder="Détails du besoin, contexte du projet..."
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none resize-none">{{ old('description', $opportunity->description ?? '') }}</textarea>
                 </div>
             </div>
         </div>
 
-        <!-- Section: Strategic Qualification (Moved from Contact) -->
+        <!-- 2. Qualification Section -->
         <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                <div class="h-4 w-1 bg-amber-500 rounded-full"></div>
-                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest">Qualification Stratégique</h2>
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
+                <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Informations Clés</h2>
             </div>
-            <div class="p-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Left Column -->
-                    <div class="space-y-6">
-                        <div class="space-y-2">
-                            <label for="score" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Score d'Opportunité (%)</label>
-                            <input type="number" name="score" id="score" value="{{ old('score', $opportunity->score ?? '0') }}" min="0" max="100"
-                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Budget -->
+                <div>
+                    <label for="budget_estime" class="block text-xs font-bold text-gray-700 uppercase mb-2">Budget Client</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 font-bold">
+                            {{ currency_symbol() }}
                         </div>
-
-                        <div class="space-y-2">
-                            <label for="budget_estime" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Budget Global Client</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-bold text-xs">
-                                    {{ currency_symbol() }}
-                                </div>
-                                <input type="number" step="0.01" name="budget_estime" id="budget_estime" value="{{ old('budget_estime', $opportunity->budget_estime ?? '') }}" 
-                                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div class="space-y-6">
-                        <div class="space-y-2">
-                            <label for="delai_projet" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Délai Souhaité</label>
-                            <input type="date" name="delai_projet" id="delai_projet" value="{{ old('delai_projet', ($isEdit && $opportunity->delai_projet) ? $opportunity->delai_projet->format('Y-m-d') : '') }}" 
-                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
-                        </div>
-
-                        <div class="flex items-center gap-3 pt-4">
-                            <div class="flex items-center h-5">
-                                <input type="checkbox" name="decisionnaire" id="decisionnaire" value="1" {{ old('decisionnaire', $opportunity->decisionnaire ?? false) ? 'checked' : '' }}
-                                    class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer">
-                            </div>
-                            <label for="decisionnaire" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest cursor-pointer">Contact est Décisionnaire</label>
-                        </div>
+                        <input type="number" step="0.01" name="budget_estime" id="budget_estime" 
+                            value="{{ old('budget_estime', $opportunity->budget_estime ?? '') }}"
+                            class="block w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg text-lg font-bold text-gray-900 bg-gray-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none">
                     </div>
                 </div>
 
-                <div class="mt-8 space-y-2">
-                    <label for="besoin" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Besoins Spécifiques / Problématique</label>
-                    <textarea name="besoin" id="besoin" rows="4" 
-                        class="block w-full px-4 py-4 border border-gray-300 rounded-xl text-sm bg-white focus:border-indigo-600 outline-none transition-all resize-none"
-                        placeholder="Quels sont les points de douleur du client ?">{{ old('besoin', $opportunity->besoin ?? '') }}</textarea>
+                <!-- Délai -->
+                <div>
+                    <label for="delai_projet" class="block text-xs font-bold text-gray-700 uppercase mb-2">Date de livraison souhaitée</label>
+                    <input type="date" name="delai_projet" id="delai_projet" 
+                        value="{{ old('delai_projet', ($isEdit && $opportunity->delai_projet) ? $opportunity->delai_projet->format('Y-m-d') : '') }}"
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none">
+                </div>
+
+                <!-- Besoins -->
+                <div class="md:col-span-2">
+                    <label for="besoin" class="block text-xs font-bold text-gray-700 uppercase mb-2">Besoins Spécifiques</label>
+                    <textarea name="besoin" id="besoin" rows="3"
+                        placeholder="Points de douleur, contraintes techniques..."
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none resize-none">{{ old('besoin', $opportunity->besoin ?? '') }}</textarea>
+                </div>
+                
+                <!-- Décisionnaire Checkbox -->
+                <div class="md:col-span-2">
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50 cursor-pointer hover:bg-white hover:border-indigo-300 transition-all group">
+                        <input type="checkbox" name="decisionnaire" value="1" {{ old('decisionnaire', $opportunity->decisionnaire ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer">
+                        <div class="ml-3">
+                            <span class="block text-sm font-bold text-gray-900 group-hover:text-indigo-700">Le contact est décisionnaire</span>
+                            <span class="block text-xs text-gray-500">Cochez si le contact a le pouvoir de signature final.</span>
+                        </div>
+                    </label>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Administrative Sidebar (Right 30%) -->
-    <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-[100px]">
+    <!-- Sidebar (Right Column) -->
+    <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-6">
         
-        <!-- Sidebar Section: Financial Architecture -->
+        <!-- 3. Financial Projections -->
         <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
-            <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                <div class="h-4 w-1 bg-indigo-600 rounded-full"></div>
-                <h3 class="text-[10px] font-bold text-gray-700 uppercase tracking-widest">Valeur & Projection</h3>
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
+                <div class="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Projection Financière</h2>
             </div>
-
-            <div class="p-6 space-y-8">
-                <!-- Montant Principal -->
-                <div class="space-y-2">
-                    <label for="montant_estime" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Montant Estimé <span class="text-rose-500">*</span></label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-bold text-xs uppercase italic mr-1">
+            
+            <div class="p-6 space-y-6">
+                <!-- Montant Estimé -->
+                <div>
+                    <label for="montant_estime" class="block text-xs font-bold text-gray-700 uppercase mb-2">Valeur du Deal <span class="text-rose-500">*</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 font-bold">
                             {{ currency_symbol() }}
                         </div>
                         <input type="number" name="montant_estime" id="montant_estime" x-model.number="montant" required step="0.01"
-                            class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-lg font-black text-gray-900 bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none">
+                            class="block w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg text-lg font-bold text-gray-900 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none">
                     </div>
                 </div>
 
-                <!-- Probability Widget -->
-                <div class="space-y-4 p-5 rounded-xl bg-gray-50 border border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Confiance</label>
-                        <span x-text="probabilite + '%'" :class="getSliderColor().replace('bg-', 'text-')" class="text-xl font-black"></span>
+                <!-- Probabilité -->
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-bold text-gray-700 uppercase">Probabilité de succès</label>
+                        <span x-text="probabilite + '%'" :class="getSliderTextColor()" class="text-lg font-black transition-colors"></span>
                     </div>
                     
-                    <div class="relative group flex items-center h-2 bg-gray-200 rounded-full">
-                        <div :class="getSliderColor()" class="h-full rounded-full transition-all duration-300" :style="`width: ${probabilite}%`"></div>
-                        <input type="range" name="probabilite" id="probabilite" min="0" max="100" step="5" x-model.number="probabilite"
-                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                    </div>
-
-                    <div class="pt-4 border-t border-gray-200 mt-2 flex flex-col items-center">
-                        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">Valeur Pondérée (Poids CRM)</p>
-                        <p class="text-2xl font-black text-gray-900" x-text="new Intl.NumberFormat('fr-FR').format(weightedValue()) + ' {{ currency_symbol() }}'"></p>
+                    <input type="range" name="probabilite" min="0" max="100" step="5" x-model.number="probabilite"
+                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-200 text-center">
+                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Valeur Pondérée</p>
+                        <p class="text-xl font-black text-gray-900" x-text="new Intl.NumberFormat('fr-FR').format(weightedValue()) + ' {{ currency_symbol() }}'"></p>
                     </div>
                 </div>
 
-                <!-- Closing Date -->
-                <div class="space-y-2 pt-2 border-t border-gray-100 mt-2">
-                    <label for="date_cloture_prev" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest uppercase">Échéance de Clôture <span class="text-rose-500">*</span></label>
+                <!-- Date de clôture -->
+                <div>
+                    <label for="date_cloture_prev" class="block text-xs font-bold text-gray-700 uppercase mb-2">Date de signature <span class="text-rose-500">*</span></label>
                     <input type="date" name="date_cloture_prev" id="date_cloture_prev" required
                         value="{{ old('date_cloture_prev', isset($opportunity->date_cloture_prev) ? $opportunity->date_cloture_prev->format('Y-m-d') : '') }}"
-                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm font-bold text-gray-700 bg-white focus:border-indigo-600 outline-none transition-all">
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none">
                 </div>
             </div>
         </div>
 
-        <!-- Pipeline Execution Sidebar (Shown only on Create, or hidden if Edit to force use of View page) -->
+        <!-- 4. Pipeline Status -->
         @if(!$isEdit)
         <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
-            <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                <div class="h-4 w-1 bg-indigo-600 rounded-full"></div>
-                <h3 class="text-[10px] font-bold text-gray-700 uppercase tracking-widest">Position Pipeline</h3>
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
+                <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                </div>
+                <h2 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Position Pipeline</h2>
             </div>
-            <div class="p-6 space-y-6">
-                <!-- Stade selector -->
-                <div class="space-y-2">
-                    <label for="stade" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Statut du Deal</label>
-                    <div class="relative">
-                        <select id="stade" name="stade" x-model="stade"
-                            class="block w-full h-12 px-4 border border-gray-300 rounded-lg text-xs font-black bg-white focus:border-indigo-600 outline-none cursor-pointer appearance-none transition-all">
-                            @foreach($stades as $key => $config)
-                                <option value="{{ $key }}">{{ strtoupper($config['label']) }}</option>
-                            @endforeach
-                        </select>
-                        <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Progress Bar View -->
-                    <div class="grid grid-cols-6 gap-1 mt-4">
+            <div class="p-6 space-y-4">
+                <div>
+                    <label for="stade" class="block text-xs font-bold text-gray-700 uppercase mb-2">Stade initial</label>
+                    <select id="stade" name="stade" x-model="stade"
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm font-bold text-gray-900 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none cursor-pointer">
                         @foreach($stades as $key => $config)
-                            <div class="h-2 rounded-full transition-all duration-300 {{ $config['color'] }}" 
-                                :class="stade === '{{ $key }}' ? 'opacity-100 ring-2 ring-offset-1 ring-gray-100' : 'opacity-10'"></div>
+                            <option value="{{ $key }}">{{ strtoupper($config['label']) }}</option>
                         @endforeach
-                    </div>
+                    </select>
                 </div>
 
-                <!-- Attribution Section (Admin Only) -->
+                <!-- Visual Indicator -->
+                <div class="flex gap-1 h-1.5 mt-2">
+                    @foreach($stades as $key => $config)
+                    <div class="flex-1 rounded-full transition-all duration-300"
+                        :class="stade === '{{ $key }}' ? '{{ str_replace('bg-', 'bg-', $config['color']) }} opacity-100' : 'bg-gray-200 opacity-50'"></div>
+                    @endforeach
+                </div>
+
                 @if(auth()->user()->isAdmin())
-                <div class="space-y-2 pt-4 border-t border-gray-100">
-                    <label for="commercial_id" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest uppercase">Expert / Responsable</label>
-                    <div class="relative">
-                        <select id="commercial_id" name="commercial_id"
-                            class="block w-full h-12 px-4 border border-gray-300 rounded-lg text-xs font-bold bg-white focus:border-indigo-600 outline-none cursor-pointer appearance-none">
-                            <option value="auto">DISTRIBUTION AUTO (SMART-RULES)</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('commercial_id') == $user->id ? 'selected' : '' }}>
-                                    {{ strtoupper($user->name) }} ({{ strtoupper($user->role) }})
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                        </div>
-                    </div>
+                <div class="pt-4 mt-4 border-t border-gray-100">
+                    <label for="commercial_id" class="block text-xs font-bold text-gray-700 uppercase mb-2">Responsable</label>
+                    <select id="commercial_id" name="commercial_id"
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all outline-none">
+                        <option value="auto">Distribution Automatique</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ old('commercial_id') == $user->id ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 @else
                     <input type="hidden" name="commercial_id" value="{{ auth()->id() }}">
@@ -274,53 +264,8 @@
             </div>
         </div>
         @else
-            <!-- Edit Mode: Hidden Inputs to preserve state -->
             <input type="hidden" name="stade" value="{{ $opportunity->stade }}">
             <input type="hidden" name="commercial_id" value="{{ $opportunity->commercial_id }}">
-            
-            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-indigo-700">
-                            Le statut et l'attribution se gèrent désormais depuis la vue principale de l'opportunité.
-                        </p>
-                    </div>
-                </div>
-            </div>
         @endif
-
     </div>
 </div>
-
-<style>
-    /* Integrated CRM precision styling */
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
-    
-    input[type=range]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: white;
-        cursor: pointer;
-        border: 4px solid #4f46e5;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        margin-top: -8px; 
-    }
-    input[type=range]::-moz-range-thumb {
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: white;
-        cursor: pointer;
-        border: 4px solid #4f46e5;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    }
-    
-    [x-cloak] { display: none !important; }
-</style>
