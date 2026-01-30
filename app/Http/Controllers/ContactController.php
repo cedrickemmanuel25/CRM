@@ -107,7 +107,7 @@ class ContactController extends Controller
             'source' => 'nullable|string|max:100',
             'poste' => 'nullable|string|max:255',
             'tags_input' => 'nullable|string',
-            'statut' => 'required|in:lead,prospect,client,inactif',
+            'statut' => 'sometimes|nullable|in:nouveau,qualifie,proposition,negociation,client,perdu,inactif',
             'notes_internes' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -247,7 +247,7 @@ class ContactController extends Controller
             'source' => 'nullable|string|max:100',
             'poste' => 'nullable|string|max:255',
             'tags_input' => 'nullable|string',
-            'statut' => 'required|in:lead,prospect,client,inactif',
+            'statut' => 'nullable|in:nouveau,qualifie,proposition,negociation,client,perdu,inactif',
             'notes_internes' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -452,32 +452,68 @@ class ContactController extends Controller
     }
 
     /**
-     * Convert contact to opportunity
+     * Update the contact stage in the pipeline
+     */
+    public function updateStage(Request $request, Contact $contact)
+    {
+        // Autorisation
+        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'statut' => 'required|string',
+        ]);
+
+        $contact->moveToStage($validated['statut']);
+
+        return back()->with('success', 'Étape du pipeline mise à jour.');
+    }
+
+    /**
+     * Log a direct interaction (Call, LinkedIn, WhatsApp)
+     */
+    public function logInteraction(Request $request, Contact $contact)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:appel,linkedin,whatsapp,email',
+            'notes' => 'nullable|string',
+        ]);
+
+        $contact->activities()->create([
+            'user_id' => auth()->id(),
+            'type' => $validated['type'],
+            'description' => "Interaction via " . ucfirst($validated['type']),
+            'contenu' => $validated['notes'],
+            'date_activite' => now(),
+            'statut' => 'termine',
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Convert contact to an opportunity.
      */
     public function convertToOpportunity(Contact $contact)
     {
-        // Autorisation : Admin ou Commercial propriétaire
-        if (!auth()->user()->isAdmin() && $contact->user_id_owner !== auth()->id()) {
-            abort(403, 'Vous n\'êtes pas autorisé à convertir ce contact.');
+        // Autorisation
+        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+            abort(403);
         }
 
-        // Création de l'opportunité
-        $opportunity = \App\Models\Opportunity::create([
+        // Create a basic opportunity
+        $opportunity = $contact->opportunities()->create([
+            'user_id' => auth()->id(),
             'commercial_id' => $contact->user_id_owner ?? auth()->id(),
-            'contact_id'    => $contact->id,
-            'titre'         => 'Opportunité : ' . $contact->nom . ' ' . $contact->prenom,
-            'stade'         => 'prospection',
-            'probabilite'   => 10,
-            'montant_estime'=> 0,
-            'statut'        => 'actif',
+            'titre' => "Ouverture de compte : " . $contact->prenom . " " . $contact->nom,
+            'montant_estime' => 0,
+            'stade' => 'prospection',
+            'probabilite' => 10,
+            'date_cloture_prev' => now()->addMonths(3),
         ]);
 
-        // Mise à jour du statut du contact si c'était un lead
-        if ($contact->statut === 'lead') {
-            $contact->update(['statut' => 'prospect']);
-        }
-
-        return redirect()->route('opportunities.show', $opportunity)
-            ->with('success', 'Contact converti en opportunité avec succès.');
+        return redirect()->route('opportunities.edit', $opportunity)
+            ->with('success', 'Contact converti en opportunité. Veuillez compléter les informations de qualification.');
     }
 }

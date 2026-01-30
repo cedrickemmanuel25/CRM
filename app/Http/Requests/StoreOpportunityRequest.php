@@ -22,6 +22,11 @@ class StoreOpportunityRequest extends FormRequest
             'date_cloture_prev' => 'required|date|after:today',
             'description' => 'nullable|string|max:2000',
             'commercial_id' => 'required', // can be 'auto' or integer
+            'besoin' => 'nullable|string',
+            'budget_estime' => 'nullable|numeric|min:0',
+            'decisionnaire' => 'nullable|boolean',
+            'delai_projet' => 'nullable|date',
+            'score' => 'nullable|integer|min:0|max:100',
         ];
     }
 }

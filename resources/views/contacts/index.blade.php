@@ -123,8 +123,9 @@
                 <tr>
                     <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[20%]">Contact</th>
                     <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[15%]">Entreprise</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[25%]">Coordonnées</th>
+                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Coordonnées</th>
                     <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Source</th>
+                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Statut CRM</th>
                     <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[12%]">Propriétaire</th>
                     <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Création</th>
                     <th class="px-3 py-3.5 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[8%]">Actions</th>
@@ -149,7 +150,8 @@
                             })
                             .then(data => {
                                 if (data.html) {
-                                    this.$el.innerHTML = atob(data.html);
+                                    const decodedHtml = new TextDecoder().decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
+                                    this.$el.innerHTML = decodedHtml;
                                     const countEl = document.getElementById('contact-count');
                                     if (countEl) countEl.innerText = data.total;
                                 }

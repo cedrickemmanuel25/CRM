@@ -108,6 +108,61 @@
                 </div>
             </div>
         </div>
+
+        <!-- Section: Strategic Qualification (Moved from Contact) -->
+        <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+                <div class="h-4 w-1 bg-amber-500 rounded-full"></div>
+                <h2 class="text-xs font-bold text-gray-700 uppercase tracking-widest">Qualification Stratégique</h2>
+            </div>
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label for="score" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Score d'Opportunité (%)</label>
+                            <input type="number" name="score" id="score" value="{{ old('score', $opportunity->score ?? '0') }}" min="0" max="100"
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="budget_estime" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Budget Global Client</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-bold text-xs">
+                                    {{ currency_symbol() }}
+                                </div>
+                                <input type="number" step="0.01" name="budget_estime" id="budget_estime" value="{{ old('budget_estime', $opportunity->budget_estime ?? '') }}" 
+                                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label for="delai_projet" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Délai Souhaité</label>
+                            <input type="date" name="delai_projet" id="delai_projet" value="{{ old('delai_projet', ($isEdit && $opportunity->delai_projet) ? $opportunity->delai_projet->format('Y-m-d') : '') }}" 
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white focus:border-indigo-600 outline-none transition-all">
+                        </div>
+
+                        <div class="flex items-center gap-3 pt-4">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" name="decisionnaire" id="decisionnaire" value="1" {{ old('decisionnaire', $opportunity->decisionnaire ?? false) ? 'checked' : '' }}
+                                    class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer">
+                            </div>
+                            <label for="decisionnaire" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest cursor-pointer">Contact est Décisionnaire</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 space-y-2">
+                    <label for="besoin" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Besoins Spécifiques / Problématique</label>
+                    <textarea name="besoin" id="besoin" rows="4" 
+                        class="block w-full px-4 py-4 border border-gray-300 rounded-xl text-sm bg-white focus:border-indigo-600 outline-none transition-all resize-none"
+                        placeholder="Quels sont les points de douleur du client ?">{{ old('besoin', $opportunity->besoin ?? '') }}</textarea>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Administrative Sidebar (Right 30%) -->
@@ -162,7 +217,8 @@
             </div>
         </div>
 
-        <!-- Pipeline Execution Sidebar -->
+        <!-- Pipeline Execution Sidebar (Shown only on Create, or hidden if Edit to force use of View page) -->
+        @if(!$isEdit)
         <div class="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
                 <div class="h-4 w-1 bg-indigo-600 rounded-full"></div>
@@ -200,11 +256,9 @@
                     <div class="relative">
                         <select id="commercial_id" name="commercial_id"
                             class="block w-full h-12 px-4 border border-gray-300 rounded-lg text-xs font-bold bg-white focus:border-indigo-600 outline-none cursor-pointer appearance-none">
-                            @if(!$isEdit)
-                                <option value="auto">DISTRIBUTION AUTO (SMART-RULES)</option>
-                            @endif
+                            <option value="auto">DISTRIBUTION AUTO (SMART-RULES)</option>
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('commercial_id', $opportunity->commercial_id ?? '') == $user->id ? 'selected' : '' }}>
+                                <option value="{{ $user->id }}" {{ old('commercial_id') == $user->id ? 'selected' : '' }}>
                                     {{ strtoupper($user->name) }} ({{ strtoupper($user->role) }})
                                 </option>
                             @endforeach
@@ -215,10 +269,28 @@
                     </div>
                 </div>
                 @else
-                    <input type="hidden" name="commercial_id" value="{{ $opportunity->commercial_id ?? auth()->id() }}">
+                    <input type="hidden" name="commercial_id" value="{{ auth()->id() }}">
                 @endif
             </div>
         </div>
+        @else
+            <!-- Edit Mode: Hidden Inputs to preserve state -->
+            <input type="hidden" name="stade" value="{{ $opportunity->stade }}">
+            <input type="hidden" name="commercial_id" value="{{ $opportunity->commercial_id }}">
+            
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-indigo-700">
+                            Le statut et l'attribution se gèrent désormais depuis la vue principale de l'opportunité.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
 
     </div>
 </div>

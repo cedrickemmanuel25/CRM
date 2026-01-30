@@ -1,0 +1,70 @@
+@php
+    $stages = \App\Models\Contact::getStages();
+    $currentStage = $contact->statut;
+    $stageKeys = array_keys($stages);
+    $currentIndex = array_search($currentStage, $stageKeys);
+    if ($currentIndex === false) $currentIndex = 0;
+@endphp
+
+<div class="relative mb-8">
+    <!-- Progress Line -->
+    <div class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 -translate-y-1/2 rounded-full" aria-hidden="true">
+        <div class="absolute top-0 left-0 h-full bg-indigo-500 rounded-full transition-all duration-500" 
+             style="width: {{ ($currentIndex / (count($stages) - 1)) * 100 }}%"></div>
+    </div>
+
+    <!-- Steps -->
+    <div class="relative flex justify-between items-center w-full">
+        @foreach($stages as $key => $stage)
+            @php
+                $index = array_search($key, $stageKeys);
+                $isCompleted = $index < $currentIndex;
+                $isCurrent = $index === $currentIndex;
+                $isFuture = $index > $currentIndex;
+
+                $colorClass = match($stage['color']) {
+                    'slate' => 'bg-slate-500',
+                    'amber' => 'bg-amber-500',
+                    'indigo' => 'bg-indigo-500',
+                    'blue' => 'bg-blue-500',
+                    'emerald' => 'bg-emerald-500',
+                    'rose' => 'bg-rose-500',
+                    default => 'bg-slate-500'
+                };
+            @endphp
+
+            <div class="flex flex-col items-center group">
+                <!-- Node -->
+                <div @class([
+                    'relative flex items-center justify-center w-10 h-10 rounded-full border-4 transition-all duration-300 z-10',
+                    'bg-white border-indigo-500 text-indigo-600 scale-110 shadow-md' => $isCurrent,
+                    'bg-indigo-500 border-indigo-500 text-white shadow-sm' => $isCompleted,
+                    'bg-white border-slate-200 text-slate-400 group-hover:border-slate-300' => $isFuture,
+                ])>
+                    @if($isCompleted)
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    @else
+                        <span class="text-xs font-bold">{{ $index + 1 }}</span>
+                    @endif
+
+                    <!-- Tooltip/Label -->
+                    <div class="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap pointer-events-none shadow-xl">
+                        {{ $stage['label'] }}
+                    </div>
+                </div>
+
+                <!-- Labels -->
+                <div class="mt-3 text-center">
+                    <span @class([
+                        'text-[10px] font-bold uppercase tracking-wider block',
+                        'text-indigo-600' => $isCurrent,
+                        'text-slate-900' => $isCompleted,
+                        'text-slate-500' => $isFuture,
+                    ])>
+                        {{ $stage['label'] }}
+                    </span>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>

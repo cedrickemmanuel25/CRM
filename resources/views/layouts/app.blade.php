@@ -38,7 +38,7 @@ if (auth()->check()) {
             return [
                 'id' => $n->id,
                 'read_at' => $n->read_at,
-                'created_at_human' => $n->created_at->translatedFormat('d M H:i'),
+                'created_at_human' => $n->created_at->translatedFormat('d M à H:i'),
                 'data' => $n->data
             ];
         })->toArray();

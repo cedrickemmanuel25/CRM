@@ -13,6 +13,7 @@ class OpportunityObserver
     public function created(Opportunity $opportunity): void
     {
         AuditLog::log('opportunity_created', $opportunity, null, $opportunity->toArray());
+        $this->syncContactStatus($opportunity);
     }
 
     /**
@@ -30,6 +31,8 @@ class OpportunityObserver
                 ['stade' => $oldStade], 
                 ['stade' => $newStade]
             );
+
+            $this->syncContactStatus($opportunity);
         } else {
             // Log other important changes
             $changes = $opportunity->getChanges();
@@ -50,5 +53,51 @@ class OpportunityObserver
     public function deleted(Opportunity $opportunity): void
     {
         AuditLog::log('opportunity_deleted', $opportunity, $opportunity->toArray(), null);
+        $this->syncContactStatus($opportunity);
+    }
+
+    /**
+     * Synchronize the associated contact's status with the opportunity's stage.
+     */
+    protected function syncContactStatus(Opportunity $opportunity): void
+    {
+        $contact = $opportunity->contact;
+        if (!$contact) return;
+
+        // Get all opportunities for this contact
+        $opportunities = $contact->opportunities()->get();
+
+        if ($opportunities->isEmpty()) {
+            $contact->update(['statut' => null]);
+            return;
+        }
+
+        // Mapping Opportunity Stage -> Contact Status
+        $mapping = [
+            'prospection' => 'nouveau',
+            'qualification' => 'qualifie',
+            'proposition' => 'proposition',
+            'negociation' => 'negociation',
+            'gagne' => 'client',
+            'perdu' => 'perdu',
+        ];
+
+        // We want the "most advanced" stage. 
+        // Order of precedence (descending)
+        $precedence = ['gagne', 'negociation', 'proposition', 'qualification', 'prospection', 'perdu'];
+
+        $bestStage = 'perdu';
+        foreach ($precedence as $stage) {
+            if ($opportunities->contains('stade', $stage)) {
+                $bestStage = $stage;
+                break;
+            }
+        }
+
+        $newStatus = $mapping[$bestStage] ?? null;
+        
+        if ($contact->statut !== $newStatus) {
+            $contact->update(['statut' => $newStatus]);
+        }
     }
 }

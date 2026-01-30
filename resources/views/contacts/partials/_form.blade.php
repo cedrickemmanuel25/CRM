@@ -175,24 +175,13 @@
     <!-- Administrative Sidebar (Right 30%) -->
     <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-[100px]">
         
-        <!-- Sidebar Section: Lifecycle Management -->
+        <!-- Sidebar Section: Administration -->
         <div class="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
             <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
                 <div class="h-4 w-1 bg-indigo-600 rounded-full"></div>
-                <h3 class="text-[10px] font-bold text-slate-700 uppercase tracking-widest">Cycle de Gestion</h3>
+                <h3 class="text-[10px] font-bold text-slate-700 uppercase tracking-widest">Administration</h3>
             </div>
             <div class="p-6 space-y-8">
-                <!-- Administrative Field -->
-                <div class="space-y-2">
-                    <label for="statut" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Statut du Pipeline</label>
-                    <select id="statut" name="statut" required 
-                        class="block w-full h-12 px-4 border border-slate-300 rounded-lg text-xs font-bold bg-white focus:border-indigo-600 outline-none cursor-pointer shadow-sm transition-all">
-                        <option value="lead" {{ old('statut', $isEdit ? $contact->statut : 'lead') == 'lead' ? 'selected' : '' }}>LEAD (CADRE INITIAL)</option>
-                        <option value="prospect" {{ old('statut', $isEdit ? $contact->statut : '') == 'prospect' ? 'selected' : '' }}>PROSPECT (EN QUALIF)</option>
-                        <option value="client" {{ old('statut', $isEdit ? $contact->statut : '') == 'client' ? 'selected' : '' }}>CLIENT ACTIF</option>
-                        <option value="inactif" {{ old('statut', $isEdit ? $contact->statut : '') == 'inactif' ? 'selected' : '' }}>INACTIF / PERDU</option>
-                    </select>
-                </div>
 
                 <!-- Administrative Field -->
                 <div class="space-y-2">

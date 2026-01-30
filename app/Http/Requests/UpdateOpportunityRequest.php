@@ -29,6 +29,11 @@ class UpdateOpportunityRequest extends FormRequest
             'date_cloture_prev' => 'sometimes|required|date', // Removed after:today to allow editing past dates or current dates
             'description' => 'nullable|string|max:2000',
             'commercial_id' => 'sometimes|required|exists:users,id',
+            'besoin' => 'nullable|string',
+            'budget_estime' => 'nullable|numeric|min:0',
+            'decisionnaire' => 'nullable|boolean',
+            'delai_projet' => 'nullable|date',
+            'score' => 'nullable|integer|min:0|max:100',
         ];
     }
 }

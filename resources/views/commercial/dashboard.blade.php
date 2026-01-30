@@ -203,7 +203,7 @@
                     <div class="space-y-1">
                         @forelse($data['lists']['next_meetings'] as $meeting)
                             <div class="flex flex-col p-4 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group">
-                                <span class="text-xs font-black text-indigo-600 uppercase tracking-widest mb-1">{{ $meeting->date_activite->translatedFormat('d M @ H:i') }}</span>
+                                <span class="text-xs font-black text-indigo-600 uppercase tracking-widest mb-1">{{ $meeting->date_activite->translatedFormat('d M à H:i') }}</span>
                                 <span class="text-sm font-bold text-slate-900 group-hover:text-indigo-700 transition-colors leading-snug">{{ $meeting->description ?? 'Réunion client' }}</span>
                             </div>
                         @empty

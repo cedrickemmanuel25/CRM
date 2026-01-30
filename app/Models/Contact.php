@@ -12,6 +12,55 @@ class Contact extends Model
 {
     use HasFactory;
 
+    const STAGE_NOUVEAU = 'nouveau';
+    const STAGE_QUALIFIE = 'qualifie';
+    const STAGE_PROPOSITION = 'proposition';
+    const STAGE_NEGOCIATION = 'negociation';
+    const STAGE_CLIENT = 'client';
+    const STAGE_PERDU = 'perdu';
+
+    public static function getStages(): array
+    {
+        return [
+            self::STAGE_NOUVEAU => [
+                'label' => 'Prospection',
+                'description' => 'Nouveau contact créé',
+                'color' => 'slate',
+                'icon' => 'user-plus',
+            ],
+            self::STAGE_QUALIFIE => [
+                'label' => 'Qualification',
+                'description' => 'Intérêt manifesté',
+                'color' => 'amber',
+                'icon' => 'check-badge',
+            ],
+            self::STAGE_PROPOSITION => [
+                'label' => 'Proposition',
+                'description' => 'Offre commerciale envoyée',
+                'color' => 'indigo',
+                'icon' => 'document-text',
+            ],
+            self::STAGE_NEGOCIATION => [
+                'label' => 'Négociation',
+                'description' => 'Discussion des conditions',
+                'color' => 'blue',
+                'icon' => 'chat-bubble-left-right',
+            ],
+            self::STAGE_CLIENT => [
+                'label' => 'Gagné',
+                'description' => 'Client actif',
+                'color' => 'emerald',
+                'icon' => 'trophy',
+            ],
+            self::STAGE_PERDU => [
+                'label' => 'Perdu',
+                'description' => 'Opportunité non aboutie',
+                'color' => 'rose',
+                'icon' => 'x-circle',
+            ],
+        ];
+    }
+
     protected $fillable = [
         'user_id_owner',
         'nom',
@@ -105,7 +154,58 @@ class Contact extends Model
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('statut', '!=', 'inactif');
+        return $query->whereNotIn('statut', ['perdu', 'inactif']);
+    }
+
+    /**
+     * Move contact to a new stage and log it.
+     */
+    public function moveToStage($newStage, $userId = null)
+    {
+        $oldStage = $this->statut;
+        
+        if ($oldStage !== $newStage) {
+            $this->update(['statut' => $newStage]);
+
+            // Log activity
+            $this->activities()->create([
+                'user_id' => $userId ?? auth()->id(),
+                'type' => 'note',
+                'description' => "Changement de statut : " . ($oldStage ?? 'Nouveau') . " → " . $newStage,
+                'date_activite' => now(),
+                'statut' => 'termine',
+            ]);
+
+            // Fire events or specific logic
+            if ($newStage === self::STAGE_CLIENT) {
+                event(new \App\Events\Contact\ContactUpdated($this)); // Or a specific ClientConverted event
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the next logical stage in the pipeline.
+     */
+    public function getNextStage()
+    {
+        $order = [
+            self::STAGE_NOUVEAU,
+            self::STAGE_QUALIFIE,
+            self::STAGE_PROPOSITION,
+            self::STAGE_NEGOCIATION,
+            self::STAGE_CLIENT
+        ];
+
+        $currentIndex = array_search($this->statut, $order);
+        if ($currentIndex !== false && isset($order[$currentIndex + 1])) {
+            return $order[$currentIndex + 1];
+        }
+
+        return null;
     }
 
     // Mutators

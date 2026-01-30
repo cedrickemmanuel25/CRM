@@ -54,11 +54,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/contacts/{contact}/convert', [App\Http\Controllers\ContactController::class, 'convertToOpportunity'])->name('contacts.convert');
     });
     
-    // All roles can view contacts (wildcard routes last)
     Route::middleware('auth')->group(function () {
         Route::get('/contacts', [App\Http\Controllers\ContactController::class, 'index'])->name('contacts.index');
         Route::get('/contacts/{contact}', [App\Http\Controllers\ContactController::class, 'show'])->name('contacts.show');
-        Route::post('/contacts/{contact}/convert', [App\Http\Controllers\ContactController::class, 'convertToOpportunity'])->name('contacts.convert');
+        Route::patch('/contacts/{contact}/stage', [App\Http\Controllers\ContactController::class, 'updateStage'])->name('contacts.updateStage');
+        Route::post('/contacts/{contact}/interaction', [App\Http\Controllers\ContactController::class, 'logInteraction'])->name('contacts.logInteraction');
     });
 
     // Opportunities Module

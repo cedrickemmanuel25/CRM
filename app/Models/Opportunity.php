@@ -22,10 +22,14 @@ class Opportunity extends Model
         'stade',
         'probabilite',
         'date_cloture_prev',
-        'date_cloture_prev',
         'statut',
         'attribution_mode',
         'assigned_at',
+        'besoin',
+        'budget_estime',
+        'decisionnaire',
+        'delai_projet',
+        'score',
     ];
 
     protected $casts = [
@@ -36,6 +40,10 @@ class Opportunity extends Model
         'probabilite' => 'integer',
         'created_at' => 'datetime',
         'assigned_at' => 'datetime',
+        'budget_estime' => 'decimal:2',
+        'decisionnaire' => 'boolean',
+        'delai_projet' => 'date',
+        'score' => 'integer',
     ];
 
     public function attributionHistory(): HasMany

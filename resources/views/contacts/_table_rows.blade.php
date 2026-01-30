@@ -40,6 +40,24 @@
             {{ $contact->source ?? 'Autre' }}
         </span>
     </td>
+    <td class="px-3 py-4">
+        @php
+            $stage = \App\Models\Contact::getStages()[$contact->statut] ?? null;
+            $color = $stage['color'] ?? 'slate';
+            $badgeClasses = match($color) {
+                'slate' => 'bg-slate-100 text-slate-700 border-slate-200',
+                'amber' => 'bg-amber-100 text-amber-700 border-amber-200',
+                'indigo' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                'blue' => 'bg-blue-100 text-blue-700 border-blue-200',
+                'emerald' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                'rose' => 'bg-rose-100 text-rose-700 border-rose-200',
+                default => 'bg-slate-100 text-slate-700 border-slate-200'
+            };
+        @endphp
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold border {{ $badgeClasses }}">
+            {{ $stage['label'] ?? ucfirst($contact->statut) }}
+        </span>
+    </td>
     <td class="px-3 py-4 break-words">
         <div class="flex items-center">
             <span class="text-xs font-medium text-slate-700 truncate">{{ $contact->owner->name ?? 'Inconnu' }}</span>

@@ -3,13 +3,33 @@
 @section('title', $contact->prenom . ' ' . $contact->nom)
 
 @section('content')
-<div class="min-h-full bg-gradient-to-br from-slate-50 via-white to-slate-50/30 py-6" x-data="{ 
-    activeTab: window.location.hash ? window.location.hash.substring(1) : 'overview',
-    showActivityForm: false,
-    showTicketForm: false,
-    showTaskForm: false,
-    showOppForm: false
-}">
+<div class="h-full flex flex-col bg-slate-50" 
+     x-data="{ 
+        activeTab: 'overview', 
+        showActivityForm: false, 
+        showTaskForm: false, 
+        showOppForm: false,
+        showQuickModal: false,
+        quickModalTitle: '',
+        quickModalBody: '',
+        quickModalIcon: '',
+        quickModalColor: '',
+        quickModalAction: null,
+        openQuickModal(title, body, icon, color, action) {
+            this.quickModalTitle = title;
+            this.quickModalBody = body;
+            this.quickModalIcon = icon;
+            this.quickModalColor = color;
+            this.quickModalAction = action;
+            this.showQuickModal = true;
+        },
+        executeQuickAction() {
+            if (this.quickModalAction) {
+                this.quickModalAction();
+            }
+            this.showQuickModal = false;
+        }
+    }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header Section -->
@@ -40,9 +60,12 @@
                         </div>
                         @php
                             $statusIcon = match($contact->statut) {
-                                'lead' => '🔥',
-                                'prospect' => '💎',
+                                'nouveau' => '🔥',
+                                'qualifie' => '💎',
+                                'proposition' => '📄',
+                                'negociation' => '🤝',
                                 'client' => '👑',
+                                'perdu' => '📉',
                                 default => '⚙️'
                             };
                         @endphp
@@ -108,16 +131,20 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Statut</span>
                             @php
-                                $statusClasses = match($contact->statut) {
-                                    'lead' => 'bg-slate-100 text-slate-700 border-slate-200',
-                                    'prospect' => 'bg-amber-100 text-amber-700 border-amber-200',
-                                    'client' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
-                                    'inactif' => 'bg-rose-100 text-rose-700 border-rose-200',
+                                $stage = \App\Models\Contact::getStages()[$contact->statut] ?? null;
+                                $color = $stage['color'] ?? 'slate';
+                                $statusClasses = match($color) {
+                                    'slate' => 'bg-slate-100 text-slate-700 border-slate-200',
+                                    'amber' => 'bg-amber-100 text-amber-700 border-amber-200',
+                                    'indigo' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                                    'blue' => 'bg-blue-100 text-blue-700 border-blue-200',
+                                    'emerald' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                                    'rose' => 'bg-rose-100 text-rose-700 border-rose-200',
                                     default => 'bg-gray-100 text-gray-700'
                                 };
                             @endphp
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border {{ $statusClasses }}">
-                                {{ ucfirst($contact->statut) }}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold border {{ $statusClasses }}">
+                                {{ $stage['label'] ?? ucfirst($contact->statut) }}
                             </span>
                         </div>
                     </div>
@@ -223,6 +250,7 @@
             <!-- MAIN CONTENT: Tabs -->
             <div class="lg:col-span-2 space-y-6">
                 
+
                 <!-- Tabs Navigation -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-1">
                     <nav class="flex space-x-1" aria-label="Tabs">
@@ -607,5 +635,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Quick Action Modal -->
+    @include('contacts.partials._action_modal')
 </div>
 @endsection

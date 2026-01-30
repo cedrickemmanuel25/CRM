@@ -14,24 +14,101 @@
 @endsection
 
 @section('content')
-<div class="w-full flex flex-col" x-data="{ 
-    viewMode: '{{ request('view', 'pipeline') }}', 
-    showFilters: {{ request()->anyFilled(['search', 'commercial_id', 'stade', 'amount_min', 'amount_max', 'date_close_start', 'date_close_end']) ? 'true' : 'false' }},
-    switchView(mode) {
-        this.viewMode = mode;
-        localStorage.setItem('oppViewMode', mode);
-        // Update URL with view parameter
-        const url = new URL(window.location);
-        url.searchParams.set('view', mode);
-        window.history.pushState({}, '', url);
-    }
-}" x-init="
-    // Ensure view mode is set from URL on page load
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('view')) {
-        viewMode = urlParams.get('view');
-    }
-">
+<div class="w-full flex flex-col" x-data="pipelineView(
+    '{{ request('view', 'pipeline') }}', 
+    {{ request()->anyFilled(['search', 'commercial_id', 'stade', 'amount_min', 'amount_max', 'date_close_start', 'date_close_end']) ? 'true' : 'false' }}
+)" @change-stage-request.window="handleStageRequest($event)">
+    
+    <!-- Loading Overlay -->
+    <div x-show="isLoading" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-30" style="display: none;">
+        <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+    </div>
+
+    <!-- Error Toast -->
+    <div x-show="showErrorToast" x-transition class="fixed bottom-4 right-4 z-[80] w-full max-w-sm rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 p-4" style="display: none;">
+        <div class="flex items-start">
+             <div class="flex-shrink-0"><svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+             <div class="ml-3 w-0 flex-1 pt-0.5"><p class="text-sm font-medium text-gray-900">Erreur</p><p class="mt-1 text-sm text-gray-500" x-text="errorMessage"></p></div>
+             <div class="ml-4 flex flex-shrink-0"><button @click="showErrorToast = false" class="bg-white rounded-md text-gray-400 hover:text-gray-500"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></button></div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div x-show="showConfirmModal" class="fixed inset-0 z-[70] overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" @click="showConfirmModal = false"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Changer d'étape ?</h3>
+                            <div class="mt-2"><p class="text-sm text-gray-500">Passer cette opportunité à l'étape <span x-text="stageGuides[targetStage]?.label.toUpperCase()" class="font-bold text-indigo-600"></span> ?</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" @click="executeStageChange()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">Confirmer</button>
+                    <button type="button" @click="showConfirmModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Qualification Modal -->
+    <div x-show="showQualifyModal" class="fixed inset-0 z-[60] overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" @click="showQualifyModal = false"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full">
+                <form id="qualificationForm" @submit.prevent="submitQualification">
+                    <div class="bg-indigo-600 px-4 py-3 sm:px-6 flex justify-between items-center">
+                        <h3 class="text-lg leading-6 font-bold text-white uppercase tracking-wider">Qualification</h3>
+                        <button type="button" @click="showQualifyModal = false" class="text-indigo-200 hover:text-white"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                    </div>
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <input type="hidden" name="stade" value="qualification">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Budget Estimé</label>
+                                <div class="relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-500 sm:text-sm">{{ currency_symbol() }}</span></div>
+                                    <input type="number" name="budget_estime" x-model="activeOpportunity.budget" required class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md py-2">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Délai Souhaité</label>
+                                <input type="date" name="delai_projet" x-model="activeOpportunity.deadline" required class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2">
+                            </div>
+                        </div>
+                        <div class="relative flex items-start py-3 px-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors mb-4">
+                            <div class="min-w-0 flex-1 text-sm"><label for="modal_decisionnaire" class="font-bold text-gray-700 select-none cursor-pointer">Décisionnaire identifié</label></div>
+                            <div class="ml-3 flex items-center h-5">
+                                <input id="modal_decisionnaire" name="decisionnaire" type="checkbox" x-model="activeOpportunity.decisionnaire" class="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded cursor-pointer">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Besoins / Points de Douleur</label>
+                            <textarea name="besoin" x-model="activeOpportunity.besoin" rows="3" required class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm uppercase tracking-wide">Valider</button>
+                        <button type="button" @click="showQualifyModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header, Filters, Content ... -->
+
     
     <!-- Header professionnel, Métriques clés, Barre de contrôles, Panneau de filtres -->
     <div class="flex-shrink-0 max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
@@ -213,7 +290,7 @@
                 kanbanContainers.forEach(container => {
                     new Sortable(container, {
                         group: 'opportunities',
-                        animation: 200,
+                        animation: 0,
                         ghostClass: 'sortable-ghost',
                         dragClass: 'sortable-drag',
                         onStart: function() {
@@ -263,22 +340,25 @@
                             scrollLeft: container.scrollLeft
                         }));
                         
-                        this.$refs.contentArea.innerHTML = atob(data.html);
+                        const decodedHtml = new TextDecoder().decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
+                        
+                        // Only update if content has changed to prevent scroll jumping
+                        if (this.$el.innerHTML === decodedHtml) return;
+
+                        this.$el.innerHTML = decodedHtml;
                         
                         // Re-initialize Alpine on the new content
                         if (window.Alpine) {
                             window.Alpine.initTree(this.$refs.contentArea);
                         }
                         
-                        // Restore scroll positions after update
-                        setTimeout(() => {
-                            const newScrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
-                            scrollPositions.forEach((saved, index) => {
-                                if (newScrollContainers[index]) {
-                                    newScrollContainers[index].scrollLeft = saved.scrollLeft;
-                                }
-                            });
-                        }, 50);
+                        // Restore scroll positions IMMEDIATELY
+                        const newScrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
+                        scrollPositions.forEach((saved, index) => {
+                            if (newScrollContainers[index]) {
+                                newScrollContainers[index].scrollLeft = saved.scrollLeft;
+                            }
+                        });
                         
                         // Update metrics
                         document.getElementById('total-pipeline-value').innerText = data.total_pipeline_value;
@@ -332,6 +412,144 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+    function pipelineView(initialView, initialFilters) {
+        return {
+            viewMode: initialView,
+            showFilters: initialFilters,
+            switchView(mode) {
+                this.viewMode = mode;
+                localStorage.setItem('oppViewMode', mode);
+                const url = new URL(window.location);
+                url.searchParams.set('view', mode);
+                window.history.pushState({}, '', url);
+            },
+            
+            isLoading: false,
+            showQualifyModal: false,
+            showConfirmModal: false,
+            showErrorToast: false,
+            errorMessage: '',
+            
+            // Global store for card expansion states to survive drag-and-drop
+            cardStates: {},
+            
+            getCardState(id) {
+                if (this.cardStates[id] === undefined) {
+                    this.cardStates[id] = false;
+                }
+                return this.cardStates[id];
+            },
+            
+            toggleCard(id) {
+                this.cardStates[id] = !this.cardStates[id];
+            },
+            
+            activeOpportunity: {
+                id: null,
+                currentStage: '',
+                budget: '',
+                deadline: '',
+                decisionnaire: false,
+                besoin: ''
+            },
+            targetStage: null,
+            
+            stageGuides: {
+                prospection:   { label: 'Prospection', objective: 'Entrer en relation' },
+                qualification: { label: 'Qualification', objective: 'Vérifier le potentiel' },
+                proposition:   { label: 'Proposition', objective: 'Convaincre' },
+                negociation:   { label: 'Négociation', objective: 'Finaliser l’accord' },
+                gagne:         { label: 'Gagné', objective: 'Exécution' },
+                perdu:         { label: 'Perdu', objective: 'Analyse' }
+            },
+
+            handleStageRequest(event) {
+                const data = event.detail;
+                // console.log('Stage Request:', data);
+                
+                this.activeOpportunity = {
+                    id: data.id,
+                    currentStage: data.currentStage,
+                    budget: data.budget || '',
+                    deadline: data.prevent_deadline || '',
+                    decisionnaire: data.decisionnaire,
+                    besoin: data.besoin || ''
+                };
+                
+                this.changeStage(data.stage);
+            },
+
+            changeStage(newStage) {
+                if (this.isLoading) return;
+                
+                if (newStage === this.activeOpportunity.currentStage && newStage !== 'qualification') return;
+                
+                if (newStage === 'qualification') {
+                    this.showQualifyModal = true;
+                    return;
+                }
+                
+                this.targetStage = newStage;
+                this.showConfirmModal = true;
+            },
+
+            async executeStageChange() {
+                this.showConfirmModal = false;
+                this.updateStage(this.targetStage);
+            },
+
+            async submitQualification() {
+                this.showQualifyModal = false;
+                const form = document.getElementById('qualificationForm');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                data.decisionnaire = form.querySelector('[name="decisionnaire"]').checked ? 1 : 0;
+                
+                this.updateStage('qualification', data);
+            },
+
+            async updateStage(stage, extraData = {}) {
+                this.isLoading = true;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                
+                try {
+                    const payload = { stade: stage, ...extraData };
+                    let url = `{{ url('/opportunities') }}/${this.activeOpportunity.id}`;
+                    let method = 'PUT'; 
+                    
+                    if (stage !== 'qualification') {
+                        url = `{{ url('/opportunities') }}/${this.activeOpportunity.id}/stage`;
+                        method = 'PATCH';
+                    }
+                    
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const resData = await response.json();
+
+                    if (resData.success || response.ok) {
+                        window.location.reload(); 
+                    } else {
+                        throw new Error(resData.message || 'Erreur');
+                    }
+                } catch (error) {
+                    this.isLoading = false;
+                    this.errorMessage = error.message || 'Une erreur est survenue';
+                    this.showErrorToast = true;
+                    setTimeout(() => this.showErrorToast = false, 4000);
+                }
+            }
+        }
+    }
+</script>
+<script>
     async function updateOpportunityStage(id, stage) {
         try {
             const response = await axios.patch(`{{ url('/opportunities') }}/${id}/stage`, {
@@ -369,14 +587,11 @@
                 const mobileCard = button.closest('.bg-white.rounded-lg.border.border-gray-200.p-4');
 
                 if (card) {
-                    card.classList.add('opacity-0', 'scale-95');
-                    setTimeout(() => card.remove(), 300);
+                    card.remove();
                 } else if (row) {
-                    row.classList.add('opacity-0');
-                    setTimeout(() => row.remove(), 300);
+                    row.remove();
                 } else if (mobileCard) {
-                    mobileCard.classList.add('opacity-0', 'scale-95');
-                    setTimeout(() => mobileCard.remove(), 300);
+                    mobileCard.remove();
                 }
             }
         } catch (error) {

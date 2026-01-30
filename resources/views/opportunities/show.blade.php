@@ -3,11 +3,216 @@
 @section('title', 'Opportunité : ' . $opportunity->titre)
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ 
-    activeTab: 'overview', 
-    showActivityForm: false,
-    showHistory: false
-}">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="opportunityData(
+    '{{ $opportunity->stade }}',
+    '{{ route('opportunities.updateStage', $opportunity) }}',
+    '{{ csrf_token() }}'
+)" x-cloak>
+    
+    <!-- Loading Overlay -->
+    <div x-show="isLoading" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-30" style="display: none;">
+        <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+    </div>
+
+    <!-- Error Toast Notification -->
+    <div x-show="showErrorToast" 
+         x-transition:enter="transform ease-out duration-300 transition"
+         x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+         x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed bottom-4 right-4 z-[80] w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 pointer-events-auto" style="display: none;">
+        <div class="p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p class="text-sm font-medium text-gray-900">Erreur</p>
+                    <p class="mt-1 text-sm text-gray-500" x-text="errorMessage"></p>
+                </div>
+                <div class="ml-4 flex flex-shrink-0">
+                    <button type="button" @click="showErrorToast = false" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <span class="sr-only">Fermer</span>
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div x-show="showConfirmModal" class="fixed inset-0 z-[70] overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showConfirmModal = false">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Changer d'étape ?
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Voulez-vous passer cette opportunité à l'étape <span x-text="stageGuides[targetStage] ? stageGuides[targetStage].label.toUpperCase() : 'SUIVANTE'" class="font-bold text-indigo-600"></span> ?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" @click="executeStageChange()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                        Confirmer
+                    </button>
+                    <button type="button" @click="showConfirmModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Qualification Modal (Relocated) -->
+    <div x-show="showQualifyModal" class="fixed inset-0 z-[60] overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showQualifyModal = false">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full">
+                <div class="bg-indigo-600 px-4 py-3 sm:px-6 flex justify-between items-center">
+                    <h3 class="text-lg leading-6 font-bold text-white uppercase tracking-wider" id="modal-title">
+                        Qualification de l'Opportunité
+                    </h3>
+                    <button @click="showQualifyModal = false" class="text-indigo-200 hover:text-white">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <!-- Form content is large, I should just move it or use include. For now I paste the structure and rely on the fact that I will DELETE the duplicates at the bottom -->
+                <form action="{{ route('opportunities.update', $opportunity) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="space-y-6">
+                            <p class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg border-l-4 border-indigo-500">
+                                Pour passer à l'étape suivante, veuillez valider les critères de qualification.
+                            </p>
+                            <input type="hidden" name="stade" value="qualification">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="modal_budget" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Budget Estimé</label>
+                                    <div class="relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">{{ currency_symbol() }}</span>
+                                        </div>
+                                        <input type="number" name="budget_estime" id="modal_budget" value="{{ old('budget_estime', $opportunity->budget_estime) }}" required
+                                            class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md py-2" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="modal_delai" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Délai Souhaité</label>
+                                    <input type="date" name="delai_projet" id="modal_delai" value="{{ old('delai_projet', $opportunity->delai_projet ? $opportunity->delai_projet->format('Y-m-d') : '') }}" required
+                                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2">
+                                </div>
+                            </div>
+                            <div class="relative flex items-start py-3 px-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                <div class="min-w-0 flex-1 text-sm">
+                                    <label for="modal_decisionnaire" class="font-bold text-gray-700 select-none cursor-pointer">Décisionnaire identifié</label>
+                                </div>
+                                <div class="ml-3 flex items-center h-5">
+                                    <input id="modal_decisionnaire" name="decisionnaire" type="checkbox" value="1" {{ $opportunity->decisionnaire ? 'checked' : '' }}
+                                        class="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded cursor-pointer">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="modal_besoin" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Besoins / Points de Douleur</label>
+                                <textarea name="besoin" id="modal_besoin" rows="3" required
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">{{ old('besoin', $opportunity->besoin) }}</textarea>
+                            </div>
+                            <input type="hidden" name="score" value="20">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm uppercase tracking-wide">
+                            Valider & Qualifier
+                        </button>
+                        <button type="button" @click="showQualifyModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pipeline Progress Bar Moved to List View -->
+    <div class="mb-4"></div>
+
+    <!-- STAGE PLAYBOOK / GUIDANCE -->
+    <div class="mb-8 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg shadow-sm" x-cloak>
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3 w-full">
+                <!-- Header: Status & Objective -->
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-sm leading-5 font-bold text-blue-800 uppercase tracking-wide">
+                            <span x-text="stageGuides[currentStage].label"></span> : <span x-text="stageGuides[currentStage].objective" class="font-normal normal-case"></span>
+                        </h3>
+                        <p class="mt-1 text-sm text-blue-700" x-text="stageGuides[currentStage].description"></p>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Column 1: Status & Actions -->
+                    <div>
+                        <h4 class="text-xs font-bold text-blue-500 uppercase mb-2">Statut & Actions</h4>
+                        <div class="text-sm text-blue-800">
+                            <p class="mb-1"><span class="font-semibold">Contact :</span> <span x-text="stageGuides[currentStage].contactStatus"></span></p>
+                            <ul class="list-disc pl-5 space-y-1 mt-2">
+                                <template x-for="action in stageGuides[currentStage].actions">
+                                    <li x-text="action"></li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: CRM Buttons (Simulated/Real) -->
+                    <div>
+                        <h4 class="text-xs font-bold text-blue-500 uppercase mb-2">Actions CRM Conseillées</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="btn in stageGuides[currentStage].buttons">
+                                <button class="inline-flex items-center px-2.5 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded text-blue-700 bg-white hover:bg-blue-50 focus:outline-none cursor-default">
+                                    <span x-text="btn"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Top Actions Mobil/Desktop -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
@@ -25,6 +230,14 @@
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4 space-x-3">
              @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opportunity->commercial_id === auth()->id()))
+                
+                @if($opportunity->stade === 'prospection')
+                    <button @click="showQualifyModal = true" class="inline-flex items-center px-6 py-2 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Qualifier l'opportunité
+                    </button>
+                @endif
+
                 @if(!in_array($opportunity->stade, ['gagne', 'perdu']))
                 <form action="{{ route('opportunities.markWon', $opportunity) }}" method="POST" class="inline">
                     @csrf
@@ -518,7 +731,134 @@
                 </div>
             </div>
 
+
+
 </div>
 <!-- Scripts (déjà inclus via layout mais nécessaire pour Alpine si pas global) -->
 <script src="//unpkg.com/alpinejs" defer></script>
 @endsection
+
+@push('scripts')
+<script>
+    function opportunityData(initialStage, updateUrl, csrfToken) {
+        return {
+            activeTab: 'overview',
+            showActivityForm: false,
+            showHistory: false,
+            currentStage: initialStage,
+            showQualifyModal: false,
+            showConfirmModal: false,
+            targetStage: null,
+            showErrorToast: false,
+            errorMessage: '',
+            isLoading: false,
+
+            stageGuides: {
+                prospection: {
+                    label: 'Prospection',
+                    description: 'Le contact vient d’être créé dans le CRM, mais aucun échange concret n’a encore eu lieu.',
+                    contactStatus: 'Nouveau contact',
+                    objective: 'Entrer en relation',
+                    actions: ['Appel de prise de contact', 'Email de présentation', 'Message WhatsApp / LinkedIn', 'Ajout de notes'],
+                    buttons: ['Appeler', 'Envoyer email', 'Ajouter une note', 'Passer en Qualification']
+                },
+                qualification: {
+                    label: 'Qualification',
+                    description: 'Le contact a répondu ou montré de l’intérêt. Vous vérifiez s’il peut devenir un client réel.',
+                    contactStatus: 'Contact qualifié',
+                    objective: 'Vérifier le potentiel',
+                    actions: ['Rendez-vous de découverte', 'Mise à jour budget/besoin', 'Scoring du contact'],
+                    buttons: ['Planifier RDV', 'Modifier fiche', 'Qualifier le contact', 'Passer en Proposition']
+                },
+                proposition: {
+                    label: 'Proposition',
+                    description: 'Le contact a un besoin clair. Une offre commerciale est liée à sa fiche.',
+                    contactStatus: 'Contact avec proposition',
+                    objective: 'Convaincre',
+                    actions: ['Création d’un devis', 'Envoi d’une proposition personnalisée', 'Ajout de documents'],
+                    buttons: ['Créer un devis', 'Envoyer proposition', 'Ajouter document', 'Passer en Négociation']
+                },
+                negociation: {
+                    label: 'Négociation',
+                    description: 'Le contact est intéressé mais discute les conditions.',
+                    contactStatus: 'En négociation',
+                    objective: 'Finaliser l’accord',
+                    actions: ['Ajustement du prix', 'Traitement des objections', 'Relances commerciales'],
+                    buttons: ['Modifier devis', 'Ajouter échange', 'Programmer relance', 'Marquer Gagné/Perdu']
+                },
+                gagne: {
+                    label: 'Gagné',
+                    description: 'Le contact devient client actif.',
+                    contactStatus: 'Client',
+                    objective: 'Exécution & fidélisation',
+                    actions: ['Conversion en client', 'Création projet/commande', 'Facturation'],
+                    buttons: ['Convertir en client', 'Créer projet', 'Créer facture', 'Voir CA']
+                },
+                perdu: {
+                    label: 'Perdu',
+                    description: 'Le contact n’a pas abouti à une vente.',
+                    contactStatus: 'Opportunité perdue',
+                    objective: 'Analyse & relance future',
+                    actions: ['Sélection motif perte', 'Archivage', 'Planification relance'],
+                    buttons: ['Marquer perdu', 'Ajouter motif', 'Relancer plus tard', 'Archiver']
+                }
+            },
+
+            async changeStage(newStage) {
+                // Prevent multi-clicks if loading
+                if (this.isLoading) return;
+
+                // Allow re-clicking 'qualification' to edit fields, otherwise block same-stage clicks
+                if (newStage === this.currentStage && newStage !== 'qualification') return;
+
+                // Specific Transition Logic: Always open modal for Qualification stage
+                if (newStage === 'qualification') {
+                     this.showQualifyModal = true;
+                     return;
+                }
+
+                // Restore Confirmation Modal logic 
+                this.targetStage = newStage;
+                this.showConfirmModal = true;
+            },
+
+            async executeStageChange() {
+                const newStage = this.targetStage;
+                this.showConfirmModal = false;
+                this.isLoading = true; // Show loading state
+
+                try {
+                    const response = await fetch(updateUrl, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ stade: newStage })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.reload(); 
+                    } else {
+                        this.isLoading = false;
+                        this.errorMessage = data.message || 'Impossible de mettre à jour le statut.';
+                        this.showErrorToast = true;
+                        let self = this;
+                        setTimeout(function() { self.showErrorToast = false; }, 4000);
+                    }
+                } catch (error) {
+                    this.isLoading = false;
+                    console.error('Error:', error);
+                    this.errorMessage = 'Une erreur système est survenue.';
+                    this.showErrorToast = true;
+                    let self = this;
+                    setTimeout(function() { self.showErrorToast = false; }, 4000);
+                }
+            }
+        };
+    }
+</script>
+@endpush

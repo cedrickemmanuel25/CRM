@@ -131,7 +131,8 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        this.$el.innerHTML = atob(data.html);
+                        const decodedHtml = new TextDecoder().decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
+                        this.$el.innerHTML = decodedHtml;
                         
                         // Update metrics
                         document.getElementById('total-tasks').innerText = data.total_tasks;

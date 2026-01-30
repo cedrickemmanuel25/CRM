@@ -345,7 +345,8 @@ window.unifiedTaskApp = function() {
                 if (!response.ok) throw new Error('Unauthenticated or server error');
                 const data = await response.json();
                 if (data.html) {
-                    this.$refs.taskBoard.innerHTML = atob(data.html);
+                    const decodedHtml = new TextDecoder().decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
+                    this.$refs.taskBoard.innerHTML = decodedHtml;
                     this.events = data.events;
                 }
             } catch (error) {
