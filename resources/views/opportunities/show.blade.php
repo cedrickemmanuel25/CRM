@@ -180,29 +180,6 @@
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4 space-x-3">
              @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opportunity->commercial_id === auth()->id()))
-                
-                @if($opportunity->stade === 'prospection')
-                    <button @click="showQualifyModal = true" class="inline-flex items-center px-6 py-2 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Qualifier l'opportunité
-                    </button>
-                @endif
-
-                @if(!in_array($opportunity->stade, ['gagne', 'perdu']))
-                <form action="{{ route('opportunities.markWon', $opportunity) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Marquer Gagné
-                    </button>
-                </form>
-                <form action="{{ route('opportunities.markLost', $opportunity) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 transition-all duration-200">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Marquer Perdu
-                    </button>
-                </form>
                 @endif
                 <a href="{{ route('opportunities.edit', $opportunity) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-xl shadow-sm text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-all duration-200">
                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
