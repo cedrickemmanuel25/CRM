@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Opportunity;
 use App\Models\User;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -459,7 +460,8 @@ class OpportunityController extends Controller
 
         $message = $stayInStage ? 'Données enregistrées.' : 'Transition vers ' . ucfirst($newStage) . ' effectuée.';
         
-        // Sécurisation de la redirection : retour à la page précédente ou index par défaut
-        return redirect()->to(url()->previous(route('opportunities.index')))->with('success', $message);
+        // On redirige vers la page précédente, ou l'index avec la bonne vue par défaut
+        return redirect()->to(url()->previous(route('opportunities.index')))
+            ->with('success', $message);
     }
 }
