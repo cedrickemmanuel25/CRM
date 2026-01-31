@@ -180,7 +180,7 @@
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4 space-x-3">
              @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opportunity->commercial_id === auth()->id()))
-                @endif
+
                 <a href="{{ route('opportunities.edit', $opportunity) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-xl shadow-sm text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-all duration-200">
                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     Modifier
