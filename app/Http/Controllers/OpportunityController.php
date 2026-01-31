@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class OpportunityController extends Controller
 {
     protected $attributionService;
+    public function getRoutingDiagnostic() { return response()->json(['status' => 'ok', 'message' => 'Controller is reachable', 'time' => now()]); }
 
     public function __construct(\App\Services\AttributionService $attributionService)
     {
