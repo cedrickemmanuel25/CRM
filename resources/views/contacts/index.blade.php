@@ -131,42 +131,7 @@
                     <th class="px-3 py-3.5 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[8%]">Actions</th>
                 </tr>
             </thead>
-            <tbody x-data="{
-                startPolling() {
-                    // Démarrer le polling après un court délai pour éviter les conflits avec le chargement initial
-                    setTimeout(() => {
-                        setInterval(() => {
-                            const url = new URL("{{ route('contacts.fetch') }}");
-                            // Append current filters from main URL
-                            const currentParams = new URLSearchParams(window.location.search);
-                            currentParams.forEach((value, key) => {
-                                url.searchParams.set(key, value);
-                            });
-                            
-                            fetch(url, {
-                                headers: { 
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                    'Accept': 'application/json'
-                                },
-                                credentials: 'same-origin'
-                            })
-                            .then(response => {
-                                if (response.ok) return response.json();
-                                throw new Error('Request failed');
-                            })
-                            .then(data => {
-                                if (data.html) {
-                                    const decodedHtml = new TextDecoder().decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
-                                    this.$el.innerHTML = decodedHtml;
-                                    const countEl = document.getElementById('contact-count');
-                                    if (countEl) countEl.innerText = data.total;
-                                }
-                            })
-                            .catch(error => console.warn('Polling error:', error));
-                        }, 5000);
-                    }, 1000);
-                }
-            }" x-init="startPolling()" class="bg-white divide-y divide-slate-100">
+            <tbody x-data="contactsTable" x-init="init()" class="bg-white divide-y divide-slate-100">
                 @include('contacts._table_rows')
             </tbody>
         </table>
@@ -179,4 +144,73 @@
     </div>
     @endif
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('contactsTable', () => ({
+        pollingInterval: null,
+        
+        init() {
+            this.startPolling();
+        },
+        
+        startPolling() {
+            // Démarrer après un délai pour éviter les conflits
+            setTimeout(() => {
+                this.pollingInterval = setInterval(() => {
+                    this.fetchContacts();
+                }, 5000);
+            }, 1000);
+        },
+        
+        async fetchContacts() {
+            try {
+                const url = new URL('{{ route('contacts.fetch') }}');
+                
+                // Ajouter les paramètres de filtre actuels
+                const currentParams = new URLSearchParams(window.location.search);
+                currentParams.forEach((value, key) => {
+                    url.searchParams.set(key, value);
+                });
+                
+                const response = await fetch(url, {
+                    headers: { 
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.html) {
+                    // Décoder le HTML base64
+                    const decodedHtml = atob(data.html);
+                    this.$el.innerHTML = decodedHtml;
+                    
+                    // Mettre à jour le compteur
+                    const countEl = document.getElementById('contact-count');
+                    if (countEl && data.total !== undefined) {
+                        countEl.innerText = data.total;
+                    }
+                }
+            } catch (error) {
+                console.warn('Erreur lors du polling des contacts:', error.message);
+            }
+        },
+        
+        destroy() {
+            if (this.pollingInterval) {
+                clearInterval(this.pollingInterval);
+            }
+        }
+    }));
+});
+</script>
+@endpush
 @endsection
