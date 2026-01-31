@@ -50,7 +50,12 @@
                             @if(isset($pipeline[$key]))
                                 @foreach($pipeline[$key] as $opp)
                                 <div class="kanban-card bg-white border-2 border-gray-200 rounded-lg p-3 hover:border-{{ $config['color'] }}-400 hover:shadow-md sm:cursor-grab sm:active:cursor-grabbing group" 
-                                     data-id="{{ $opp->id }}">
+                                     data-id="{{ $opp->id }}"
+                                     data-current-stage="{{ $opp->stade }}"
+                                     data-besoin="{{ $opp->besoin }}"
+                                     data-budget="{{ (int)$opp->budget_estime }}"
+                                     data-amount="{{ (int)$opp->montant_estime }}"
+                                     data-client-name="{{ $opp->contact->entreprise ?? $opp->contact->full_name }}">
                                     
                                     <div class="flex items-center justify-between mb-2">
                                         <a href="{{ route('opportunities.show', $opp) }}" class="block flex-1">
@@ -146,8 +151,30 @@
                                 'perdu'         => 'rose',
                             ];
                             $color = $stageColors[$opp->stade] ?? 'gray';
+
+                            $nextStages = [
+                                'prospection' => 'qualification',
+                                'qualification' => 'proposition',
+                                'proposition' => 'negociation',
+                                'negociation' => 'gagne',
+                            ];
+                            $nextStage = $nextStages[$opp->stade] ?? null;
                         @endphp
-                        <span class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700">{{ $opp->stade }}</span>
+                        <button 
+                            @click.stop="window.dispatchEvent(new CustomEvent('change-stage-request', {
+                                detail: {
+                                    id: '{{ $opp->id }}',
+                                    stage: '{{ $nextStage ?? $opp->stade }}',
+                                    currentStage: '{{ $opp->stade }}',
+                                    besoin: `{!! addslashes($opp->besoin) !!}`,
+                                    budget: '{{ (int)$opp->budget_estime }}',
+                                    amount: '{{ (int)$opp->montant_estime }}',
+                                    client_name: '{{ $opp->contact->entreprise ?? $opp->contact->full_name }}'
+                                }
+                            }))"
+                            class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 transition-colors">
+                            {{ $opp->stade }}
+                        </button>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3 mb-3">
@@ -238,7 +265,7 @@
                                     @endphp
                                     <span class="inline-flex px-2 py-1 rounded-full text-xs font-bold bg-{{ $probColor }}-100 text-{{ $probColor }}-700">{{ $opp->probabilite }}%</span>
                                 </td>
-                                <td class="px-3 py-4">
+                                 <td class="px-3 py-4">
                                     @php
                                         $stageColors = [
                                             'prospection'   => 'slate',
@@ -249,8 +276,31 @@
                                             'perdu'         => 'rose',
                                         ];
                                         $color = $stageColors[$opp->stade] ?? 'gray';
+                                        
+                                        $nextStages = [
+                                            'prospection' => 'qualification',
+                                            'qualification' => 'proposition',
+                                            'proposition' => 'negociation',
+                                            'negociation' => 'gagne', // Default next
+                                        ];
+                                        $nextStage = $nextStages[$opp->stade] ?? null;
                                     @endphp
-                                    <span class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700">{{ $opp->stade }}</span>
+                                    <button 
+                                        @click.stop="window.dispatchEvent(new CustomEvent('change-stage-request', {
+                                            detail: {
+                                                id: '{{ $opp->id }}',
+                                                stage: '{{ $nextStage ?? $opp->stade }}',
+                                                currentStage: '{{ $opp->stade }}',
+                                                besoin: `{!! addslashes($opp->besoin) !!}`,
+                                                budget: '{{ (int)$opp->budget_estime }}',
+                                                amount: '{{ (int)$opp->montant_estime }}',
+                                                client_name: '{{ $opp->contact->entreprise ?? $opp->contact->full_name }}'
+                                            }
+                                        }))"
+                                        class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 transition-colors cursor-pointer"
+                                        title="Passer à l'étape suivante">
+                                        {{ $opp->stade }}
+                                    </button>
                                 </td>
                                 <td class="px-3 py-4">
                                     @if($opp->date_cloture_prev)

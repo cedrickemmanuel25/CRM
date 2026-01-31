@@ -28,82 +28,11 @@
     </div>
 
     <!-- Error Toast -->
-    <div x-show="showErrorToast" x-transition class="fixed bottom-4 right-4 z-[80] w-full max-w-sm rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 p-4" style="display: none;">
+    <div x-show="showErrorToast" x-transition class="fixed bottom-4 right-4 z-[100] w-full max-w-sm rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 p-4" style="display: none;">
         <div class="flex items-start">
              <div class="flex-shrink-0"><svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
              <div class="ml-3 w-0 flex-1 pt-0.5"><p class="text-sm font-medium text-gray-900">Erreur</p><p class="mt-1 text-sm text-gray-500" x-text="errorMessage"></p></div>
              <div class="ml-4 flex flex-shrink-0"><button @click="showErrorToast = false" class="bg-white rounded-md text-gray-400 hover:text-gray-500"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></button></div>
-        </div>
-    </div>
-
-    <!-- Confirm Modal -->
-    <div x-show="showConfirmModal" class="fixed inset-0 z-[70] overflow-y-auto" style="display: none;">
-        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" @click="showConfirmModal = false"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">Changer d'étape ?</h3>
-                            <div class="mt-2"><p class="text-sm text-gray-500">Passer cette opportunité à l'étape <span x-text="stageGuides[targetStage]?.label.toUpperCase()" class="font-bold text-indigo-600"></span> ?</p></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" @click="executeStageChange()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">Confirmer</button>
-                    <button type="button" @click="showConfirmModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Qualification Modal -->
-    <div x-show="showQualifyModal" class="fixed inset-0 z-[60] overflow-y-auto" style="display: none;">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" @click="showQualifyModal = false"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full">
-                <form id="qualificationForm" @submit.prevent="submitQualification">
-                    <div class="bg-indigo-600 px-4 py-3 sm:px-6 flex justify-between items-center">
-                        <h3 class="text-lg leading-6 font-bold text-white uppercase tracking-wider">Qualification</h3>
-                        <button type="button" @click="showQualifyModal = false" class="text-indigo-200 hover:text-white"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                    </div>
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <input type="hidden" name="stade" value="qualification">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Budget Estimé</label>
-                                <div class="relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="text-gray-500 sm:text-sm">{{ currency_symbol() }}</span></div>
-                                    <input type="number" name="budget_estime" x-model="activeOpportunity.budget" required class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md py-2">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Délai Souhaité</label>
-                                <input type="date" name="delai_projet" x-model="activeOpportunity.deadline" required class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2">
-                            </div>
-                        </div>
-                        <div class="relative flex items-start py-3 px-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors mb-4">
-                            <div class="min-w-0 flex-1 text-sm"><label for="modal_decisionnaire" class="font-bold text-gray-700 select-none cursor-pointer">Décisionnaire identifié</label></div>
-                            <div class="ml-3 flex items-center h-5">
-                                <input id="modal_decisionnaire" name="decisionnaire" type="checkbox" x-model="activeOpportunity.decisionnaire" class="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded cursor-pointer">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Besoins / Points de Douleur</label>
-                            <textarea name="besoin" x-model="activeOpportunity.besoin" rows="3" required class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm uppercase tracking-wide">Valider</button>
-                        <button type="button" @click="showQualifyModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -298,11 +227,29 @@
                         },
                         onEnd: function (evt) {
                             self.isDragging = false;
-                            const opportunityId = evt.item.getAttribute('data-id');
+                            const item = evt.item;
+                            const opportunityId = item.getAttribute('data-id');
+                            const currentStage = item.getAttribute('data-current-stage');
                             const newStage = evt.to.getAttribute('data-stage');
                             
                             if (evt.from !== evt.to) {
-                                updateOpportunityStage(opportunityId, newStage);
+                                // Dispatch event to Alpine pipelineView
+                                window.dispatchEvent(new CustomEvent('change-stage-request', {
+                                    detail: {
+                                        id: opportunityId,
+                                        stage: newStage,
+                                        currentStage: currentStage,
+                                        besoin: item.getAttribute('data-besoin'),
+                                        budget: item.getAttribute('data-budget'),
+                                        amount: item.getAttribute('data-amount'),
+                                        client_name: item.getAttribute('data-client-name')
+                                    }
+                                }));
+                                
+                                // Cancel sortable's DOM move because we want to reload or let modal handle it
+                                // Actually, Sortable has already moved it. If the user cancels the modal, 
+                                // we should probably reload or move it back. 
+                                // For now, reloading on success is handled by the modal submission.
                             }
                         }
                     });
@@ -381,6 +328,8 @@
     x-ref="contentArea">
         @include('opportunities._content')
     </div>
+
+    @include('opportunities._modals')
 </div>
 
 <style>
@@ -430,8 +379,16 @@
             },
             
             isLoading: false,
-            showQualifyModal: false,
-            showConfirmModal: false,
+            transitionUrl: '',
+            
+            // Pipeline Modals
+            showProspectionModal: false,
+            showQualificationModal: false,
+            showPropositionModal: false,
+            showNegociationModal: false,
+            showWonModal: false,
+            showLostModal: false,
+            
             showErrorToast: false,
             errorMessage: '',
             
@@ -451,11 +408,11 @@
             
             activeOpportunity: {
                 id: null,
-                currentStage: '',
+                stade: '',
+                besoin: '',
                 budget: '',
-                deadline: '',
-                decisionnaire: false,
-                besoin: ''
+                montant: '',
+                client_name: ''
             },
             targetStage: null,
             
@@ -470,16 +427,17 @@
 
             handleStageRequest(event) {
                 const data = event.detail;
-                // console.log('Stage Request:', data);
                 
                 this.activeOpportunity = {
                     id: data.id,
-                    currentStage: data.currentStage,
+                    stade: data.currentStage,
+                    besoin: data.besoin || '',
                     budget: data.budget || '',
-                    deadline: data.prevent_deadline || '',
-                    decisionnaire: data.decisionnaire,
-                    besoin: data.besoin || ''
+                    montant: data.amount || '',
+                    client_name: data.client_name || ''
                 };
+
+                this.transitionUrl = `/opportunities/${data.id}/transition`;
                 
                 this.changeStage(data.stage);
             },
@@ -487,15 +445,25 @@
             changeStage(newStage) {
                 if (this.isLoading) return;
                 
-                if (newStage === this.activeOpportunity.currentStage && newStage !== 'qualification') return;
+                // If it's the same stage, we might still want to open the modal for data update (especially in Prospection)
+                // But generally we trigger modals on target stage
                 
+                const currentStage = this.activeOpportunity.stade;
+
                 if (newStage === 'qualification') {
-                    this.showQualifyModal = true;
-                    return;
+                    this.showProspectionModal = true;
+                } else if (newStage === 'proposition') {
+                    this.showQualificationModal = true;
+                } else if (newStage === 'negociation') {
+                    this.showPropositionModal = true;
+                } else if (newStage === 'gagne') {
+                    this.showWonModal = true;
+                } else if (newStage === 'perdu') {
+                    this.showLostModal = true;
+                } else {
+                    // Fallback for simple stages or confirm if no specific modal
+                    this.updateStage(newStage);
                 }
-                
-                this.targetStage = newStage;
-                this.showConfirmModal = true;
             },
 
             async executeStageChange() {
