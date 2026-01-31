@@ -19,18 +19,6 @@ class Contact extends Model
     const STAGE_CLIENT = 'client';
     const STAGE_PERDU = 'perdu';
 
-    /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
-    {
-        static::creating(function (Contact $contact) {
-            if (empty($contact->statut)) {
-                $contact->statut = self::STAGE_NOUVEAU;
-            }
-        });
-    }
-
     public static function getStages(): array
     {
         return [
