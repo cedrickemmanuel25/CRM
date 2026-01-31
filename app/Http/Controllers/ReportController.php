@@ -86,7 +86,7 @@ class ReportController extends Controller
 
                 $query = Contact::query()->with('owner');
                 if ($type === 'leads') {
-                    $query->where('statut', 'lead');
+                    $query->where('statut', 'nouveau');
                 }
 
                 if (auth()->user()->isCommercial()) {
@@ -130,7 +130,7 @@ class ReportController extends Controller
         $user = auth()->user();
         
         $oppQuery = Opportunity::query();
-        $contactQuery = Contact::where('statut', 'lead');
+        $contactQuery = Contact::where('statut', 'nouveau');
 
         if ($user->isCommercial()) {
             $oppQuery->byCommercial($user->id);
@@ -192,7 +192,7 @@ class ReportController extends Controller
             $title = "Rapport des Prospects - $date";
             $query = Contact::query();
             if ($type === 'leads') {
-                $query->where('statut', 'lead');
+                $query->where('statut', 'nouveau');
             }
             if ($user->isCommercial()) {
                 $query->ownedBy($user->id);
