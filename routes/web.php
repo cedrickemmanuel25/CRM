@@ -111,6 +111,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/opportunities/{opportunity}/stage', [App\Http\Controllers\OpportunityController::class, 'updateStage'])->name('opportunities.updateStage');
         Route::post('/opportunities/{opportunity}/mark-won', [App\Http\Controllers\OpportunityController::class, 'markAsWon'])->name('opportunities.markWon');
         Route::post('/opportunities/{opportunity}/mark-lost', [App\Http\Controllers\OpportunityController::class, 'markAsLost'])->name('opportunities.markLost');
+        Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
         Route::delete('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'destroy'])->name('opportunities.destroy');
     });
     

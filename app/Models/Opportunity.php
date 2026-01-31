@@ -30,6 +30,25 @@ class Opportunity extends Model
         'decisionnaire',
         'delai_projet',
         'score',
+        // Nouveaux champs workflow
+        'type_premier_contact',
+        'date_premier_contact',
+        'resume_premier_contact',
+        'niveau_interet',
+        'pouvoir_decision',
+        'priorite_qualification',
+        'delai_projet_cat',
+        'type_proposition',
+        'montant_propose',
+        'description_offre',
+        'document_offre',
+        'points_negocies',
+        'objections_client',
+        'prochaine_action_date',
+        'motif_perte',
+        'commentaire_perte',
+        'relancer_plus_tard_date',
+        'type_client',
     ];
 
     protected $casts = [
@@ -44,6 +63,11 @@ class Opportunity extends Model
         'decisionnaire' => 'boolean',
         'delai_projet' => 'date',
         'score' => 'integer',
+        // Nouveaux casts
+        'date_premier_contact' => 'date',
+        'montant_propose' => 'decimal:2',
+        'prochaine_action_date' => 'date',
+        'relancer_plus_tard_date' => 'date',
     ];
 
     public function attributionHistory(): HasMany
