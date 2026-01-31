@@ -340,7 +340,12 @@
                             scrollLeft: container.scrollLeft
                         }));
                         
-                        const decodedHtml = new TextDecoder().decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
+                        const binaryString = atob(data.html);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const decodedHtml = new TextDecoder('utf-8').decode(bytes);
                         
                         // Only update if content has changed to prevent scroll jumping
                         if (this.$el.innerHTML === decodedHtml) return;
