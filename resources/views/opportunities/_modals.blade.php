@@ -1,66 +1,87 @@
 <!-- Modal 1: Prospection -> Qualification -->
 <div x-show="showProspectionModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showProspectionModal = false">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         </div>
+
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+
+        <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-200">
             <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" value="qualification">
                 <input type="hidden" name="stay_in_stage" x-ref="stayInStageProspection" value="0">
 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <!-- Header visual -->
+                <div class="bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900">Démarrer la qualification du contact</h3>
-                            <div class="mt-2 group-objective">
-                                <p class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Objectif : S’assurer qu’un premier échange a bien eu lieu</p>
+                        <h3 class="text-lg font-bold text-white tracking-tight">Qualification Initiale</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white px-8 py-8 border-b border-slate-100">
+                    <!-- Objectif stratégique -->
+                    <div class="mb-8 p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50">
+                        <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Objectif stratégique</p>
+                        <p class="text-sm font-semibold text-indigo-900 leading-relaxed">Confirmer l'intérêt réel et établir un premier contact qualitatif.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Ligne 1: Canal & Date -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Canal de contact</label>
+                                <select name="canal_contact" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all cursor-pointer">
+                                    <option value="Appel sortant">Appel sortant</option>
+                                    <option value="LinkedIn">LinkedIn</option>
+                                    <option value="Email">Email</option>
+                                    <option value="Rencontre">Rencontre physique</option>
+                                    <option value="Autre canal">Autre canal</option>
+                                </select>
                             </div>
-                            
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Type de premier contact</label>
-                                    <select name="type_premier_contact" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Appel">Appel</option>
-                                        <option value="Email">Email</option>
-                                        <option value="WhatsApp">WhatsApp</option>
-                                        <option value="Autre">Autre</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Date du contact</label>
-                                    <input type="date" name="date_premier_contact" value="{{ date('Y-m-d') }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Résumé de l’échange <span class="text-red-500">*</span></label>
-                                    <textarea name="resume_premier_contact" required class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="3" placeholder="Points clés discutés..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Niveau d’intérêt</label>
-                                    <select name="niveau_interet" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Faible">Faible</option>
-                                        <option value="Moyen" selected>Moyen</option>
-                                        <option value="Élevé">Élevé</option>
-                                    </select>
-                                </div>
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Date du contact</label>
+                                <input type="date" name="date_contact" value="{{ date('Y-m-d') }}" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                            </div>
+                        </div>
+
+                        <!-- Ligne 2: Résumé -->
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Résumé de l'échange <span class="text-rose-500">*</span></label>
+                            <textarea name="resume_echange" required class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all min-h-[120px] p-4" placeholder="Qu'avez-vous appris lors de cet échange ?"></textarea>
+                        </div>
+
+                        <!-- Ligne 3: Température -->
+                        <div class="space-y-3 pt-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Température du prospect</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <label class="relative cursor-pointer group">
+                                    <input type="radio" name="temperature" value="Faible" class="peer sr-only">
+                                    <div class="px-3 py-2 text-center rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-500 peer-checked:bg-white peer-checked:border-indigo-500 peer-checked:text-indigo-600 peer-checked:shadow-sm transition-all">Faible</div>
+                                </label>
+                                <label class="relative cursor-pointer group">
+                                    <input type="radio" name="temperature" value="Moyen" checked class="peer sr-only">
+                                    <div class="px-3 py-2 text-center rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-500 peer-checked:bg-white peer-checked:border-indigo-500 peer-checked:text-indigo-600 peer-checked:shadow-sm transition-all">Moyen</div>
+                                </label>
+                                <label class="relative cursor-pointer group">
+                                    <input type="radio" name="temperature" value="Élevé" class="peer sr-only">
+                                    <div class="px-3 py-2 text-center rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-500 peer-checked:bg-white peer-checked:border-indigo-500 peer-checked:text-indigo-600 peer-checked:shadow-sm transition-all">Élevé</div>
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Passer en Qualification
+
+                <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-4">
+                    <button type="submit" class="inline-flex items-center justify-center px-8 py-3 bg-indigo-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
+                        Passer en Qualification <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
-                    <button type="submit" @click="$refs.stayInStageProspection.value = '1'" class="w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:w-auto sm:text-sm">
-                        Enregistrer et rester en Prospection
-                    </button>
-                    <button type="button" @click="showProspectionModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
-                        Annuler
+                    <button type="submit" @click="$refs.stayInStageProspection.value = '1'" class="text-sm font-bold text-slate-500 hover:text-slate-700 bg-white border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow">
+                        Sauvegarder les notes
                     </button>
                 </div>
             </form>
@@ -70,76 +91,84 @@
 
 <!-- Modal 2: Qualification -> Proposition -->
 <div x-show="showQualificationModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showQualificationModal = false">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         </div>
+
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+
+        <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-200">
             <form :action="transitionUrl" method="POST">
                 @csrf
-                <input type="hidden" name="stade" x-ref="targetStageQualif" value="proposition">
+                <input type="hidden" name="stade" x-ref="targetStage" value="proposition">
+                <input type="hidden" name="stay_in_stage" x-ref="stayInStageQual" value="0">
 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900">Qualification du contact</h3>
-                            <div class="mt-2 group-objective">
-                                <p class="text-xs text-emerald-600 font-semibold uppercase tracking-wider">Objectif : Vérifier si le contact est une opportunité réelle</p>
+                        <h3 class="text-lg font-bold text-white tracking-tight">Analyse des Besoins</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white px-8 py-8 border-b border-slate-100">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Besoin identifié <span class="text-rose-500">*</span></label>
+                            <textarea name="besoin" required x-model="activeOpportunity.besoin" class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all min-h-[120px] p-4" placeholder="Quels sont les besoins exprimés par le prospect ?"></textarea>
+                        </div>
+
+                        <!-- Analyse BANT -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Budget estimé (FCFA)</label>
+                                <input type="number" name="budget_estime" x-model="activeOpportunity.budget" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
                             </div>
-                            
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Besoin identifié <span class="text-red-500">*</span></label>
-                                    <textarea name="besoin" required class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="2" x-model="activeOpportunity.besoin"></textarea>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Budget estimé (FCFA)</label>
-                                        <input type="number" name="budget_estime" x-model="activeOpportunity.budget" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Priorité</label>
-                                        <select name="priorite_qualification" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            <option value="Basse">Basse</option>
-                                            <option value="Moyenne" selected>Moyenne</option>
-                                            <option value="Haute">Haute</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Pouvoir de décision</label>
-                                    <select name="pouvoir_decision" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Décideur">Décideur</option>
-                                        <option value="Influenceur">Influenceur</option>
-                                        <option value="Non décideur">Non décideur</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Délai du projet</label>
-                                    <select name="delai_projet_cat" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Immédiat">Immédiat</option>
-                                        <option value="< 3 mois">&lt; 3 mois</option>
-                                        <option value="> 3 mois">&gt; 3 mois</option>
-                                    </select>
-                                </div>
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Pouvoir de décision</label>
+                                <select name="autorite_decision" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all cursor-pointer">
+                                    <option value="Décisionnaire">Directeur / Décisionnaire</option>
+                                    <option value="Prescripteur">Prescripteur / Influenceur</option>
+                                    <option value="Utilisateur">Utilisateur final</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Timeline du projet</label>
+                                <select name="timeline_projet" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all cursor-pointer">
+                                    <option value="Immédiat">Immédiat (< 1 mois)</option>
+                                    <option value="Court terme">Court terme (1-3 mois)</option>
+                                    <option value="Moyen terme">Moyen terme (3-6 mois)</option>
+                                    <option value="Veille">Veille stratégique</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Priorité interne</label>
+                                <select name="priorite" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all cursor-pointer">
+                                    <option value="Haute">🔴 Haute</option>
+                                    <option value="Moyenne" selected>🟡 Moyenne</option>
+                                    <option value="Basse">🟢 Basse</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-bold text-white hover:bg-emerald-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Passer en Proposition
-                    </button>
-                    <button type="submit" @click="$refs.targetStageQualif.value = 'prospection'" class="w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:w-auto sm:text-sm">
-                        Revenir à Prospection
-                    </button>
-                    <button type="button" @click="showQualificationModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
-                        Annuler
-                    </button>
+
+                <div class="bg-slate-50 px-8 py-6 flex flex-col gap-3">
+                    <div class="flex flex-col sm:flex-row-reverse gap-3">
+                        <button type="submit" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
+                            Générer la Proposition
+                        </button>
+                        <button type="submit" @click="$refs.targetStage.value = 'prospection'" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white text-sm font-medium text-slate-500 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all uppercase tracking-wide">
+                            Retour en Prospection
+                        </button>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button type="submit" @click="$refs.stayInStageQual.value = '1'; $refs.targetStage.value = 'qualification'" class="flex-1 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest py-2">
+                            Sauvegarder sans changer de stade
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -148,63 +177,87 @@
 
 <!-- Modal 3: Proposition -> Négociation -->
 <div x-show="showPropositionModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showPropositionModal = false">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         </div>
+
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+
+        <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-200">
             <form :action="transitionUrl" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="stade" value="negociation">
 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900">Créer et envoyer une proposition</h3>
-                            <div class="mt-2 group-objective">
-                                <p class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Objectif : Formaliser l’offre</p>
-                            </div>
-                            
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Type de proposition</label>
-                                    <select name="type_proposition" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Devis">Devis</option>
-                                        <option value="Offre personnalisée">Offre personnalisée</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Montant proposé (FCFA)</label>
-                                    <input type="number" name="montant_propose" x-model="activeOpportunity.montant" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Description de l’offre</label>
-                                    <textarea name="description_offre" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="2" placeholder="Détails du pack ou service..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Document joint (PDF)</label>
-                                    <input type="file" name="document_offre" accept=".pdf" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" name="send_email" id="send_email" value="1" checked class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                    <label for="send_email" class="ml-2 block text-sm text-gray-900">Envoyer automatiquement par email</label>
+                        <h3 class="text-lg font-bold text-white tracking-tight">Soumission de l'Offre</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white px-8 py-8 border-b border-slate-100">
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Montant proposé (FCFA) <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="number" name="montant_propose" required x-model="activeOpportunity.montant" class="w-full h-[45px] pl-12 pr-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-bold text-xs border-r border-slate-200 mr-4">F</div>
                                 </div>
                             </div>
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Type de prestation</label>
+                                <select name="type_proposition" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all cursor-pointer">
+                                    <option value="Standard">Offre Standard</option>
+                                    <option value="Premium">Offre Premium</option>
+                                    <option value="Sur-mesure">Sur-mesure / Projet</option>
+                                    <option value="Accompagnement">Accompagnement annuel</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Description de l'offre</label>
+                            <textarea name="description_offre" class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all min-h-[100px] p-4" placeholder="Détaillez les principaux points de votre proposition..."></textarea>
+                        </div>
+
+                        <div class="p-6 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 hover:border-purple-400 hover:bg-white transition-all group text-center cursor-pointer relative shadow-sm">
+                            <input type="file" name="document_offre" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="flex flex-col items-center">
+                                <div class="p-3 bg-white rounded-xl shadow-sm mb-3 group-hover:scale-110 transition-transform border border-slate-100">
+                                    <svg class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                </div>
+                                <span class="text-sm font-bold text-slate-700">Charger le document PDF</span>
+                                <span class="text-[11px] text-slate-500 font-medium mt-1 uppercase tracking-tighter">Glissez-déposez ou cliquez (Max 5Mo)</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-purple-50 rounded-2xl border border-purple-100 shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-purple-100 rounded-lg">
+                                    <svg class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-purple-900 uppercase">Envoi automatique</p>
+                                    <p class="text-[10px] text-purple-600 font-medium">Envoyer l'offre par email au client</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="send_email" value="1" class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600 shadow-inner"></div>
+                            </label>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-bold text-white hover:bg-indigo-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Passer en Négociation
+
+                <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-4">
+                    <button type="submit" class="inline-flex items-center justify-center px-8 py-3 bg-purple-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-purple-200 hover:bg-purple-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
+                        Lancer la Négociation
                     </button>
-                    <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:w-auto sm:text-sm">
-                        Créer la proposition
-                    </button>
-                    <button type="button" @click="showPropositionModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
+                    <button type="button" @click="showPropositionModal = false" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wide px-4">
                         Annuler
                     </button>
                 </div>
@@ -215,69 +268,83 @@
 
 <!-- Modal 4: Négociation -> Gagné / Perdu -->
 <div x-show="showNegociationModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showNegociationModal = false">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         </div>
+
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+
+        <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-slate-200">
             <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" x-ref="targetStageNegoc" value="negociation">
                 <input type="hidden" name="stay_in_stage" x-ref="stayInStageNegoc" value="0">
 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <div class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900">Phase de négociation</h3>
-                            <div class="mt-2 group-objective">
-                                <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Objectif : Finalisation des termes et conclusion</p>
-                            </div>
-                            
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Derniers retours client <span class="text-red-500">*</span></label>
-                                    <textarea name="feedback_negociation" required class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="3" placeholder="Quels sont les points de friction restants ?"></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Obstacles éventuels</label>
-                                    <select name="obstacles_negoc" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Aucun">Aucun</option>
-                                        <option value="Budget excessif">Budget excessif</option>
-                                        <option value="Validation juridique">Validation juridique</option>
-                                        <option value="Comparaison concurrence">Comparaison concurrence</option>
+                        <h3 class="text-lg font-bold text-white tracking-tight">Phase de Négociation</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white px-8 py-8 border-b border-slate-100">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Derniers retours client <span class="text-rose-500">*</span></label>
+                            <textarea name="feedback_negociation" required class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all min-h-[120px] p-4" placeholder="Quels sont les points de friction ou de blocage ?"></textarea>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="space-y-2">
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Obstacle majeur</label>
+                                    <select name="obstacles_negoc" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all cursor-pointer">
+                                        <option value="Aucun">Aucun blocage</option>
+                                        <option value="Budget">Budget trop élevé</option>
+                                        <option value="Juridique">Attente service juridique</option>
+                                        <option value="Concurrence">Concurrence agressive</option>
+                                        <option value="Technique">Complexité technique</option>
                                     </select>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Probabilité finale (%)</label>
-                                        <input type="number" name="probabilite_finale" min="0" max="100" value="80" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Date de décision prévue</label>
-                                        <input type="date" name="date_decision_prevue" value="{{ date('Y-m-d', strtotime('+7 days')) }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <div class="space-y-2">
+                                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Confiance de signature</label>
+                                    <div class="flex items-center gap-4 py-2">
+                                        <input type="range" name="probabilite_finale" min="0" max="100" value="80" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500 border-none shadow-inner">
+                                        <span class="text-sm font-bold text-slate-800 min-w-[32px]">80%</span>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Date de décision prévue</label>
+                                <input type="date" name="date_decision_prevue" value="{{ date('Y-m-d', strtotime('+7 days')) }}" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="submit" @click="$refs.targetStageNegoc.value = 'gagne'" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-bold text-white hover:bg-emerald-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Marquer Gagné
-                    </button>
-                    <button type="submit" @click="$refs.targetStageNegoc.value = 'perdu'" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-rose-600 text-base font-bold text-white hover:bg-rose-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Marquer Perdu
-                    </button>
-                    <button type="submit" @click="$refs.stayInStageNegoc.value = '1'; $refs.targetStageNegoc.value = 'negociation'" class="w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:w-auto sm:text-sm">
-                        Enregistrer les notes
-                    </button>
-                    <button type="button" @click="showNegociationModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
-                        Annuler
-                    </button>
+
+                <div class="bg-slate-50 px-8 py-6 flex flex-col gap-3 text-label">
+                    <div class="flex flex-col sm:flex-row-reverse gap-3">
+                        <button type="submit" @click="$refs.targetStageNegoc.value = 'gagne'" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
+                            <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Marquer Gagné
+                        </button>
+                        <button type="submit" @click="$refs.targetStageNegoc.value = 'perdu'" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-rose-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-rose-200 hover:bg-rose-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
+                            <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            Marquer Perdu
+                        </button>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button type="submit" @click="$refs.stayInStageNegoc.value = '1'; $refs.targetStageNegoc.value = 'negociation'" class="flex-1 inline-flex items-center justify-center px-6 py-2 bg-white text-[11px] font-bold text-slate-500 rounded-xl border border-slate-200 hover:bg-slate-100 hover:text-slate-700 transition-all uppercase tracking-widest shadow-sm">
+                            Enregistrer les notes de suivi
+                        </button>
+                        <button type="button" @click="showNegociationModal = false" class="flex-1 inline-flex items-center justify-center px-6 py-2 bg-transparent text-[11px] font-bold text-slate-400 hover:text-slate-600 transition-all uppercase tracking-widest">
+                            Annuler
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -286,63 +353,71 @@
 
 <!-- Modal 5: Gagné (Conversion en client) -->
 <div x-show="showWonModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showWonModal = false">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         </div>
+
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+
+        <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-slate-200">
             <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" value="gagne">
 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-8 text-center relative overflow-hidden">
+                    <!-- Decorative elements -->
+                    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="10" cy="10" r="20" fill="white"/><circle cx="90" cy="80" r="30" fill="white"/></svg>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-white/20 backdrop-blur-md mb-4 shadow-inner">
+                            <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900">Conversion en client</h3>
-                            <div class="mt-2 group-objective">
-                                <p class="text-xs text-emerald-600 font-semibold uppercase tracking-wider">Objectif : Passage commercial → opérationnel</p>
-                            </div>
+                        <h3 class="text-2xl font-black text-white tracking-tight uppercase">Victoire !</h3>
+                        <p class="text-emerald-50 text-sm font-medium mt-1">L'opportunité a été marquée comme gagnée.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white px-8 py-8">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Nom officiel du client / Entreprise</label>
+                            <input type="text" name="nom_client_final" x-model="activeOpportunity.client_name" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                        </div>
+
+                        <div class="space-y-4">
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">Actions de conversion automatique</p>
                             
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Nom du client</label>
-                                    <input type="text" name="nom_client_final" x-model="activeOpportunity.client_name" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Type de client</label>
-                                    <select name="type_client" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Particulier">Particulier</option>
-                                        <option value="Entreprise" selected>Entreprise</option>
-                                    </select>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="text-sm font-medium text-gray-700">Créer automatiquement :</p>
-                                    <div class="flex items-center">
-                                        <input type="checkbox" name="create_project" id="create_project" value="1" checked class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
-                                        <label for="create_project" class="ml-2 block text-sm text-gray-900">Projet</label>
+                            <div class="grid grid-cols-1 gap-3">
+                                @foreach([
+                                    'create_project' => ['label' => 'Créer un projet dédié', 'desc' => 'Initialise un espace projet pour l\'exécution', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                                    'create_invoice' => ['label' => 'Générer facture d\'acompte', 'desc' => 'Crée un brouillon de facture à 30%', 'icon' => 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z']
+                                ] as $name => $info)
+                                <label class="flex items-start p-4 rounded-2xl border border-slate-200 bg-white hover:border-emerald-200 hover:shadow-md cursor-pointer transition-all group shadow-sm">
+                                    <div class="flex-shrink-0 mt-0.5">
+                                        <input type="checkbox" name="{{ $name }}" value="1" class="h-5 w-5 text-emerald-600 focus:ring-emerald-500 border-slate-300 rounded-lg">
                                     </div>
-                                    <div class="flex items-center">
-                                        <input type="checkbox" name="create_order" id="create_order" value="1" class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
-                                        <label for="create_order" class="ml-2 block text-sm text-gray-900">Commande</label>
+                                    <div class="ml-4 flex-1">
+                                        <div class="flex items-center gap-2">
+                                            <svg class="h-4 w-4 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $info['icon'] }}"></path></svg>
+                                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ $info['label'] }}</span>
+                                        </div>
+                                        <p class="text-[11px] text-slate-500 font-medium mt-0.5">{{ $info['desc'] }}</p>
                                     </div>
-                                    <div class="flex items-center">
-                                        <input type="checkbox" name="create_invoice" id="create_invoice" value="1" class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
-                                        <label for="create_invoice" class="ml-2 block text-sm text-gray-900">Facture</label>
-                                    </div>
-                                </div>
+                                </label>
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-bold text-white hover:bg-emerald-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Convertir en client
+
+                <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-4">
+                    <button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-emerald-600 text-sm font-black text-white rounded-2xl shadow-xl shadow-emerald-200 hover:bg-emerald-700 hover:scale-[1.03] active:scale-[0.97] transition-all uppercase tracking-widest">
+                        Confirmer la Vente
                     </button>
-                    <button type="button" @click="showWonModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
+                    <button type="button" @click="showWonModal = false" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wide px-6">
                         Annuler
                     </button>
                 </div>
@@ -353,54 +428,60 @@
 
 <!-- Modal 6: Perdu -->
 <div x-show="showLostModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showLostModal = false">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         </div>
+
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+
+        <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-slate-200">
             <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" value="perdu">
 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-rose-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="bg-white px-8 pt-8 pb-4">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 bg-rose-50 rounded-2xl">
+                            <svg class="h-6 w-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900">Marquer l’opportunité comme perdue</h3>
-                            <div class="mt-2 group-objective">
-                                <p class="text-xs text-rose-600 font-semibold uppercase tracking-wider">Objectif : Analyse et amélioration future</p>
-                            </div>
-                            
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Motif de perte</label>
-                                    <select name="motif_perte" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Prix">Prix</option>
-                                        <option value="Concurrence">Concurrence</option>
-                                        <option value="Abandon">Abandon</option>
-                                        <option value="Autre">Autre</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Commentaire libre</label>
-                                    <textarea name="commentaire_perte" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="3" placeholder="Précisez les raisons..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Relancer plus tard ? (date optionnelle)</label>
-                                    <input type="date" name="relancer_plus_tard_date" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                </div>
-                            </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-800 tracking-tight uppercase">Opportunité Perdue</h3>
+                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">Analyse de l'échec commercial</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Motif principal de perte <span class="text-rose-500">*</span></label>
+                            <select name="motif_perte" required class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer">
+                                <option value="Prix">Prix trop élevé</option>
+                                <option value="Concurrence">Perdu face à la concurrence</option>
+                                <option value="Besoin">Le besoin a disparu</option>
+                                <option value="Relationnel">Mauvais fit relationnel</option>
+                                <option value="Projet annulé">Projet client annulé / reporté</option>
+                                <option value="Autre">Autre motif</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Commentaire analytique</label>
+                            <textarea name="commentaire_perte" class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all min-h-[120px] p-4" placeholder="Pourquoi n'avons-nous pas réussi à conclure ?"></textarea>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">Relancer plus tard ? (Optionnel)</label>
+                            <input type="date" name="relancer_plus_tard_date" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                            <p class="text-[10px] text-slate-500 font-medium mt-2 italic">Une tâche de rappel sera créée à cette date.</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-rose-600 text-base font-bold text-white hover:bg-rose-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
-                        Confirmer la perte
+
+                <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-4">
+                    <button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-rose-600 text-sm font-bold text-white rounded-2xl shadow-xl shadow-rose-200 hover:bg-rose-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
+                        Archiver comme Perte
                     </button>
-                    <button type="button" @click="showLostModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
+                    <button type="button" @click="showLostModal = false" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wide px-6">
                         Annuler
                     </button>
                 </div>

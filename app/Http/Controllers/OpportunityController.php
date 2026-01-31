@@ -459,6 +459,6 @@ class OpportunityController extends Controller
 
         $message = $stayInStage ? 'Données enregistrées.' : 'Transition vers ' . ucfirst($newStage) . ' effectuée.';
         
-        return redirect()->route('opportunities.show', $opportunity)->with('success', $message);
+        return redirect()->back()->with('success', $message);
     }
 }
