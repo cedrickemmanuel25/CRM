@@ -102,14 +102,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Opportunities Module
-    // Admin & Commercial can manage opportunities (specific routes first)
     Route::middleware('role:admin,commercial')->group(function () {
-        // Routes de transition (Placer au début pour éviter les conflits de wildcard)
-        Route::post('/opportunities/{id}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
-        Route::get('/opportunities/{id}/transition', function() {
-            return redirect()->route('opportunities.index');
-        });
-
         Route::get('/opportunities/create', [App\Http\Controllers\OpportunityController::class, 'create'])->name('opportunities.create');
         Route::post('/opportunities', [App\Http\Controllers\OpportunityController::class, 'store'])->name('opportunities.store');
         Route::get('/opportunities/{opportunity}/edit', [App\Http\Controllers\OpportunityController::class, 'edit'])->name('opportunities.edit');
@@ -120,11 +113,20 @@ Route::middleware('auth')->group(function () {
         Route::delete('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'destroy'])->name('opportunities.destroy');
     });
     
-    // All roles can view opportunities (wildcard routes last)
-    Route::middleware('auth')->group(function () {
-        Route::get('/opportunities', [App\Http\Controllers\OpportunityController::class, 'index'])->name('opportunities.index');
-        Route::get('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'show'])->name('opportunities.show');
+    // Routes de transition (Placées hors du middleware 'role' pour test, mais toujours sous 'auth')
+    Route::post('/opportunities/{transition_id}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+    Route::get('/opportunities/{transition_id}/transition', function() {
+        return redirect()->route('opportunities.index');
     });
+
+    Route::get('/debug-routing', function() {
+        return "Routing is active - " . now();
+    });
+
+    // All roles can view opportunities (wildcard routes last)
+    Route::get('/opportunities', [App\Http\Controllers\OpportunityController::class, 'index'])->name('opportunities.index');
+    Route::get('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'show'])->name('opportunities.show');
+
 
     // Activities Module
     Route::post('/activities', [App\Http\Controllers\ActivityController::class, 'store'])->name('activities.store');
