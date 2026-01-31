@@ -57,6 +57,45 @@ Route::middleware('auth')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/contacts', [App\Http\Controllers\ContactController::class, 'index'])->name('contacts.index');
         Route::get('/contacts/fetch', [App\Http\Controllers\ContactController::class, 'fetch'])->name('contacts.fetch');
+        Route::get('/fix-encoding', function() {
+            $contacts = \App\Models\Contact::all();
+            $count = 0;
+            $replacements = [
+                'Ã©vÃ©nement' => 'Événement',
+                'Ã©vÃ¨nement' => 'Événement', 
+                'Ã‰vÃ©nement' => 'Événement',
+                'Ã‰vÃ¨nement' => 'Événement',
+                '6agn6' => 'Gagné',
+                'GagnÃ©' => 'Gagné',
+                'gagnÃ©' => 'gagné',
+                'ProspÃ©' => 'Prospé',
+                'prospÃ©' => 'prospé',
+                'Ã©' => 'é',
+                'Ã¨' => 'è',
+                'Ãª' => 'ê',
+                'Ã ' => 'à',
+                'Ã§' => 'ç',
+                'Ã‰' => 'É',
+            ];
+            
+            foreach ($contacts as $contact) {
+                $changed = false;
+                foreach (['source', 'statut', 'nom', 'prenom', 'entreprise'] as $field) {
+                    if ($contact->$field) {
+                        $newValue = str_replace(array_keys($replacements), array_values($replacements), $contact->$field);
+                        if ($newValue !== $contact->$field) {
+                            $contact->$field = $newValue;
+                            $changed = true;
+                        }
+                    }
+                }
+                if ($changed) {
+                    $contact->save();
+                    $count++;
+                }
+            }
+            return "Correction terminée. $count contacts mis à jour.";
+        })->name('fix.encoding');
         Route::get('/contacts/{contact}', [App\Http\Controllers\ContactController::class, 'show'])->name('contacts.show');
         Route::patch('/contacts/{contact}/stage', [App\Http\Controllers\ContactController::class, 'updateStage'])->name('contacts.updateStage');
         Route::post('/contacts/{contact}/interaction', [App\Http\Controllers\ContactController::class, 'logInteraction'])->name('contacts.logInteraction');

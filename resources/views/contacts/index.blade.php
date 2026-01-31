@@ -189,8 +189,13 @@ document.addEventListener('alpine:init', () => {
                 const data = await response.json();
                 
                 if (data.html) {
-                    // Décoder le HTML base64
-                    const decodedHtml = atob(data.html);
+                    // Décoder le HTML base64 en gérant correctement l'UTF-8
+                    const binaryString = atob(data.html);
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    const decodedHtml = new TextDecoder('utf-8').decode(bytes);
                     this.$el.innerHTML = decodedHtml;
                     
                     // Mettre à jour le compteur
