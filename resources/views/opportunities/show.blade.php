@@ -164,56 +164,6 @@
     <!-- Pipeline Progress Bar Moved to List View -->
     <div class="mb-4"></div>
 
-    <!-- STAGE PLAYBOOK / GUIDANCE -->
-    <div class="mb-8 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg shadow-sm" x-cloak>
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <div class="ml-3 w-full">
-                <!-- Header: Status & Objective -->
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-sm leading-5 font-bold text-blue-800 uppercase tracking-wide">
-                            <span x-text="stageGuides[currentStage].label"></span> : <span x-text="stageGuides[currentStage].objective" class="font-normal normal-case"></span>
-                        </h3>
-                        <p class="mt-1 text-sm text-blue-700" x-text="stageGuides[currentStage].description"></p>
-                    </div>
-                </div>
-
-                <!-- Content Grid -->
-                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Column 1: Status & Actions -->
-                    <div>
-                        <h4 class="text-xs font-bold text-blue-500 uppercase mb-2">Statut & Actions</h4>
-                        <div class="text-sm text-blue-800">
-                            <p class="mb-1"><span class="font-semibold">Contact :</span> <span x-text="stageGuides[currentStage].contactStatus"></span></p>
-                            <ul class="list-disc pl-5 space-y-1 mt-2">
-                                <template x-for="action in stageGuides[currentStage].actions">
-                                    <li x-text="action"></li>
-                                </template>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Column 2: CRM Buttons (Simulated/Real) -->
-                    <div>
-                        <h4 class="text-xs font-bold text-blue-500 uppercase mb-2">Actions CRM Conseillées</h4>
-                        <div class="flex flex-wrap gap-2">
-                            <template x-for="btn in stageGuides[currentStage].buttons">
-                                <button class="inline-flex items-center px-2.5 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded text-blue-700 bg-white hover:bg-blue-50 focus:outline-none cursor-default">
-                                    <span x-text="btn"></span>
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <!-- Top Actions Mobil/Desktop -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div class="flex-1 min-w-0">
