@@ -459,6 +459,7 @@ class OpportunityController extends Controller
 
         $message = $stayInStage ? 'Données enregistrées.' : 'Transition vers ' . ucfirst($newStage) . ' effectuée.';
         
-        return redirect()->back()->with('success', $message);
+        // Sécurisation de la redirection : retour à la page précédente ou index par défaut
+        return redirect()->to(url()->previous(route('opportunities.index')))->with('success', $message);
     }
 }
