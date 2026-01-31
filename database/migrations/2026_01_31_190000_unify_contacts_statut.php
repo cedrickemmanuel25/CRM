@@ -15,9 +15,9 @@ return new class extends Migration
         // 1. Convertir tous les anciens 'lead' en 'nouveau'
         DB::table('contacts')->where('statut', 'lead')->update(['statut' => 'nouveau']);
 
-        // 2. S'assurer que le défaut SQL est bien 'nouveau'
+        // 2. S'assurer que le statut est nullable et sans défaut forcé
         Schema::table('contacts', function (Blueprint $table) {
-            $table->string('statut')->default('nouveau')->change();
+            $table->string('statut')->nullable()->default(null)->change();
         });
     }
 
