@@ -6,7 +6,7 @@
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="{{ route('opportunities.processTransition', $opportunity) }}" method="POST">
+            <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" value="qualification">
                 <input type="hidden" name="stay_in_stage" x-ref="stayInStageProspection" value="0">
@@ -76,7 +76,7 @@
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="{{ route('opportunities.processTransition', $opportunity) }}" method="POST">
+            <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" x-ref="targetStageQualif" value="proposition">
 
@@ -94,12 +94,12 @@
                             <div class="mt-4 space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Besoin identifié <span class="text-red-500">*</span></label>
-                                    <textarea name="besoin" required class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="2">{{ $opportunity->besoin }}</textarea>
+                                    <textarea name="besoin" required class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="2" x-model="activeOpportunity.besoin"></textarea>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Budget estimé (FCFA)</label>
-                                        <input type="number" name="budget_estime" value="{{ (int)$opportunity->budget_estime }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <input type="number" name="budget_estime" x-model="activeOpportunity.budget" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Priorité</label>
@@ -154,7 +154,7 @@
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="{{ route('opportunities.processTransition', $opportunity) }}" method="POST" enctype="multipart/form-data">
+            <form :action="transitionUrl" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="stade" value="negociation">
 
@@ -179,7 +179,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Montant proposé (FCFA)</label>
-                                    <input type="number" name="montant_propose" value="{{ (int)$opportunity->montant_estime }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <input type="number" name="montant_propose" x-model="activeOpportunity.montant" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Description de l’offre</label>
@@ -215,9 +215,73 @@
 
 <!-- Modal 4: Négociation -> Gagné / Perdu -->
 <div x-show="showNegociationModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-    <!-- On n'utilise pas ce modal directement pour transitionner car on a showWonModal et showLostModal -->
-    <!-- Mais l'utilisateur demande un titre "Phase de négociation" -->
-    <!-- On va peut-être fusionner avec la logique d'ouverture selon le bouton cliqué -->
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showNegociationModal = false">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form :action="transitionUrl" method="POST">
+                @csrf
+                <input type="hidden" name="stade" x-ref="targetStageNegoc" value="negociation">
+                <input type="hidden" name="stay_in_stage" x-ref="stayInStageNegoc" value="0">
+
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-bold text-gray-900">Phase de négociation</h3>
+                            <div class="mt-2 group-objective">
+                                <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Objectif : Finalisation des termes et conclusion</p>
+                            </div>
+                            
+                            <div class="mt-4 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Derniers retours client <span class="text-red-500">*</span></label>
+                                    <textarea name="feedback_negociation" required class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="3" placeholder="Quels sont les points de friction restants ?"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Obstacles éventuels</label>
+                                    <select name="obstacles_negoc" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="Aucun">Aucun</option>
+                                        <option value="Budget excessif">Budget excessif</option>
+                                        <option value="Validation juridique">Validation juridique</option>
+                                        <option value="Comparaison concurrence">Comparaison concurrence</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Probabilité finale (%)</label>
+                                        <input type="number" name="probabilite_finale" min="0" max="100" value="80" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Date de décision prévue</label>
+                                        <input type="date" name="date_decision_prevue" value="{{ date('Y-m-d', strtotime('+7 days')) }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse gap-3">
+                    <button type="submit" @click="$refs.targetStageNegoc.value = 'gagne'" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-bold text-white hover:bg-emerald-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
+                        Marquer Gagné
+                    </button>
+                    <button type="submit" @click="$refs.targetStageNegoc.value = 'perdu'" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-rose-600 text-base font-bold text-white hover:bg-rose-700 focus:outline-none sm:w-auto sm:text-sm uppercase tracking-wide">
+                        Marquer Perdu
+                    </button>
+                    <button type="submit" @click="$refs.stayInStageNegoc.value = '1'; $refs.targetStageNegoc.value = 'negociation'" class="w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:w-auto sm:text-sm">
+                        Enregistrer les notes
+                    </button>
+                    <button type="button" @click="showNegociationModal = false" class="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 sm:w-auto sm:text-sm">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <!-- Modal 5: Gagné (Conversion en client) -->
@@ -228,7 +292,7 @@
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="{{ route('opportunities.processTransition', $opportunity) }}" method="POST">
+            <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" value="gagne">
 
@@ -246,7 +310,7 @@
                             <div class="mt-4 space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Nom du client</label>
-                                    <input type="text" name="nom_client_final" value="{{ $opportunity->contact->entreprise ?? $opportunity->contact->full_name }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <input type="text" name="nom_client_final" x-model="activeOpportunity.client_name" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Type de client</label>
@@ -295,7 +359,7 @@
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="{{ route('opportunities.processTransition', $opportunity) }}" method="POST">
+            <form :action="transitionUrl" method="POST">
                 @csrf
                 <input type="hidden" name="stade" value="perdu">
 

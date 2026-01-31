@@ -695,6 +695,15 @@
     function opportunityData(initialStage, updateUrl, csrfToken) {
         return {
             isLoading: false,
+            transitionUrl: updateUrl + '/transition',
+            activeOpportunity: {
+                id: {{ $opportunity->id }},
+                stade: '{{ $opportunity->stade }}',
+                besoin: `{!! addslashes($opportunity->besoin) !!}`,
+                budget: {{ (int)$opportunity->budget_estime }},
+                montant: {{ (int)$opportunity->montant_estime }},
+                client_name: '{{ $opportunity->contact->entreprise ?? $opportunity->contact->full_name }}'
+            },
 
             // Pipeline Modals
             showProspectionModal: false,

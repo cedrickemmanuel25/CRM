@@ -403,15 +403,17 @@ class OpportunityController extends Controller
             'description_offre' => 'nullable|string',
             'document_offre' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:5120',
             'send_email' => 'nullable|boolean',
-            // Négociation -> G / P
-            'points_negocies' => 'nullable|string',
-            'objections_client' => 'nullable|string',
-            'prochaine_action_date' => 'nullable|date',
+            // Négociation logic
+            'feedback_negociation' => 'nullable|string',
+            'obstacles_negoc' => 'nullable|string',
+            'probabilite_finale' => 'nullable|integer',
+            'date_decision_prevue' => 'nullable|date',
             // Perdu
             'motif_perte' => 'nullable|string',
             'commentaire_perte' => 'nullable|string',
             'relancer_plus_tard_date' => 'nullable|date',
             // Gagne / Client
+            'nom_client_final' => 'nullable|string',
             'type_client' => 'nullable|string',
             'create_project' => 'nullable|boolean',
             'create_order' => 'nullable|boolean',
