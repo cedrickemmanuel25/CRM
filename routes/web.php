@@ -9,6 +9,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/test-public', function() {
+    return "Public test works - " . date('H:i:s');
+});
+
 // Routes d'authentification (accessibles uniquement aux invités)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -114,14 +118,13 @@ Route::middleware('auth')->group(function () {
     });
     
     // Routes de transition (Placées hors du middleware 'role' pour test, mais toujours sous 'auth')
-    Route::post('/opportunities/{transition_id}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
-    Route::get('/opportunities/{transition_id}/transition', function() {
+    Route::post('/opportunities/{id}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+    Route::get('/opportunities/{id}/transition', function() {
         return redirect()->route('opportunities.index');
     });
 
-    Route::get('/debug-routing', function() {
-        return "Routing is active - " . now();
-    });
+    Route::get('/debug-routing-controller', [App\Http\Controllers\OpportunityController::class, 'getRoutingDiagnostic']);
+    Route::get('/debug-routing-simple', function() { return "Simple routing works - " . now(); });
 
     // All roles can view opportunities (wildcard routes last)
     Route::get('/opportunities', [App\Http\Controllers\OpportunityController::class, 'index'])->name('opportunities.index');
