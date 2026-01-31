@@ -112,6 +112,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/opportunities/{opportunity}/mark-won', [App\Http\Controllers\OpportunityController::class, 'markAsWon'])->name('opportunities.markWon');
         Route::post('/opportunities/{opportunity}/mark-lost', [App\Http\Controllers\OpportunityController::class, 'markAsLost'])->name('opportunities.markLost');
         Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+        Route::get('/opportunities/{opportunity}/transition', function() {
+            return redirect()->route('opportunities.index');
+        });
         Route::delete('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'destroy'])->name('opportunities.destroy');
     });
     
