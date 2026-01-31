@@ -373,4 +373,90 @@ class OpportunityController extends Controller
 
         return redirect()->back()->with('error', 'Opportunité marquée comme perdue.');
     }
+
+    /**
+     * Traite les transitions complexes avec données additionnelles.
+     */
+    public function processTransition(Request $request, Opportunity $opportunity)
+    {
+        if (auth()->user()->isSupport() || (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id())) {
+            return redirect()->back()->with('error', 'Non autorisé.');
+        }
+
+        $validated = $request->validate([
+            'stade' => 'required|string|in:prospection,qualification,proposition,negociation,gagne,perdu',
+            // Prospection -> Qualification
+            'type_premier_contact' => 'nullable|string',
+            'date_premier_contact' => 'nullable|date',
+            'resume_premier_contact' => 'nullable|string',
+            'niveau_interet' => 'nullable|string',
+            // Qualification -> Proposition
+            'besoin' => 'nullable|string',
+            'budget_estime' => 'nullable|numeric',
+            'pouvoir_decision' => 'nullable|string',
+            'delai_projet_cat' => 'nullable|string',
+            'priorite_qualification' => 'nullable|string',
+            'score' => 'nullable|integer',
+            // Proposition -> Négociation
+            'type_proposition' => 'nullable|string',
+            'montant_propose' => 'nullable|numeric',
+            'description_offre' => 'nullable|string',
+            'document_offre' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:5120',
+            'send_email' => 'nullable|boolean',
+            // Négociation -> G / P
+            'points_negocies' => 'nullable|string',
+            'objections_client' => 'nullable|string',
+            'prochaine_action_date' => 'nullable|date',
+            // Perdu
+            'motif_perte' => 'nullable|string',
+            'commentaire_perte' => 'nullable|string',
+            'relancer_plus_tard_date' => 'nullable|date',
+            // Gagne / Client
+            'type_client' => 'nullable|string',
+            'create_project' => 'nullable|boolean',
+            'create_order' => 'nullable|boolean',
+            'create_invoice' => 'nullable|boolean',
+        ]);
+
+        // Handle File Upload for Document Offre
+        if ($request->hasFile('document_offre')) {
+            $path = $request->file('document_offre')->store('opportunities/documents', 'public');
+            $validated['document_offre'] = $path;
+        }
+
+        // Logic check: If it's just a save without stage change (Modal 1 specific requirement)
+        $stayInStage = $request->boolean('stay_in_stage');
+        $newStage = $stayInStage ? $opportunity->stade : $validated['stade'];
+
+        // Update Fields
+        $opportunity->update(collect($validated)->except(['stade', 'document_offre', 'stay_in_stage', 'send_email', 'create_project', 'create_order', 'create_invoice'])->toArray());
+
+        // Process Stage Transition if needed
+        if ($opportunity->stade !== $newStage) {
+            $opportunity->moveToStage($newStage, auth()->id());
+        }
+
+        // Add an activity log for the transition data if significant
+        if ($request->filled('resume_premier_contact')) {
+             $opportunity->activities()->create([
+                'user_id' => auth()->id(),
+                'contact_id' => $opportunity->contact_id,
+                'type' => 'note',
+                'description' => "Compte-rendu du premier contact : " . $validated['resume_premier_contact'],
+                'date_activite' => $validated['date_premier_contact'] ?? now(),
+            ]);
+        }
+
+        // Hypothetical Logic for Projects/Invoices (Placeholder as requested in Modal 5)
+        if ($newStage === 'gagne') {
+            if ($request->boolean('create_project')) {
+                // Logic to create project...
+                AuditLog::log('opportunity_auto_project_creation', $opportunity);
+            }
+        }
+
+        $message = $stayInStage ? 'Données enregistrées.' : 'Transition vers ' . ucfirst($newStage) . ' effectuée.';
+        
+        return redirect()->route('opportunities.show', $opportunity)->with('success', $message);
+    }
 }

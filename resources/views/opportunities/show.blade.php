@@ -180,6 +180,31 @@
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4 space-x-3">
              @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opportunity->commercial_id === auth()->id()))
+                @if($opportunity->stade === 'prospection')
+                    <button @click="showProspectionModal = true" class="inline-flex items-center px-6 py-2 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Démarrer Qualification
+                    </button>
+                @elseif($opportunity->stade === 'qualification')
+                    <button @click="showQualificationModal = true" class="inline-flex items-center px-6 py-2 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Valider Qualification
+                    </button>
+                @elseif($opportunity->stade === 'proposition')
+                    <button @click="showPropositionModal = true" class="inline-flex items-center px-6 py-2 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Négocier l'offre
+                    </button>
+                @elseif($opportunity->stade === 'negociation')
+                    <button @click="showWonModal = true" class="inline-flex items-center px-6 py-2 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Marquer Gagné
+                    </button>
+                    <button @click="showLostModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 transition-all duration-200">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Marquer Perdu
+                    </button>
+                @endif
 
                 <a href="{{ route('opportunities.edit', $opportunity) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-xl shadow-sm text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-all duration-200">
                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -659,7 +684,7 @@
             </div>
 
 
-
+@include('opportunities._modals')
 </div>
 <!-- Scripts (déjà inclus via layout mais nécessaire pour Alpine si pas global) -->
 <script src="//unpkg.com/alpinejs" defer></script>
@@ -669,16 +694,15 @@
 <script>
     function opportunityData(initialStage, updateUrl, csrfToken) {
         return {
-            activeTab: 'overview',
-            showActivityForm: false,
-            showHistory: false,
-            currentStage: initialStage,
-            showQualifyModal: false,
-            showConfirmModal: false,
-            targetStage: null,
-            showErrorToast: false,
-            errorMessage: '',
             isLoading: false,
+
+            // Pipeline Modals
+            showProspectionModal: false,
+            showQualificationModal: false,
+            showPropositionModal: false,
+            showNegociationModal: false,
+            showWonModal: false,
+            showLostModal: false,
 
             stageGuides: {
                 prospection: {
