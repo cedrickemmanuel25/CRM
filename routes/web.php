@@ -105,7 +105,7 @@ Route::middleware('auth')->group(function () {
     // Admin & Commercial can manage opportunities (specific routes first)
     Route::middleware('role:admin,commercial')->group(function () {
         // Routes de transition (Placer au début pour éviter les conflits de wildcard)
-        Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+        Route::post('/opportunities/{id}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
         Route::get('/opportunities/{id}/transition', function() {
             return redirect()->route('opportunities.index');
         });
