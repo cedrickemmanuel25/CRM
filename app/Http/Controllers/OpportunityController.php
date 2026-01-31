@@ -378,8 +378,9 @@ class OpportunityController extends Controller
     /**
      * Traite les transitions complexes avec données additionnelles.
      */
-    public function processTransition(Request $request, Opportunity $opportunity)
+    public function processTransition(Request $request, $id)
     {
+        $opportunity = Opportunity::findOrFail($id);
         if (auth()->user()->isSupport() || (auth()->user()->isCommercial() && $opportunity->commercial_id != auth()->id())) {
             return redirect()->back()->with('error', 'Non autorisé.');
         }
