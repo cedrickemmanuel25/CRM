@@ -126,10 +126,14 @@ class ContactController extends Controller
         $perPage = in_array($request->query('per_page'), [20, 50]) ? $request->query('per_page') : 20;
         $contacts = $query->paginate($perPage)->withQueryString();
 
+        $html = view('contacts._table_rows', compact('contacts'))->render();
+        
         return response()->json([
-            'html' => base64_encode(view('contacts._table_rows', compact('contacts'))->render()),
+            'html' => base64_encode($html),
             'total' => $contacts->total()
-        ], 200, [], JSON_UNESCAPED_UNICODE);
+        ], 200, [
+            'Content-Type' => 'application/json; charset=UTF-8'
+        ], JSON_UNESCAPED_UNICODE);
     }
 
     /**
