@@ -104,6 +104,12 @@ Route::middleware('auth')->group(function () {
     // Opportunities Module
     // Admin & Commercial can manage opportunities (specific routes first)
     Route::middleware('role:admin,commercial')->group(function () {
+        // Routes de transition (Placer au début pour éviter les conflits de wildcard)
+        Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+        Route::get('/opportunities/{id}/transition', function() {
+            return redirect()->route('opportunities.index');
+        });
+
         Route::get('/opportunities/create', [App\Http\Controllers\OpportunityController::class, 'create'])->name('opportunities.create');
         Route::post('/opportunities', [App\Http\Controllers\OpportunityController::class, 'store'])->name('opportunities.store');
         Route::get('/opportunities/{opportunity}/edit', [App\Http\Controllers\OpportunityController::class, 'edit'])->name('opportunities.edit');
@@ -111,10 +117,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('/opportunities/{opportunity}/stage', [App\Http\Controllers\OpportunityController::class, 'updateStage'])->name('opportunities.updateStage');
         Route::post('/opportunities/{opportunity}/mark-won', [App\Http\Controllers\OpportunityController::class, 'markAsWon'])->name('opportunities.markWon');
         Route::post('/opportunities/{opportunity}/mark-lost', [App\Http\Controllers\OpportunityController::class, 'markAsLost'])->name('opportunities.markLost');
-        Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
-        Route::get('/opportunities/{opportunity}/transition', function() {
-            return redirect()->route('opportunities.index');
-        });
         Route::delete('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'destroy'])->name('opportunities.destroy');
     });
     
