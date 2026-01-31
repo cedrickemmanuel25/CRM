@@ -136,7 +136,13 @@
                     // Démarrer le polling après un court délai pour éviter les conflits avec le chargement initial
                     setTimeout(() => {
                         setInterval(() => {
-                            const url = new URL(window.location.href);
+                            const url = new URL("{{ route('contacts.fetch') }}");
+                            // Append current filters from main URL
+                            const currentParams = new URLSearchParams(window.location.search);
+                            currentParams.forEach((value, key) => {
+                                url.searchParams.set(key, value);
+                            });
+                            
                             fetch(url, {
                                 headers: { 
                                     'X-Requested-With': 'XMLHttpRequest',

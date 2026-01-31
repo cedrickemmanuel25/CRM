@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
     
     Route::middleware('auth')->group(function () {
         Route::get('/contacts', [App\Http\Controllers\ContactController::class, 'index'])->name('contacts.index');
+        Route::get('/contacts/fetch', [App\Http\Controllers\ContactController::class, 'fetch'])->name('contacts.fetch');
         Route::get('/contacts/{contact}', [App\Http\Controllers\ContactController::class, 'show'])->name('contacts.show');
         Route::patch('/contacts/{contact}/stage', [App\Http\Controllers\ContactController::class, 'updateStage'])->name('contacts.updateStage');
         Route::post('/contacts/{contact}/interaction', [App\Http\Controllers\ContactController::class, 'logInteraction'])->name('contacts.logInteraction');

@@ -68,16 +68,68 @@ class ContactController extends Controller
         $owners = \App\Models\User::whereHas('contacts')->get();
         $entreprises = Contact::distinct()->whereNotNull('entreprise')->pluck('entreprise');
 
-        // Vérifier si c'est une vraie requête AJAX qui accepte JSON
-        // On vérifie à la fois ajax() et wantsJson() pour éviter les faux positifs
-        if ($request->ajax() && ($request->wantsJson() || $request->expectsJson())) {
-            return response()->json([
-                'html' => base64_encode(view('contacts._table_rows', compact('contacts'))->render()),
-                'total' => $contacts->total()
-            ], 200, [], JSON_UNESCAPED_UNICODE);
+        return view('contacts.index', compact('contacts', 'sources', 'owners', 'entreprises'));
+    }
+
+    /**
+     * Fetch contacts data for AJAX requests.
+     */
+    public function fetch(Request $request)
+    {
+        $query = Contact::query();
+
+        // Relation Eager Loading
+        $query->with('owner');
+
+        // Sécurisation accès commercial
+        if (auth()->user()->isCommercial()) {
+            $query->where('user_id_owner', (int)auth()->id());
         }
 
-        return view('contacts.index', compact('contacts', 'sources', 'owners', 'entreprises'));
+        // Search scope (nom, prenom, email, entreprise)
+        if ($request->filled('search')) {
+            $query->search($request->search);
+        }
+
+        // Filtre par entreprise
+        if ($request->filled('entreprise')) {
+            $query->where('entreprise', 'like', "%{$request->entreprise}%");
+        }
+
+        // Filtre par source
+        if ($request->filled('source')) {
+            $query->where('source', $request->source);
+        }
+
+        // Filtre par propriétaire (Commercial assigné)
+        if ($request->filled('owner_id')) {
+            $query->where('user_id_owner', $request->owner_id);
+        }
+
+        // Date range filters
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Tri (Sorting)
+        $allowedSorts = ['nom', 'entreprise', 'created_at'];
+        $sortBy = in_array($request->query('sort'), $allowedSorts) ? $request->query('sort') : 'created_at';
+        $sortOrder = $request->query('order') === 'asc' ? 'asc' : 'desc';
+        
+        $query->orderBy($sortBy, $sortOrder);
+
+        // Pagination dynamique (20 ou 50)
+        $perPage = in_array($request->query('per_page'), [20, 50]) ? $request->query('per_page') : 20;
+        $contacts = $query->paginate($perPage)->withQueryString();
+
+        return response()->json([
+            'html' => base64_encode(view('contacts._table_rows', compact('contacts'))->render()),
+            'total' => $contacts->total()
+        ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
