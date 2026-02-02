@@ -161,7 +161,7 @@ class TicketController extends Controller
         $validated = $request->validate([
             'subject' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
-            'status' => 'sometimes|required|in:new,in_progress,resolved,closed',
+            'status' => 'sometimes|required|in:new,in_progress,resolved,waiting_client,closed',
             'category' => 'sometimes|required|string|in:technical,commercial,billing,feature_request,other',
             'priority' => 'sometimes|required|in:low,medium,high,urgent',
             'assigned_to' => 'nullable|exists:users,id',
