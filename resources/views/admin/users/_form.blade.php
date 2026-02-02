@@ -1,42 +1,41 @@
-<div class="space-y-6">
+<div class="space-y-8">
     
     <!-- Identity Section -->
-    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+    <div class="grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-6">
         <!-- Nom -->
         <div class="sm:col-span-3">
-            <label for="name" class="block text-sm font-semibold text-slate-700">Nom Complet</label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            <label for="name" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nom Complet</label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-300 group-focus-within:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
                 <input type="text" name="name" id="name" x-model="formData.name" required 
-                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-2.5" 
-                    placeholder="">
+                    class="block w-full pl-11 pr-4 py-3 bg-gray-50 border-gray-100 rounded-xl text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-gray-300" 
+                    placeholder="ex: Jean Dupont">
             </div>
         </div>
 
         <!-- Email -->
         <div class="sm:col-span-3">
-            <label for="email" class="block text-sm font-semibold text-slate-700">Adresse Email</label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            <label for="email" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Adresse Email</label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-300 group-focus-within:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206" />
                     </svg>
                 </div>
                 <input type="email" name="email" id="email" x-model="formData.email" required 
-                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-2.5" 
-                    placeholder="">
+                    class="block w-full pl-11 pr-4 py-3 bg-gray-50 border-gray-100 rounded-xl text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-gray-300" 
+                    placeholder="jean.dupont@entreprise.com">
             </div>
         </div>
 
         <!-- Téléphone -->
         <div class="sm:col-span-3">
-            <label for="telephone" class="block text-sm font-semibold text-slate-700">Téléphone</label>
-            <div class="mt-1 relative rounded-md shadow-sm">
+            <label for="telephone" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Téléphone</label>
+            <div class="relative">
                 <input type="tel" id="telephone" x-model="formData.telephone" x-init="
                     $nextTick(() => {
                         window.intlTelInput($el, {
@@ -49,48 +48,77 @@
                             utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js',
                         });
                     })
-                " class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-lg sm:text-sm border-gray-300 py-2.5 pl-3">
+                " class="block w-full py-3 bg-gray-50 border-gray-100 rounded-xl text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
             </div>
         </div>
 
         <!-- Role -->
         <div class="sm:col-span-3">
-            <label for="role" class="block text-sm font-semibold text-slate-700">Rôle & Permissions</label>
-            <div class="mt-1 relative rounded-md shadow-sm">
+            <label for="role" class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Rôle Système</label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-300 group-focus-within:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
                 <select id="role" name="role" x-model="formData.role" 
-                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-3 pr-10 py-2.5 text-base border-gray-300 sm:text-sm rounded-lg">
+                    class="block w-full pl-11 pr-10 py-3 bg-gray-50 border-gray-100 rounded-xl text-sm focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
                     <option value="admin">Administrateur</option>
                     <option value="commercial">Commercial</option>
-                    <option value="support">Support</option>
+                    <option value="support">Support Technique</option>
                 </select>
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
             </div>
-            <p class="mt-1.5 text-xs text-gray-500" x-show="formData.role === 'admin'">Accès total à la configuration et aux utilisateurs.</p>
-            <p class="mt-1.5 text-xs text-gray-500" x-show="formData.role === 'commercial'">Gestion des prospects, opportunités et tâches.</p>
-            <p class="mt-1.5 text-xs text-gray-500" x-show="formData.role === 'support'">Accès aux tickets et fiches clients.</p>
+        </div>
+    </div>
+
+    <!-- Permission Insights -->
+    <div class="bg-indigo-50/50 border border-indigo-100/50 rounded-2xl p-5 mb-2">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div class="ml-4">
+                <h4 class="text-sm font-bold text-indigo-900 mb-1">Résumé des permissions</h4>
+                <div class="text-xs text-indigo-700 leading-relaxed font-medium">
+                    <p x-show="formData.role === 'admin'" x-cloak>Accès complet au système : configuration, gestion des utilisateurs, audits et rapports financiers.</p>
+                    <p x-show="formData.role === 'commercial'" x-cloak>Focus commercial : gestion du pipeline, opportunités, contacts et synchronisation des tâches.</p>
+                    <p x-show="formData.role === 'support'" x-cloak>Focus client : gestion du ticketing, historique client et fiches techniques.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Password Info (Create Mode) -->
-    <div x-show="!editMode" class="bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start space-x-3">
-        <svg class="h-6 w-6 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-        </svg>
+    <div x-show="!editMode" x-transition class="bg-amber-50 border border-amber-100/50 rounded-2xl p-5 flex items-start space-x-4">
+        <div class="flex-shrink-0 bg-amber-100 rounded-xl p-2.5">
+            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+        </div>
         <div>
-            <h4 class="text-sm font-medium text-blue-900">Mot de passe temporaire</h4>
-            <p class="mt-1 text-sm text-blue-700">Le mot de passe par défaut est <span class="font-mono bg-blue-100 px-1 py-0.5 rounded font-bold">Bienvenue123!</span>. L'utilisateur sera invité à le changer.</p>
+            <h4 class="text-sm font-bold text-amber-900 mb-1">Sécurité de compte</h4>
+            <p class="text-xs text-amber-800 leading-relaxed font-medium">Le mot de passe par défaut est <span class="font-bold bg-white px-2 py-0.5 rounded shadow-sm">Bienvenue123!</span>. L'utilisateur devra le modifier dès sa première connexion.</p>
             <input type="hidden" name="password" value="Bienvenue123!">
         </div>
     </div>
 
     <!-- Actions -->
-    <div class="pt-4 flex items-center justify-end space-x-3 border-t border-gray-100 mt-6">
-        <button type="button" @click="openUserModal = false; editMode = false;" 
-            class="inline-flex justify-center px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+    <div class="pt-6 flex items-center justify-end space-x-3 border-t border-gray-100 mt-8">
+        <button type="button" @click="openUserModal = false" 
+            class="px-6 py-3 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-all duration-200">
             Annuler
         </button>
         <button type="submit" 
-            class="inline-flex justify-center px-6 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-            <span x-text="editMode ? 'Mettre à jour' : 'Envoyer l\'invitation'"></span>
+            class="px-8 py-3 rounded-xl shadow-lg shadow-indigo-200 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:scale-95 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 transition-all duration-200">
+            <span x-text="editMode ? 'Appliquer les modifications' : 'Confirmer l\'invitation'"></span>
         </button>
     </div>
 </div>
+
