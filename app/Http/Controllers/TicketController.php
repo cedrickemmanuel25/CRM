@@ -181,7 +181,7 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        if (!auth()->user()->isAdmin() && $ticket->user_id !== auth()->id()) {
+        if (!auth()->user()->isAdmin() && !auth()->user()->isSupport() && $ticket->user_id !== auth()->id()) {
             abort(403);
         }
 
