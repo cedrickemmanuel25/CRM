@@ -118,8 +118,8 @@ Route::middleware('auth')->group(function () {
     });
     
     // Routes de transition (Placées hors du middleware 'role' pour test, mais toujours sous 'auth')
-    Route::post('/opportunities/{id}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
-    Route::get('/opportunities/{id}/transition', function() {
+    Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+    Route::get('/opportunities/{opportunity}/transition', function() {
         return redirect()->route('opportunities.index');
     });
 

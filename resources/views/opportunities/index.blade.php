@@ -437,7 +437,7 @@
                     client_name: data.client_name || ''
                 };
 
-                this.transitionUrl = `/opportunities/${data.id}/transition`;
+                this.transitionUrl = `{{ route('opportunities.processTransition', ':id') }}`.replace(':id', data.id);
                 
                 this.changeStage(data.stage);
             },
@@ -487,11 +487,11 @@
                 
                 try {
                     const payload = { stade: stage, ...extraData };
-                    let url = `{{ url('/opportunities') }}/${this.activeOpportunity.id}`;
+                    let url = `{{ route('opportunities.update', ':id') }}`.replace(':id', this.activeOpportunity.id);
                     let method = 'PUT'; 
                     
                     if (stage !== 'qualification') {
-                        url = `{{ url('/opportunities') }}/${this.activeOpportunity.id}/stage`;
+                        url = `{{ route('opportunities.updateStage', ':id') }}`.replace(':id', this.activeOpportunity.id);
                         method = 'PATCH';
                     }
                     
