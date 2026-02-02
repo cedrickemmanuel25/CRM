@@ -27,6 +27,20 @@ class TicketController extends Controller
             $query->where('assigned_to', $request->assigned_to);
         }
 
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('subject', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%")
+                  ->orWhereHas('contact', function($qContact) use ($search) {
+                      $qContact->where('nom', 'like', "%{$search}%")
+                               ->orWhere('prenom', 'like', "%{$search}%")
+                               ->orWhere('entreprise', 'like', "%{$search}%");
+                  });
+            });
+        }
+
         // Logic by role
         if (auth()->user()->isCommercial()) {
              // Commercials see tickets they created OR tickets linked to THEIR contacts

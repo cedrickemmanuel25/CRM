@@ -156,11 +156,11 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500 border border-slate-200">
-                                    {{ substr($ticket->contact->nom_complet, 0, 2) }}
+                                    {{ $ticket->contact ? substr($ticket->contact->nom_complet, 0, 2) : '??' }}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-semibold text-slate-800 truncate">{{ $ticket->contact->nom_complet }}</p>
-                                    <p class="text-[10px] text-slate-400 truncate">{{ $ticket->contact->entreprise ?? 'Indépendant' }}</p>
+                                    <p class="text-sm font-semibold text-slate-800 truncate">{{ $ticket->contact->nom_complet ?? 'Client inconnu' }}</p>
+                                    <p class="text-[10px] text-slate-400 truncate">{{ $ticket->contact ? ($ticket->contact->entreprise ?? 'Indépendant') : 'N/A' }}</p>
                                 </div>
                             </div>
                         </td>

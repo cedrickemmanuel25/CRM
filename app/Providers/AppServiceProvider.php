@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
             'contact' => \App\Models\Contact::class,
             'opportunity' => \App\Models\Opportunity::class,
             'user' => \App\Models\User::class,
+            'ticket' => \App\Models\Ticket::class,
         ]);
 
         // Observers
