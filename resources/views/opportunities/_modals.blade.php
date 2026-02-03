@@ -14,33 +14,43 @@
                 <input type="hidden" name="stay_in_stage" x-ref="stayInStageProspection" value="0">
 
                 <!-- Header visual -->
-                <div class="bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
-                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-700 px-6 py-5 flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-white/20 rounded-xl backdrop-blur-md shadow-inner">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white tracking-tight">Qualification Initiale</h3>
+                        <div>
+                            <h3 class="text-xl font-bold text-white tracking-tight">Prospection</h3>
+                            <p class="text-indigo-100 text-sm font-medium">Nouveau contact</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white px-8 py-8 border-b border-slate-100">
                     <!-- Objectif stratégique -->
                     <div class="mb-8 p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50">
-                        <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Objectif stratégique</p>
-                        <p class="text-sm font-semibold text-indigo-900 leading-relaxed">Confirmer l'intérêt réel et établir un premier contact qualitatif.</p>
+                        <div class="mb-2">
+                             <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Description</p>
+                             <p class="text-sm font-medium text-slate-700 leading-relaxed">Le contact vient d’être créé. Aucun échange concret n’a encore eu lieu.</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Objectif</p>
+                            <p class="text-sm font-bold text-indigo-900 leading-relaxed">Entrer en relation</p>
+                        </div>
                     </div>
 
                     <div class="space-y-6">
                         <!-- Ligne 1: Canal & Date -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Canal de contact</label>
-                                <select name="canal_contact" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all cursor-pointer">
-                                    <option value="Appel sortant">Appel sortant</option>
-                                    <option value="LinkedIn">LinkedIn</option>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1">Action réalisée</label>
+                                <select name="canal_contact" class="w-full h-[48px] px-4 rounded-lg border-2 border-slate-200 bg-white text-sm font-medium text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all cursor-pointer hover:border-slate-300">
+                                    <option value="Appel">Appel téléphonique</option>
                                     <option value="Email">Email</option>
-                                    <option value="Rencontre">Rencontre physique</option>
-                                    <option value="Autre canal">Autre canal</option>
+                                    <option value="Message">Message (WhatsApp / LinkedIn)</option>
+                                    <option value="Note">Note interne</option>
                                 </select>
                             </div>
                             <div class="space-y-2">
@@ -104,30 +114,47 @@
                 <input type="hidden" name="stade" x-ref="targetStage" value="proposition">
                 <input type="hidden" name="stay_in_stage" x-ref="stayInStageQual" value="0">
 
-                <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
-                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-700 px-6 py-5 flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-white/20 rounded-xl backdrop-blur-md shadow-inner">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white tracking-tight">Analyse des Besoins</h3>
+                        <div>
+                            <h3 class="text-xl font-bold text-white tracking-tight">Qualification</h3>
+                            <p class="text-blue-100 text-sm font-medium">Contact qualifié</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white px-8 py-8 border-b border-slate-100">
+                     <!-- Desc & Obj -->
+                    <div class="mb-8 p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50">
+                        <div class="mb-2">
+                             <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Description</p>
+                             <p class="text-sm font-medium text-slate-700 leading-relaxed">Le besoin du client est analysé et validé.</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Objectif</p>
+                            <p class="text-sm font-bold text-blue-900 leading-relaxed">Vérifier la faisabilité de l’opportunité</p>
+                        </div>
+                    </div>
+
                     <div class="space-y-6">
                         <div class="space-y-2">
-                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Besoin identifié <span class="text-rose-500">*</span></label>
-                            <textarea name="besoin" required x-model="activeOpportunity.besoin" class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all min-h-[120px] p-4" placeholder="Quels sont les besoins exprimés par le prospect ?"></textarea>
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Identifier le besoin <span class="text-rose-500">*</span></label>
+                            <textarea name="besoin" required x-model="activeOpportunity.besoin" class="w-full rounded-2xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all min-h-[100px] p-4" placeholder="Détaillez le besoin identifié..."></textarea>
                         </div>
 
                         <!-- Analyse BANT -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Budget estimé (FCFA)</label>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Vérifier le budget (FCFA)</label>
                                 <input type="number" name="budget_estime" x-model="activeOpportunity.budget" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all">
                             </div>
                             <div class="space-y-2">
-                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Pouvoir de décision</label>
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Confirmer le décideur</label>
                                 <select name="autorite_decision" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all cursor-pointer">
                                     <option value="Décisionnaire">Directeur / Décisionnaire</option>
                                     <option value="Prescripteur">Prescripteur / Influenceur</option>
@@ -158,7 +185,7 @@
                 <div class="bg-slate-50 px-8 py-6 flex flex-col gap-3">
                     <div class="flex flex-col sm:flex-row-reverse gap-3">
                         <button type="submit" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
-                            Générer la Proposition
+                            ➡️ Créer une opportunité
                         </button>
                         <button type="submit" @click="$refs.targetStage.value = 'prospection'" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white text-sm font-medium text-slate-500 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all uppercase tracking-wide">
                             Retour en Prospection
@@ -190,15 +217,38 @@
                 <input type="hidden" name="stade" value="negociation">
 
                 <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
-                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-white/20 rounded-xl backdrop-blur-md shadow-inner">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white tracking-tight">Soumission de l'Offre</h3>
+                        <div>
+                             <h3 class="text-xl font-bold text-white tracking-tight">Proposition</h3>
+                             <p class="text-purple-100 text-sm font-medium">Offre envoyée</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white px-8 py-8 border-b border-slate-100">
+                    <!-- Desc & Obj -->
+                    <div class="mb-6 p-5 bg-gradient-to-br from-purple-50 to-purple-100/30 rounded-xl border border-purple-200/50 shadow-sm">
+                        <div class="mb-3">
+                                <p class="text-xs font-bold text-purple-700 uppercase tracking-wide mb-1.5 flex items-center gap-2">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Description
+                                </p>
+                                <p class="text-sm font-medium text-slate-700 leading-relaxed">Une proposition commerciale a été transmise au client.</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-purple-700 uppercase tracking-wide mb-1.5 flex items-center gap-2">
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Objectif
+                            </p>
+                            <p class="text-sm font-semibold text-purple-900 leading-relaxed">Convaincre le client</p>
+                        </div>
+                    </div>
+
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="space-y-2">
@@ -255,7 +305,7 @@
 
                 <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-4">
                     <button type="submit" class="inline-flex items-center justify-center px-8 py-3 bg-purple-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-purple-200 hover:bg-purple-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
-                        Lancer la Négociation
+                        ➡️ Passer en Négociation
                     </button>
                     <button type="button" @click="showPropositionModal = false" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wide px-4">
                         Annuler
@@ -282,15 +332,38 @@
                 <input type="hidden" name="stay_in_stage" x-ref="stayInStageNegoc" value="0">
 
                 <div class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-md">
-                            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-white/20 rounded-xl backdrop-blur-md shadow-inner">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white tracking-tight">Phase de Négociation</h3>
+                        <div>
+                            <h3 class="text-xl font-bold text-white tracking-tight">Négociation</h3>
+                            <p class="text-amber-100 text-sm font-medium">En discussion</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white px-8 py-8 border-b border-slate-100">
+                     <!-- Desc & Obj -->
+                     <div class="mb-6 p-5 bg-gradient-to-br from-amber-50 to-amber-100/30 rounded-xl border border-amber-200/50 shadow-sm">
+                        <div class="mb-3">
+                                <p class="text-xs font-bold text-amber-700 uppercase tracking-wide mb-1.5 flex items-center gap-2">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Description
+                                </p>
+                                <p class="text-sm font-medium text-slate-700 leading-relaxed">Les conditions commerciales sont en cours d'ajustement.</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-amber-700 uppercase tracking-wide mb-1.5 flex items-center gap-2">
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Objectif
+                            </p>
+                            <p class="text-sm font-semibold text-amber-900 leading-relaxed">Trouver un accord</p>
+                        </div>
+                    </div>
+
                     <div class="space-y-6">
                         <div class="space-y-2">
                             <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Derniers retours client <span class="text-rose-500">*</span></label>
@@ -329,12 +402,10 @@
                 <div class="bg-slate-50 px-8 py-6 flex flex-col gap-3 text-label">
                     <div class="flex flex-col sm:flex-row-reverse gap-3">
                         <button type="submit" @click="$refs.targetStageNegoc.value = 'gagne'" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
-                            <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Marquer Gagné
+                            ✅ Marquer comme Gagné
                         </button>
                         <button type="submit" @click="$refs.targetStageNegoc.value = 'perdu'" class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-rose-600 text-sm font-bold text-white rounded-xl shadow-lg shadow-rose-200 hover:bg-rose-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
-                            <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            Marquer Perdu
+                            ❌ Marquer comme Perdu
                         </button>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3">
@@ -365,23 +436,36 @@
                 @csrf
                 <input type="hidden" name="stade" value="gagne">
 
-                <div class="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-8 text-center relative overflow-hidden">
+                <div class="bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 px-6 py-8 text-center relative overflow-hidden shadow-lg">
                     <!-- Decorative elements -->
                     <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
                         <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="10" cy="10" r="20" fill="white"/><circle cx="90" cy="80" r="30" fill="white"/></svg>
                     </div>
                     
                     <div class="relative z-10">
-                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-white/20 backdrop-blur-md mb-4 shadow-inner">
-                            <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-white/20 backdrop-blur-md mb-4 shadow-inner">
+                            <svg class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                         </div>
-                        <h3 class="text-2xl font-black text-white tracking-tight uppercase">Victoire !</h3>
-                        <p class="text-emerald-50 text-sm font-medium mt-1">L'opportunité a été marquée comme gagnée.</p>
+                        <h3 class="text-2xl font-black text-white tracking-tight uppercase">Opportunité Gagnée</h3>
+                        <p class="text-emerald-50 text-base font-medium mt-2">Félicitations ! Le client a accepté l'offre</p>
                     </div>
                 </div>
 
                 <div class="bg-white px-8 py-8">
                     <div class="space-y-6">
+                        <!-- Desc & Obj -->
+                        <div class="mb-6 p-5 bg-gradient-to-br from-emerald-50 to-emerald-100/30 rounded-xl border border-emerald-200/50 shadow-sm">
+                            <div class="mb-3">
+                                <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-1.5 flex items-center gap-2">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Prochaines étapes
+                                </p>
+                                <p class="text-sm font-medium text-slate-700 leading-relaxed">Le client a accepté l'offre. Il est temps de démarrer la prestation.</p>
+                            </div>
+                        </div>
+
                         <div class="space-y-2">
                             <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Nom officiel du client / Entreprise</label>
                             <input type="text" name="nom_client_final" x-model="activeOpportunity.client_name" class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
@@ -392,8 +476,9 @@
                             
                             <div class="grid grid-cols-1 gap-3">
                                 @foreach([
-                                    'create_project' => ['label' => 'Créer un projet dédié', 'desc' => 'Initialise un espace projet pour l\'exécution', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
-                                    'create_invoice' => ['label' => 'Générer facture d\'acompte', 'desc' => 'Crée un brouillon de facture à 30%', 'icon' => 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z']
+                                    'create_project' => ['label' => 'Générer le contrat (Créer projet)', 'desc' => 'Initialise un espace projet pour l\'exécution', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                                    'create_invoice' => ['label' => 'Créer la facture', 'desc' => 'Crée un brouillon de facture à 30%', 'icon' => 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z'],
+                                    'launch_service' => ['label' => 'Lancer le service', 'desc' => 'Notifier les équipes', 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z']
                                 ] as $name => $info)
                                 <label class="flex items-start p-4 rounded-2xl border border-slate-200 bg-white hover:border-emerald-200 hover:shadow-md cursor-pointer transition-all group shadow-sm">
                                     <div class="flex-shrink-0 mt-0.5">
@@ -442,18 +527,34 @@
 
                 <div class="bg-white px-8 pt-8 pb-4">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="p-3 bg-rose-50 rounded-2xl">
-                            <svg class="h-6 w-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="p-3 bg-gradient-to-br from-rose-100 to-rose-200 rounded-xl shadow-sm">
+                            <svg class="h-7 w-7 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-black text-slate-800 tracking-tight uppercase">Opportunité Perdue</h3>
-                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">Analyse de l'échec commercial</p>
+                            <h3 class="text-xl font-black text-slate-800 tracking-tight">Opportunité Perdue</h3>
+                            <p class="text-slate-500 text-sm font-medium mt-0.5">Analyse et apprentissage</p>
                         </div>
                     </div>
 
                     <div class="space-y-6">
+                        <!-- Desc & Obj -->
+                        <div class="p-5 bg-gradient-to-br from-rose-50 to-rose-100/30 rounded-xl border border-rose-200/50 shadow-sm mb-4">
+                            <div class="mb-3">
+                                <p class="text-xs font-bold text-rose-700 uppercase tracking-wide mb-1.5 flex items-center gap-2">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Contexte
+                                </p>
+                                <p class="text-sm font-medium text-slate-700 leading-relaxed">Le client n'a pas donné suite.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Objectif</p>
+                                <p class="text-sm font-bold text-rose-900 leading-relaxed">Capitaliser sur l’expérience</p>
+                            </div>
+                        </div>
                         <div class="space-y-2">
-                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Motif principal de perte <span class="text-rose-500">*</span></label>
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">Sélectionner la raison de perte <span class="text-rose-500">*</span></label>
                             <select name="motif_perte" required class="w-full h-[45px] px-4 rounded-xl border-slate-300 bg-white text-sm font-semibold text-slate-900 shadow-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all cursor-pointer">
                                 <option value="Prix">Prix trop élevé</option>
                                 <option value="Concurrence">Perdu face à la concurrence</option>
@@ -479,7 +580,7 @@
 
                 <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-4">
                     <button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-rose-600 text-sm font-bold text-white rounded-2xl shadow-xl shadow-rose-200 hover:bg-rose-700 hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide">
-                        Archiver comme Perte
+                        Archiver l’opportunité
                     </button>
                     <button type="button" @click="showLostModal = false" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wide px-6">
                         Annuler

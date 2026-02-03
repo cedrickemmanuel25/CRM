@@ -287,6 +287,15 @@
                             scrollLeft: container.scrollLeft
                         }));
                         
+                        // Save expanded states of all tbody elements
+                        const expandedStates = new Map();
+                        this.$refs.contentArea.querySelectorAll('tbody[x-data]').forEach((tbody, index) => {
+                            const alpineData = Alpine.$data(tbody);
+                            if (alpineData && alpineData.expanded) {
+                                expandedStates.set(index, true);
+                            }
+                        });
+                        
                         const binaryString = atob(data.html);
                         const bytes = new Uint8Array(binaryString.length);
                         for (let i = 0; i < binaryString.length; i++) {
@@ -303,6 +312,18 @@
                         if (window.Alpine) {
                             window.Alpine.initTree(this.$refs.contentArea);
                         }
+                        
+                        // Restore expanded states AFTER Alpine initialization
+                        setTimeout(() => {
+                            this.$refs.contentArea.querySelectorAll('tbody[x-data]').forEach((tbody, index) => {
+                                if (expandedStates.has(index)) {
+                                    const alpineData = Alpine.$data(tbody);
+                                    if (alpineData) {
+                                        alpineData.expanded = true;
+                                    }
+                                }
+                            });
+                        }, 50);
                         
                         // Restore scroll positions IMMEDIATELY
                         const newScrollContainers = this.$refs.contentArea.querySelectorAll('.overflow-x-auto');
@@ -418,11 +439,11 @@
             
             stageGuides: {
                 prospection:   { label: 'Prospection', objective: 'Entrer en relation' },
-                qualification: { label: 'Qualification', objective: 'Vérifier le potentiel' },
-                proposition:   { label: 'Proposition', objective: 'Convaincre' },
-                negociation:   { label: 'Négociation', objective: 'Finaliser l’accord' },
-                gagne:         { label: 'Gagné', objective: 'Exécution' },
-                perdu:         { label: 'Perdu', objective: 'Analyse' }
+                qualification: { label: 'Qualification', objective: 'Vérifier la faisabilité de l’opportunité' },
+                proposition:   { label: 'Proposition', objective: 'Convaincre le client' },
+                negociation:   { label: 'Négociation', objective: 'Trouver un accord' },
+                gagne:         { label: 'Gagné', objective: 'Démarrer la prestation' },
+                perdu:         { label: 'Perdu', objective: 'Capitaliser sur l’expérience' }
             },
 
             handleStageRequest(event) {

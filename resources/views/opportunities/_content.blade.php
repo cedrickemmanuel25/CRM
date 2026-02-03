@@ -241,25 +241,25 @@
                         </thead>
                         @foreach($opportunities as $opp)
                         <tbody x-data="{ expanded: false }" class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                            <tr class="group cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
+                            <tr class="group">
                                 <td class="px-3 py-4 text-center">
                                     <button @click.stop="expanded = !expanded" class="text-gray-400 hover:text-indigo-600 focus:outline-none transform" :class="expanded ? 'rotate-90' : ''">
                                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                     </button>
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
                                     <div class="text-sm font-medium text-gray-900 hover:text-indigo-600 block" title="{{ $opp->titre }}">{{ $opp->titre }}</div>
                                     <p class="text-xs text-gray-500 mt-1">{{ $opp->updated_at->diffForHumans() }}</p>
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
                                     <p class="text-xs font-medium text-gray-900" title="{{ $opp->contact?->entreprise ?? 'Particulier' }}">{{ $opp->contact?->entreprise ?? 'Particulier' }}</p>
                                     <p class="text-[10px] text-gray-500">{{ $opp->contact?->prenom }} {{ $opp->contact?->nom }}</p>
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
                                     <p class="text-sm font-bold text-gray-900">{{ format_currency($opp->montant_estime) }}</p>
                                     <p class="text-xs text-emerald-600 font-medium">{{ format_currency($opp->weighted_value) }}</p>
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
                                     @php
                                         $probColor = $opp->probabilite >= 70 ? 'emerald' : ($opp->probabilite >= 30 ? 'amber' : 'rose');
                                     @endphp
@@ -302,7 +302,7 @@
                                         {{ $opp->stade }}
                                     </button>
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
                                     @if($opp->date_cloture_prev)
                                         <p class="text-sm font-medium text-gray-700">{{ $opp->date_cloture_prev->format('d/m/Y') }}</p>
                                         <p class="text-[10px] text-gray-500">{{ $opp->time_in_stage }} jours</p>
@@ -310,7 +310,7 @@
                                         <span class="text-xs text-gray-400">Non définie</span>
                                     @endif
                                 </td>
-                                <td class="px-3 py-4">
+                                <td class="px-3 py-4 cursor-pointer" onclick="window.location='{{ route('opportunities.show', $opp) }}'">
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-medium text-gray-700" title="{{ $opp->commercial?->name ?? 'Non assigné' }}">{{ $opp->commercial?->name ?? 'Non assigné' }}</span>
                                     </div>
