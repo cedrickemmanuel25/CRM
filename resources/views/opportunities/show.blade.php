@@ -716,51 +716,51 @@
             stageGuides: {
                 prospection: {
                     label: 'Prospection',
-                    description: 'Le contact vient d’être créé dans le CRM, mais aucun échange concret n’a encore eu lieu.',
+                    description: 'Le contact vient d’être créé. Aucun échange concret n’a encore eu lieu.',
                     contactStatus: 'Nouveau contact',
                     objective: 'Entrer en relation',
-                    actions: ['Appel de prise de contact', 'Email de présentation', 'Message WhatsApp / LinkedIn', 'Ajout de notes'],
-                    buttons: ['Appeler', 'Envoyer email', 'Ajouter une note', 'Passer en Qualification']
+                    actions: ['Appeler', 'Envoyer un email', 'Message WhatsApp / LinkedIn', 'Ajout de notes'],
+                    buttons: ['Appeler', 'Envoyer un email', 'Ajouter une note']
                 },
                 qualification: {
                     label: 'Qualification',
-                    description: 'Le contact a répondu ou montré de l’intérêt. Vous vérifiez s’il peut devenir un client réel.',
+                    description: 'Le besoin du client est analysé et validé.',
                     contactStatus: 'Contact qualifié',
-                    objective: 'Vérifier le potentiel',
-                    actions: ['Rendez-vous de découverte', 'Mise à jour budget/besoin', 'Scoring du contact'],
-                    buttons: ['Planifier RDV', 'Modifier fiche', 'Qualifier le contact', 'Passer en Proposition']
+                    objective: 'Vérifier la faisabilité de l’opportunité',
+                    actions: ['Identifier le besoin', 'Vérifier le budget', 'Confirmer le décideur', 'Ajouter des notes'],
+                    buttons: ['Créer une opportunité']
                 },
                 proposition: {
                     label: 'Proposition',
-                    description: 'Le contact a un besoin clair. Une offre commerciale est liée à sa fiche.',
-                    contactStatus: 'Contact avec proposition',
-                    objective: 'Convaincre',
-                    actions: ['Création d’un devis', 'Envoi d’une proposition personnalisée', 'Ajout de documents'],
-                    buttons: ['Créer un devis', 'Envoyer proposition', 'Ajouter document', 'Passer en Négociation']
+                    description: 'Une proposition commerciale a été transmise au client.',
+                    contactStatus: 'Offre envoyée',
+                    objective: 'Convaincre le client',
+                    actions: ['Envoyer un devis', 'Modifier la proposition', 'Relancer le client'],
+                    buttons: ['Passer en Négociation']
                 },
                 negociation: {
                     label: 'Négociation',
-                    description: 'Le contact est intéressé mais discute les conditions.',
-                    contactStatus: 'En négociation',
-                    objective: 'Finaliser l’accord',
-                    actions: ['Ajustement du prix', 'Traitement des objections', 'Relances commerciales'],
-                    buttons: ['Modifier devis', 'Ajouter échange', 'Programmer relance', 'Marquer Gagné/Perdu']
+                    description: 'Les conditions commerciales sont en cours d’ajustement.',
+                    contactStatus: 'En discussion',
+                    objective: 'Trouver un accord',
+                    actions: ['Négocier le prix', 'Ajuster les délais', 'Mettre à jour le devis'],
+                    buttons: ['Marquer comme Gagné', 'Marquer comme Perdu']
                 },
                 gagne: {
                     label: 'Gagné',
-                    description: 'Le contact devient client actif.',
-                    contactStatus: 'Client',
-                    objective: 'Exécution & fidélisation',
-                    actions: ['Conversion en client', 'Création projet/commande', 'Facturation'],
-                    buttons: ['Convertir en client', 'Créer projet', 'Créer facture', 'Voir CA']
+                    description: 'Le client a accepté l’offre.',
+                    contactStatus: 'Opportunité gagnée',
+                    objective: 'Démarrer la prestation',
+                    actions: ['Générer le contrat', 'Créer la facture', 'Lancer le service'],
+                    buttons: ['Confirmer la Vente']
                 },
                 perdu: {
                     label: 'Perdu',
-                    description: 'Le contact n’a pas abouti à une vente.',
+                    description: 'Le client n’a pas donné suite.',
                     contactStatus: 'Opportunité perdue',
-                    objective: 'Analyse & relance future',
-                    actions: ['Sélection motif perte', 'Archivage', 'Planification relance'],
-                    buttons: ['Marquer perdu', 'Ajouter motif', 'Relancer plus tard', 'Archiver']
+                    objective: 'Capitaliser sur l’expérience',
+                    actions: ['Sélectionner la raison de perte', 'Ajouter un commentaire', 'Archiver l’opportunité'],
+                    buttons: ['Archiver l’opportunité']
                 }
             },
 
