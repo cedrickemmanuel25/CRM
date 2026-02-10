@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ company_name() }} - @yield('title', 'Tableau de bord')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ company_logo() }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Alpine.js for interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -112,7 +113,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                 <!-- Sidebar Component (Mobile) -->
                 <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                     <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 hover:opacity-80 transition-opacity">
-                        <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
+                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
                         <span class="text-white font-bold text-xl">{{ company_name() }}</span>
                     </a>
                     <nav class="flex flex-1 flex-col">
@@ -133,7 +134,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-[18%] lg:flex-col">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-100 border-r border-gray-200 px-6 pb-4 custom-scrollbar">
             <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 mt-4 hover:opacity-80 transition-opacity whitespace-nowrap overflow-hidden">
-                <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
+                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
                 <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
@@ -151,7 +152,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
 
     <!-- Main ContentArea -->
     <div class="lg:pl-[18%] min-h-screen flex flex-col">
-        <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                 <span class="sr-only">Ouvrir la barre latérale</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -249,5 +250,12 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     </div>
 
     @stack('scripts')
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 </body>
 </html>

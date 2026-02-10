@@ -36,14 +36,14 @@ class TaskReminderNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Rappel : Tâche à échéance demain')
+            ->subject('⏰ Rappel : Tâche à échéance demain')
             ->greeting('Bonjour ' . $notifiable->name . ',')
-            ->line('Vous avez une tâche qui arrive à échéance demain :')
+            ->line('Une tâche importante arrive à échéance demain :')
             ->line('**' . $this->task->titre . '**')
-            ->line('Description : ' . ($this->task->description ?? 'Aucune description'))
-            ->line('Échéance : ' . $this->task->due_date->format('d/m/Y à H:i'))
-            ->action('Voir la tâche', route('tasks.index'))
-            ->line('Merci de bien vouloir la traiter dans les délais.');
+            ->line('Détails : ' . ($this->task->description ?? 'Pas de description supplémentaire.'))
+            ->line('Échéance : ' . $this->task->due_date->translatedFormat('d F Y à H:i'))
+            ->action('Ouvrir la tâche', url("/tasks/{$this->task->id}"))
+            ->line('Pensez à la mettre à jour une fois terminée.');
     }
 
     /**
@@ -52,12 +52,13 @@ class TaskReminderNotification extends Notification implements ShouldQueue
     public function toArray($notifiable): array
     {
         return [
-            'task_id' => $this->task->id,
-            'task_title' => $this->task->titre,
-            'task_description' => $this->task->description,
-            'due_date' => $this->task->due_date->format('Y-m-d H:i:s'),
             'type' => 'task_reminder',
-            'message' => 'Rappel : La tâche "' . $this->task->titre . '" arrive à échéance demain.',
+            'entity' => 'task',
+            'title' => 'Rappel de Tâche',
+            'message' => "La tâche \"{$this->task->titre}\" arrive à échéance demain.",
+            'link' => "/tasks/{$this->task->id}",
+            'task_id' => $this->task->id,
+            'due_date' => $this->task->due_date->format('Y-m-d H:i:s'),
         ];
     }
 }

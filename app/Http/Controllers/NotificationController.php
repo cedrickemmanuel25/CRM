@@ -83,6 +83,12 @@ class NotificationController extends Controller
             'task_overdue' => 'Tâche en retard',
         ];
 
+        // Add Admin-specific notification types
+        if (Auth::user()->isAdmin()) {
+            $eventTypes['performance_report'] = 'Rapport de Performance (Admin)';
+            $eventTypes['user_activity'] = 'Activité Utilisateur / Sécurité (Admin)';
+        }
+
         return view('profile.notifications', compact('preferences', 'eventTypes'));
     }
 
@@ -92,7 +98,8 @@ class NotificationController extends Controller
         $types = [
             'contact_created', 'contact_updated', 'contact_deleted',
             'opportunity_created', 'opportunity_updated', 'opportunity_won', 'opportunity_lost',
-            'task_created', 'task_completed', 'task_overdue'
+            'task_created', 'task_completed', 'task_overdue',
+            'performance_report', 'user_activity'
         ];
 
         foreach ($types as $type) {

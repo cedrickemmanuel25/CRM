@@ -1,254 +1,282 @@
 @extends('layouts.app')
 
-@section('title', 'Tableau de bord Commercial - Nexus CRM')
+@section('title', 'Tableau de Bord Commercial - Nexus CRM')
 
 @section('content')
-<div class="min-h-screen bg-[#F9FAFB] p-8">
-    <div class="max-w-[1600px] mx-auto space-y-10">
-        
-        <!-- Header Section -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+<div class="px-8 py-2 space-y-8 bg-[#F4F7FC]/30 min-h-screen">
+    <div class="space-y-8">
+        <!-- Header with Quick Actions -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900 font-primary">
-                    Tableau de bord
-                </h2>
-                <p class="mt-1.5 text-[15px] text-slate-500 font-medium">Bon retour, {{ Auth::user()->name }}. Voici vos indicateurs de vente.</p>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Tableau de Bord Commercial</h1>
+                <p class="text-slate-500 text-sm mt-1">Gérez votre pipeline et vos activités quotidiennes.</p>
             </div>
-            <div class="flex items-center gap-4">
-                <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-lg shadow-sm text-sm font-semibold hover:bg-indigo-700 transition-all border border-indigo-700">
-                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Nouvelle opportunité
+            
+            <div class="flex items-center gap-3">
+                <a href="{{ route('activities.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+                    <div class="bg-amber-100 p-1.5 rounded-lg text-amber-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    Journal
+                </a>
+                
+                <a href="{{ route('tasks.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4C7CDF] text-white text-sm font-bold rounded-xl hover:bg-[#3b66bd] transition-all shadow-md shadow-blue-100 group">
+                    <div class="bg-white/20 p-1.5 rounded-lg group-hover:bg-white/30 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    Rappel
                 </a>
             </div>
         </div>
 
-        <!-- KPI Grid (Corporate Style) -->
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Forecast Revenue -->
-            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-indigo-50 rounded-lg text-indigo-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <p class="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Prévisionnel</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-blue-50 p-3 rounded-lg text-[#4C7CDF]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-3xl font-bold text-slate-900">{{ format_currency($data['kpis']['my_forecast_revenue']) }}</p>
-                    <div class="flex items-center text-xs font-bold text-emerald-600">
-                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        +12% <span class="text-slate-400 font-medium ml-1.5">vs mois dernier</span>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Volume Prévisionnel</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ format_currency($data['kpis']['my_forecast_revenue']) }}</p>
+                    <div class="flex items-center gap-1 {{ $data['kpis']['my_forecast_change'] >= 0 ? 'text-[#4ED6A3]' : 'text-rose-500' }} text-sm font-bold mt-2">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="{{ $data['kpis']['my_forecast_change'] >= 0 ? 'M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z' : 'M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z' }}" clip-rule="evenodd"></path></svg>
+                        <span>{{ abs($data['kpis']['my_forecast_change']) }}% <span class="text-slate-400 font-normal">vs mois dernier</span></span>
                     </div>
                 </div>
             </div>
 
             <!-- Active Leads -->
-            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-slate-50 rounded-lg text-slate-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <p class="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Leads Actifs</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 p-3 rounded-lg text-slate-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-3xl font-bold text-slate-900">{{ $data['kpis']['my_leads_opps'] }}</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">En cours de traitement</p>
+                <div class="flex-1">
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Leads Actifs</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ $data['kpis']['my_leads_opps'] }}</p>
+                    <div class="mt-2 bg-[#4C7CDF] text-white text-[10px] font-bold px-2 py-1 rounded-full inline-flex items-center gap-1">
+                        Opportunités en cours
+                    </div>
                 </div>
             </div>
 
             <!-- Conversion Rate -->
-            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-emerald-50 rounded-lg text-emerald-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <p class="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Taux de Conv.</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-blue-50 p-3 rounded-lg text-[#4C7CDF]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-3xl font-bold text-slate-900">{{ $data['kpis']['my_conversion_rate'] }}%</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Ratio opportunités gagnées</p>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Taux de Conversion</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ $data['kpis']['my_conversion_rate'] }}%</p>
+                    <p class="text-[10px] font-bold text-[#4ED6A3] mt-2 uppercase tracking-widest italic">Performance Gagnée</p>
                 </div>
             </div>
 
             <!-- Tasks Overdue -->
-            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 {{ $data['kpis']['tasks_overdue'] > 0 ? 'bg-rose-50 text-rose-600' : 'bg-slate-50 text-slate-600' }} rounded-lg transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <p class="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Tâches en retard</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 p-3 rounded-lg text-slate-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-3xl font-bold {{ $data['kpis']['tasks_overdue'] > 0 ? 'text-rose-600' : 'text-slate-900' }}">{{ $data['kpis']['tasks_overdue'] }}</p>
-                    <p class="text-xs font-bold {{ $data['kpis']['tasks_overdue'] > 0 ? 'text-rose-400' : 'text-slate-400' }} uppercase tracking-widest">
-                        {{ $data['kpis']['tasks_overdue'] > 0 ? 'Action prioritaire' : 'Pas de retard' }}
-                    </p>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Tâches en Retard</h3>
+                    <p class="text-3xl font-bold {{ $data['kpis']['tasks_overdue'] > 0 ? 'text-rose-500' : 'text-slate-800' }} mt-1">{{ $data['kpis']['tasks_overdue'] }}</p>
+                    <div class="flex items-center gap-1 text-slate-500 text-sm mt-2 font-bold uppercase tracking-tighter">
+                        <svg class="w-4 h-4 text-[#4C7CDF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <span class="text-slate-800">Action Prioritaire</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Group -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Center/Left Area (2 Cols) -->
-            <div class="lg:col-span-2 space-y-8">
-                
-                <!-- Status Distribution Chart (Professional Design) -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8">
-                    <div class="flex items-center justify-between mb-8">
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-900">Distribution par Étape</h3>
-                            <p class="text-xs text-slate-400 font-medium uppercase tracking-widest mt-1">Nombre d'opportunités par stade de vente</p>
-                        </div>
-                    </div>
-                    <div class="h-[350px] relative">
-                        <canvas id="statusDistributionChart"></canvas>
-                    </div>
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Funnel Chart (Sales Pipeline) -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-lg font-bold text-slate-700 tracking-tight">Mon Pipeline de Ventes</h3>
+                    <span class="text-[10px] font-black text-[#4C7CDF] bg-blue-50 px-3 py-1 rounded-full uppercase tracking-[0.2em]">Live Data</span>
                 </div>
-
-                <!-- Goal Progress (Sober Design) -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-900">Objectif mensuel</h3>
-                            <p class="text-xs text-slate-400 font-medium mt-1">Avancement par rapport au quota de 50 000€</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-2xl font-black text-indigo-600">{{ $data['kpis']['goal_percentage'] }}%</span>
-                        </div>
+                <div class="flex flex-col sm:flex-row items-center gap-12">
+                    <div class="flex-1 w-full sm:w-auto flex flex-col items-center">
+                        @php
+                            $stages = $data['charts']['pipeline_by_stage'];
+                            $totalCount = $stages->sum('count') ?: 1;
+                            $widths = ['100%', '80%', '60%', '25%'];
+                            $opacities = ['70', '85', '100', '100'];
+                        @endphp
+                        @foreach($stages->take(4) as $index => $stage)
+                            <div class="relative h-16 bg-[#4C7CDF] rounded-sm flex items-center justify-center text-white font-bold opacity-{{ $opacities[$index] }} transition-all" 
+                                 style="width: {{ $widths[$index] }}; margin-bottom: 2px; border-bottom-left-radius: {{ $index == 3 ? '8px' : '0' }}; border-bottom-right-radius: {{ $index == 3 ? '8px' : '0' }}; border-top-left-radius: {{ $index == 0 ? '8px' : '0' }}; border-top-right-radius: {{ $index == 0 ? '8px' : '0' }};">
+                                {{ $stage->count }}
+                            </div>
+                        @endforeach
                     </div>
-                    <div class="relative w-full bg-slate-100 rounded-full h-3 overflow-hidden">
-                        <div class="absolute inset-y-0 left-0 bg-indigo-600 rounded-full transition-all duration-1000 ease-out" style="width:{{ $data['kpis']['goal_percentage'] }}%"></div>
-                    </div>
-                    <div class="mt-4 flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        <span>0 €</span>
-                        <span>50 000 €</span>
-                    </div>
-                </div>
-
-                <!-- Hot Opportunities (Clean Table) -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                        <h3 class="text-md font-bold text-slate-900">Opportunités à forte priorité</h3>
-                        <a href="{{ route('opportunities.index') }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 uppercase tracking-widest px-3 py-1.5 bg-indigo-50 rounded-lg border border-indigo-100 transition-colors">
-                            Voir tout le pipeline
-                        </a>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="bg-slate-50/50">
-                                    <th class="px-8 py-3.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Opportunité</th>
-                                    <th class="px-8 py-3.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Client</th>
-                                    <th class="px-8 py-3.5 text-right font-bold text-slate-500 uppercase tracking-wider text-[11px]">Valeur Estimée</th>
-                                    <th class="px-8 py-3.5 text-right font-bold text-slate-500 uppercase tracking-wider text-[11px]">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                @forelse($data['lists']['hot_opportunities'] as $opp)
-                                <tr class="hover:bg-slate-50/30 transition-colors group">
-                                    <td class="px-8 py-4">
-                                        <a href="{{ route('opportunities.show', $opp) }}" class="font-bold text-slate-900 hover:text-indigo-600 truncate block">{{ $opp->titre }}</a>
-                                    </td>
-                                    <td class="px-8 py-4">
-                                        @if($opp->contact)
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-8 w-8 rounded-full border border-slate-200 overflow-hidden shadow-sm bg-slate-100 italic shrink-0">
-                                                <img src="{{ $opp->contact->avatar_url }}" alt="{{ $opp->contact->nom_complet }}" class="h-full w-full object-cover">
-                                            </div>
-                                            <a href="{{ route('contacts.show', $opp->contact) }}" class="text-slate-500 font-medium hover:text-indigo-600 truncate">{{ $opp->contact->nom_complet }}</a>
-                                        </div>
-                                        @else
-                                        <span class="text-slate-400 italic">N/A</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-8 py-4 text-right">
-                                        <span class="font-bold text-slate-900 border border-slate-100 bg-white px-2.5 py-1 rounded shadow-sm">{{ format_currency($opp->montant_estime) }}</span>
-                                    </td>
-                                    <td class="px-8 py-4 text-right whitespace-nowrap">
-                                        <div class="flex justify-end gap-2">
-                                            <a href="{{ route('opportunities.edit', $opp) }}" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Modifier">
-                                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                                            </a>
-                                            <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" onsubmit="return confirm('Supprimer cette opportunité ?');" class="inline">
-                                                @csrf @method('DELETE')
-                                                <button type="submit" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Supprimer">
-                                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="px-8 py-10 text-center text-slate-400 italic font-medium">Aucune opportunité prioritaire détectée.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                    <div class="space-y-6 flex-1 w-full sm:w-auto">
+                        @foreach($stages->take(4) as $stage)
+                            <div class="flex items-center justify-between gap-8 border-b border-slate-50 pb-2">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-slate-800 font-bold">{{ $stage->count }}</span>
+                                    <span class="text-slate-400 font-bold uppercase tracking-tight text-[11px]">{{ $stage->stade }}</span>
+                                </div>
+                                <span class="text-slate-800 font-bold text-sm">{{ format_currency($stage->total_amount) }}</span>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar Area (1 Col) -->
-            <div class="space-y-8">
+            <!-- Goal Progress & Status Distribution -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden flex flex-col">
+                <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-50">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-700 tracking-tight">Objectif du Mois</h3>
+                        <p class="text-xs text-slate-400 mt-1">Avancement par rapport au quota</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-3xl font-black text-[#4C7CDF]">{{ $data['kpis']['goal_percentage'] }}%</span>
+                    </div>
+                </div>
                 
-                <!-- Upcoming Meetings -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                        <h3 class="font-bold text-slate-900">Agenda Prochain</h3>
-                        <span class="text-[10px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full border border-indigo-100 uppercase tracking-widest">Planifié</span>
+                <div class="space-y-10 flex-1 flex flex-col justify-center">
+                    <div class="space-y-4">
+                        <div class="relative w-full bg-slate-100 rounded-full h-4 overflow-hidden shadow-inner">
+                            <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-[#4C7CDF] to-[#6366F1] rounded-full transition-all duration-1000 ease-out" style="width:{{ $data['kpis']['goal_percentage'] }}%"></div>
+                        </div>
+                        <div class="flex justify-between text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                            <span>0 €</span>
+                            <span>Cible: {{ format_currency($data['kpis']['sales_quota']) }}</span>
+                        </div>
                     </div>
-                    <div class="space-y-1">
-                        @forelse($data['lists']['next_meetings'] as $meeting)
-                            <div class="flex flex-col p-4 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group">
-                                <span class="text-xs font-black text-indigo-600 uppercase tracking-widest mb-1">{{ $meeting->date_activite->translatedFormat('d M à H:i') }}</span>
-                                <span class="text-sm font-bold text-slate-900 group-hover:text-indigo-700 transition-colors leading-snug">{{ $meeting->description ?? 'Réunion client' }}</span>
-                            </div>
-                        @empty
-                            <p class="text-sm text-slate-400 italic text-center py-4">Aucune réunion prévue.</p>
-                        @endforelse
+
+                    <div class="h-40">
+                        <canvas id="statusDistributionChart"></canvas>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- My Tasks -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                        <h3 class="font-bold text-slate-900">Mes Tâches</h3>
-                        <span class="text-[10px] font-black bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full border border-amber-100 uppercase tracking-widest">{{ $data['kpis']['tasks_due_today'] }} AUJ.</span>
-                    </div>
-                    <div class="space-y-2">
-                        @forelse($data['lists']['tasks'] as $task)
-                            <div class="flex items-start gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors transition-colors">
-                                <div class="mt-1.5 w-1.5 h-1.5 rounded-full {{ $task->due_date < now() ? 'bg-rose-500' : 'bg-slate-300' }} flex-shrink-0"></div>
-                                <div class="min-w-0">
-                                    <p class="text-sm font-bold text-slate-800 leading-snug truncate">{{ $task->titre }}</p>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ $task->due_date->translatedFormat('d F Y') }}</p>
-                                </div>
-                            </div>
-                        @empty
-                            <p class="text-sm text-slate-400 italic text-center py-4">Pas de tâches en attente.</p>
-                        @endforelse
-                    </div>
+        <!-- 4-Column Widgets -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Tasks -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden group">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm flex justify-between items-center">
+                    <span>Mes Tâches</span>
+                    <span class="text-[10px] bg-amber-100 text-amber-600 px-2 py-0.5 rounded">{{ $data['kpis']['tasks_due_today'] }} AUJ.</span>
                 </div>
-
-                <!-- Activity Feed -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-                    <h3 class="font-bold text-slate-900 mb-6 pb-4 border-b border-slate-100">Dernières Activités</h3>
-                    <div class="relative space-y-6 before:absolute before:inset-0 before:left-[11px] before:border-l before:border-slate-100">
-                        @forelse($data['lists']['recent_activities'] as $activity)
-                            <div class="relative pl-7 flex flex-col group">
-                                <div class="absolute left-0 top-1 w-2.5 h-2.5 rounded-full bg-white border-2 border-slate-200 z-10 group-hover:border-indigo-500 transition-colors"></div>
-                                <p class="text-[13px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{{ $activity->description }}</p>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{{ $activity->created_at->diffForHumans() }}</span>
-                            </div>
-                        @empty
-                            <p class="text-sm text-slate-400 italic text-center py-4 bg-white relative z-10">Historique vide.</p>
-                        @endforelse
+                <div class="p-4 space-y-4">
+                    @forelse($data['lists']['tasks'] as $task)
+                    <div class="flex gap-3 hover:translate-x-1 transition-transform cursor-pointer">
+                        <div class="{{ $task->due_date < now() ? 'bg-rose-100 text-rose-500' : 'bg-blue-100 text-[#4C7CDF]' }} p-2 rounded h-fit shrink-0">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 truncate">{{ $task->titre }}</h4>
+                            <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-tighter">{{ $task->due_date->translatedFormat('d F') }}</p>
+                        </div>
                     </div>
+                    @empty
+                    <p class="text-[11px] text-slate-400 italic py-6 text-center">Aucune tâche en attente.</p>
+                    @endforelse
                 </div>
+            </div>
 
+            <!-- Hot Opportunities -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Priorités Hautes</div>
+                <div class="p-4 space-y-5 text-xs">
+                    @forelse($data['lists']['hot_opportunities'] as $opp)
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-500 font-black shrink-0">
+                            {{ substr($opp->titre, 0, 1) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-800 truncate">{{ $opp->titre }}</span>
+                                <span class="font-black text-[#4C7CDF] ml-2">{{ format_currency($opp->montant_estime) }}</span>
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-0.5 truncate uppercase">{{ $opp->contact->nom_complet ?? 'NC' }}</div>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-[11px] text-slate-400 italic py-6 text-center">Aucun focus haute priorité.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Next Meetings -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Prochains Rendez-vous</div>
+                <div class="p-4 space-y-4 text-xs font-bold">
+                    @forelse($data['lists']['next_meetings'] as $meeting)
+                    <div class="flex flex-col border-l-2 border-[#4C7CDF] pl-3 py-1 bg-slate-50/50 rounded-r-md">
+                        <span class="text-[10px] text-[#4C7CDF] uppercase tracking-widest">{{ $meeting->date_activite->translatedFormat('d M H:i') }}</span>
+                        <span class="text-slate-800 mt-1 leading-snug line-clamp-2">{{ $meeting->description ?? 'Réunion Client' }}</span>
+                    </div>
+                    @empty
+                    <p class="text-[11px] text-slate-400 italic py-6 text-center">Aucune réunion prévue.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Dernières Activités</div>
+                <div class="p-4 space-y-4">
+                    @forelse($data['lists']['recent_activities'] as $activity)
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 rounded-full bg-[#4ED6A3] mt-1.5 shrink-0 opacity-40"></div>
+                        <div class="flex-1">
+                            <p class="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{{ $activity->description }}</p>
+                            <p class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{{ $activity->created_at->diffForHumans() }}</p>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-[11px] text-slate-400 italic py-6 text-center">Aucun log récent.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Footer Bar (Commercial Stats) -->
+    <div class="bg-white border-t border-slate-100 p-8 mt-12 mb-8 rounded-xl shadow-lg border border-slate-50">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-50">
+            <h3 class="text-lg font-black text-slate-800 tracking-tighter uppercase italic">Synthèse de Ventes</h3>
+            <a href="{{ route('opportunities.index') }}" class="text-[#4C7CDF] text-[11px] font-black flex items-center gap-2 uppercase tracking-widest">
+                Mon Pipeline Complet
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-center">
+            <div class="space-y-1 group">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-l-2 border-indigo-200 pl-3">Opportunités en cours</p>
+                <div class="flex items-baseline gap-2 pl-3 mt-2">
+                    <span class="text-4xl font-black text-slate-900 tracking-tighter">{{ $data['kpis']['my_leads_opps'] }}</span>
+                    <span class="text-[11px] text-[#4C7CDF] font-black">Actives</span>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-l-2 border-indigo-200 pl-3">Volume de Pipe</p>
+                <div class="flex items-baseline gap-2 pl-3 mt-2">
+                    <span class="text-3xl font-black text-slate-900 tracking-tighter">{{ format_currency($data['kpis']['my_forecast_revenue']) }}</span>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-l-2 border-indigo-200 pl-3">Performance Conv.</p>
+                <div class="flex items-baseline gap-2 pl-3 mt-2">
+                    <span class="text-4xl font-black text-slate-900 tracking-tighter">{{ $data['kpis']['my_conversion_rate'] }}%</span>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-l-2 border-indigo-200 pl-3">Objectif Restant</p>
+                <div class="flex items-baseline gap-2 pl-3 mt-2">
+                    @php
+                        $remaining = $data['kpis']['sales_quota'] - $data['kpis']['my_forecast_revenue'];
+                    @endphp
+                    <span class="text-3xl font-black {{ $remaining > 0 ? 'text-slate-900' : 'text-[#4ED6A3]' }} tracking-tighter">
+                        {{ format_currency(max(0, $remaining)) }}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -256,34 +284,33 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.x/dist/chart.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Status Distribution Chart (Mini version for Goal Section)
         const distributionCtx = document.getElementById('statusDistributionChart').getContext('2d');
-        const rawData = @json($data['charts']['status_distribution']);
+        const distributionData = @json($data['charts']['status_distribution']);
         
         const stagesConfig = [
-            { key: 'prospection', label: 'Prospection', color: '#6366F1' },
-            { key: 'qualification', label: 'Qualification', color: '#4F46E5' },
-            { key: 'proposition', label: 'Proposition', color: '#4338CA' },
-            { key: 'negociation', label: 'Négociation', color: '#3730A3' },
-            { key: 'gagne', label: 'Gagné', color: '#10B981' },
-            { key: 'perdu', label: 'Perdu', color: '#94A3B8' }
+            { key: 'prospection', label: 'PROS.', color: '#E2E8F0' },
+            { key: 'qualification', label: 'QUAL.', color: '#CBD5E1' },
+            { key: 'proposition', label: 'PROP.', color: '#94A3B8' },
+            { key: 'negociation', label: 'NEGOC.', color: '#64748B' },
+            { key: 'gagne', label: 'GAGNÉ', color: '#4ED6A3' }
         ];
 
         const labels = stagesConfig.map(s => s.label);
-        const dataValues = stagesConfig.map(s => Number(rawData[s.key] || 0));
+        const values = stagesConfig.map(s => distributionData[s.key] || 0);
 
         new Chart(distributionCtx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Opportunités',
-                    data: dataValues,
+                    data: values,
                     backgroundColor: stagesConfig.map(s => s.color),
                     borderRadius: 4,
-                    maxBarThickness: 50,
+                    maxBarThickness: 25,
                 }]
             },
             options: {
@@ -292,29 +319,19 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
+                        enabled: true,
                         backgroundColor: '#1E293B',
-                        padding: 12,
-                        cornerRadius: 8,
-                        titleFont: { size: 12, family: "'Inter', sans-serif", weight: 'bold' },
-                        bodyFont: { size: 12, family: "'Inter', sans-serif" },
+                        cornerRadius: 4,
                         callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + ' Opportunité(s)';
-                            }
+                            label: (ctx) => ` ${ctx.parsed.y} Opportunités`
                         }
                     }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#F1F5F9', borderDash: [2, 2] },
-                        ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#94A3B8' },
-                        border: { display: false }
-                    },
+                    y: { display: false },
                     x: {
                         grid: { display: false },
-                        ticks: { font: { family: "'Inter', sans-serif", size: 11, weight: '600' }, color: '#64748B' },
-                        border: { display: false }
+                        ticks: { font: { size: 9, weight: '700', family: "'Inter', sans-serif" }, color: '#94A3B8' }
                     }
                 }
             }

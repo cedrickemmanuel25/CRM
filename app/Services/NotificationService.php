@@ -16,24 +16,39 @@ class NotificationService
      */
     public static function send($eventType, $notification, $entity = null)
     {
-        // 1. Determine base group: Admins always get system hooks
-        $targetUsers = User::admins()->get();
+        // 1. Determine target audience
+        $targetUsers = collect();
 
-        // 2. Add entity-specific users
-        if ($entity) {
-            // Add owner if exists (for Contacts/Opportunities)
-            if (isset($entity->user_id_owner)) {
-                $owner = User::find($entity->user_id_owner);
-                if ($owner) $targetUsers->push($owner);
+        // 2. Routing logic based on Event Type and Entity
+        // Some events go only to Admins (Supervision)
+        $supervisionEvents = [
+            'user_created', 'error', 'performance_report', 'user_activity'
+        ];
+
+        if (in_array($eventType, $supervisionEvents)) {
+            $targetUsers = User::admins()->get();
+        } else {
+            // Action-oriented events: Owner, Commercial, or Assignee
+            if ($entity) {
+                if (isset($entity->user_id_owner)) {
+                    $owner = User::find($entity->user_id_owner);
+                    if ($owner) $targetUsers->push($owner);
+                }
+                if (isset($entity->commercial_id)) {
+                    $commercial = User::find($entity->commercial_id);
+                    if ($commercial) $targetUsers->push($commercial);
+                }
+                if (isset($entity->assigned_to)) {
+                    $assigned = User::find($entity->assigned_to);
+                    if ($assigned) $targetUsers->push($assigned);
+                }
             }
-            if (isset($entity->commercial_id)) {
-                $commercial = User::find($entity->commercial_id);
-                if ($commercial) $targetUsers->push($commercial);
-            }
-            if (isset($entity->assigned_to)) {
-                $assigned = User::find($entity->assigned_to);
-                if ($assigned) $targetUsers->push($assigned);
-            }
+            
+            // Add Admins to everything? User says "Distinct notifications"
+            // Let's NOT auto-add admins to commercial tasks unless they are assigned
+            // But if the user remains an admin, they might want to see everything
+            // User requested: "distinct notifications according to role"
+            // So Admins get supervision, Commercials get follow-up.
         }
 
         // Unique users list

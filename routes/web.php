@@ -132,6 +132,7 @@ Route::middleware('auth')->group(function () {
 
 
     // Activities Module
+    Route::get('/activities', [App\Http\Controllers\ActivityController::class, 'index'])->name('activities.index');
     Route::post('/activities', [App\Http\Controllers\ActivityController::class, 'store'])->name('activities.store');
 
     // Tasks Module

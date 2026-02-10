@@ -150,15 +150,15 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:contacts,email',
+            'nom' => 'nullable|string|max:255',
+            'prenom' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255|unique:contacts,email',
             'alternative_emails' => 'nullable|array',
             'alternative_emails.*' => 'nullable|email|max:255',
-            'telephone' => 'required|string|max:20',
+            'telephone' => 'nullable|string|max:20',
             'alternative_telephones' => 'nullable|array',
             'alternative_telephones.*' => 'nullable|string|max:25',
-            'entreprise' => 'required|string|max:255',
+            'entreprise' => 'nullable|string|max:255',
             'adresse' => 'nullable|string|max:500',
             'source' => 'nullable|string|max:100',
             'poste' => 'nullable|string|max:255',
@@ -285,20 +285,20 @@ class ContactController extends Controller
         }
 
         $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
+            'nom' => 'nullable|string|max:255',
+            'prenom' => 'nullable|string|max:255',
             'email' => [
-                'required', 
+                'nullable', 
                 'email', 
                 'max:255', 
                 Rule::unique('contacts')->ignore($contact->id)
             ],
             'alternative_emails' => 'nullable|array',
             'alternative_emails.*' => 'nullable|email|max:255',
-            'telephone' => 'required|string|max:20',
+            'telephone' => 'nullable|string|max:20',
             'alternative_telephones' => 'nullable|array',
             'alternative_telephones.*' => 'nullable|string|max:25',
-            'entreprise' => 'required|string|max:255',
+            'entreprise' => 'nullable|string|max:255',
             'adresse' => 'nullable|string|max:500',
             'source' => 'nullable|string|max:100',
             'poste' => 'nullable|string|max:255',

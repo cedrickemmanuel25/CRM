@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Connexion - {{ company_name() }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ company_logo() }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -29,7 +30,7 @@
             <!-- Card -->
             <div class="bg-white rounded-xl shadow-sm p-8">
                 <div class="text-center mb-6">
-                    <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-16 w-auto mx-auto mb-4">
+                    <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-16 w-auto mx-auto mb-4">
                     <h2 class="text-xl font-bold text-gray-900 mb-1">Connexion</h2>
                     <p class="text-sm text-gray-500">Entrez vos identifiants pour accéder à votre compte</p>
                 </div>
@@ -136,5 +137,12 @@
             </div>
         </div>
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 </body>
 </html>

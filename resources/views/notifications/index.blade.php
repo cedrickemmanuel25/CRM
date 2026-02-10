@@ -42,23 +42,40 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
                                 <div class="flex-shrink-0">
-                                    @if(isset($notification->data['type']) && $notification->data['type'] == 'reminder')
-                                        <span class="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
-                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        </span>
-                                    @elseif(isset($notification->data['type']) && ($notification->data['type'] == 'new_access_request' || $notification->data['type'] == 'access_request_approved'))
-                                        <span class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                                        </span>
-                                    @else
-                                        <span class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    @php
+                                        $type = $notification->data['type'] ?? 'default';
+                                        $entity = $notification->data['entity'] ?? 'system';
+                                        
+                                        $bgColor = match($entity) {
+                                            'opportunity' => 'bg-emerald-100 text-emerald-600',
+                                            'task' => 'bg-amber-100 text-amber-600',
+                                            'report' => 'bg-purple-100 text-purple-600',
+                                            'security' => 'bg-rose-100 text-rose-600',
+                                            default => 'bg-indigo-100 text-indigo-600'
+                                        };
+                                    @endphp
+                                    <span class="h-10 w-10 rounded-xl flex items-center justify-center {{ $bgColor }}">
+                                        @if($entity == 'opportunity')
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        @elseif($entity == 'task')
                                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
-                                        </span>
-                                    @endif
+                                        @elseif($entity == 'report')
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                                        @elseif($entity == 'security')
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                        @else
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                                        @endif
+                                    </span>
                                 </div>
-                                <p class="text-sm font-bold text-gray-900">
-                                    {{ $notification->data['title'] ?? 'Notification' }}
-                                </p>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-900">
+                                        {{ $notification->data['title'] ?? 'Notification' }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-0.5">
+                                        {{ $notification->created_at->translatedFormat('d F Y à H:i') }}
+                                    </p>
+                                </div>
                             </div>
                             <div class="ml-2 flex-shrink-0 flex">
                                 <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $notification->read_at ? 'bg-gray-100 text-gray-800' : 'bg-green-100 text-green-800' }}">
@@ -66,33 +83,28 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-2 sm:flex sm:justify-between items-center">
-                            <div class="sm:flex flex-col">
+                        <div class="mt-2 sm:flex sm:justify-between items-center pl-14">
+                            <div class="sm:flex flex-col w-full">
                                 <p class="text-sm text-gray-600 font-medium">
                                     {{ $notification->data['message'] ?? '' }}
                                 </p>
-                                <div class="flex items-center space-x-4">
-                                    <span class="text-xs text-indigo-600 mt-1 flex items-center">
+                                
+                                <div class="flex items-center space-x-4 mt-2">
+                                    @if(isset($notification->data['link']))
+                                    <a href="{{ url($notification->data['link']) }}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors">
                                         Voir les détails
                                         <svg class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                                    </span>
-                                    <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST" onsubmit="return confirm('Supprimer cette notification ?')" class="mt-1">
+                                    </a>
+                                    @endif
+
+                                    <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST" onsubmit="return confirm('Supprimer cette notification ?')" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-xs text-rose-500 hover:text-rose-700 flex items-center">
-                                            <svg class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                        <button type="submit" class="text-xs text-rose-500 hover:text-rose-700 font-medium flex items-center px-2 py-1.5">
                                             Supprimer
                                         </button>
                                     </form>
                                 </div>
-                            </div>
-                            <div class="mt-2 flex items-center text-xs text-gray-400 sm:mt-0">
-                                <svg class="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <p>
-                                    {{ $notification->created_at->translatedFormat('d F Y à H:i') }}
-                                </p>
                             </div>
                         </div>
                     </div>

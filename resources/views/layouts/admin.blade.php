@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - {{ company_name() }}</title>
+    <link rel="icon" type="image/png" href="{{ company_logo() }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -85,7 +87,7 @@ if (auth()->check()) {
                 <!-- Sidebar Component (Mobile) -->
                 <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                     <div class="flex h-16 shrink-0 items-center gap-x-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
+                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
                         <span class="text-white font-bold text-xl">{{ company_name() }}</span>
                     </div>
                     <nav class="flex flex-1 flex-col">
@@ -106,7 +108,7 @@ if (auth()->check()) {
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-[18%] lg:flex-col">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-100 border-r border-gray-200 px-6 pb-4 custom-scrollbar">
             <a href="{{ route('admin.dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 mt-4 hover:opacity-80 transition-opacity whitespace-nowrap overflow-hidden">
-                <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
+                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
                 <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
@@ -233,5 +235,12 @@ if (auth()->check()) {
     </div>
     </div>
     @stack('scripts')
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 </body>
 </html>

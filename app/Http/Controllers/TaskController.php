@@ -113,6 +113,15 @@ class TaskController extends Controller
         return view('tasks.show', compact('task'));
     }
 
+    public function create()
+    {
+        $users = User::all();
+        $contacts = \App\Models\Contact::orderBy('nom')->get();
+        $opportunities = \App\Models\Opportunity::active()->orderBy('titre')->get();
+        
+        return view('tasks.create', compact('users', 'contacts', 'opportunities'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

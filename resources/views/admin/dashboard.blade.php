@@ -3,222 +3,252 @@
 @section('title', 'Tableau de bord - Nexus CRM')
 
 @section('content')
-<div class="min-h-screen bg-gray-50/50 p-6">
-    <div class="max-w-[1600px] mx-auto space-y-8">
-        
-        <!-- Header Section -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-                    Tableau de bord
-                </h2>
-                <!-- Optional Subtitle if needed 
-                <p class="mt-1 text-sm text-gray-500">Vue d'ensemble de vos performances</p>
-                -->
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="{{ route('reports.pdf') }}" class="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all">
-                    <svg class="mr-2 h-4 w-4 text-gray-500" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    Exporter au format PDF
-                </a>
-                <a href="{{ route('reports.export', ['type' => 'opportunities']) }}" class="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all">
-                    <svg class="mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Exporter au format CSV
-                </a>
-            </div>
-        </div>
-
-        <!-- KPIs Grid -->
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Revenu Total -->
-            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
-                <div class="flex items-center justify-between mb-4">
-                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Revenu total</p>
-                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-indigo-50 transition-colors">
-                        <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
+<div class="px-8 py-2 space-y-8 bg-[#F4F7FC]/30 min-h-screen">
+    <div class="space-y-8">
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- New Leads -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-blue-50 p-3 rounded-lg text-[#4C7CDF]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 </div>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-3xl font-bold text-gray-900">{{ format_currency($data['kpis']['global_forecast_revenue']) }}</p>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500">Nouveaux Leads</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ $data['kpis']['contacts_count'] }}</p>
+                    <div class="flex items-center gap-1 text-[#4ED6A3] text-sm font-bold mt-2">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                        <span>{{ $data['kpis']['leads_today'] }} Aujourd'hui</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Opportunités actives -->
-            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
-                <div class="flex items-center justify-between mb-4">
-                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Opportunités actives</p>
-                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-blue-50 transition-colors">
-                        <svg class="h-5 w-5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
+            <!-- Active Opportunities -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 p-3 rounded-lg text-slate-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                 </div>
-                 <div class="flex items-baseline gap-2">
-                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['total_leads_opps'] }}</p>
+                <div class="flex-1">
+                    <h3 class="text-sm font-semibold text-slate-500">Opportunités En Cours</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ $data['kpis']['total_leads_opps'] }}</p>
+                    <div class="mt-2 bg-[#4C7CDF] text-white text-[10px] font-bold px-2 py-1 rounded-full inline-flex items-center gap-1">
+                        {{ format_currency($data['kpis']['global_forecast_revenue']) }} <span class="opacity-60">= Volume Global</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Contacts -->
-            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
-                <div class="flex items-center justify-between mb-4">
-                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Contacts</p>
-                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-emerald-50 transition-colors">
-                         <svg class="h-5 w-5 text-gray-400 group-hover:text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
+            <!-- Sales This Month -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-blue-50 p-3 rounded-lg text-[#4C7CDF]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['contacts_count'] }}</p>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500">Ventes Ce Mois-ci</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ $data['kpis']['won_this_month_count'] }}</p>
+                    <div class="flex items-center gap-1 text-slate-500 text-sm mt-2">
+                        <svg class="w-4 h-4 text-[#4C7CDF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                        <span class="font-bold text-slate-800">CA: {{ format_currency($data['kpis']['won_this_month_revenue']) }}</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tâches en attente -->
-            <div class="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 hover:shadow-lg transition-all duration-300 group">
-                <div class="flex items-center justify-between mb-4">
-                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Tâches en attente</p>
-                    <div class="p-2 bg-gray-50 rounded-lg group-hover:bg-amber-50 transition-colors">
-                         <svg class="h-5 w-5 text-gray-400 group-hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
+            <!-- Overdue Tasks -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 p-3 rounded-lg text-slate-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-3xl font-bold text-gray-900">{{ $data['kpis']['pending_tasks_count'] }}</p>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-500">Tâches En Retard</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ $data['lists']['overdue_tasks']->count() }}</p>
+                    <div class="flex items-center gap-1 text-slate-500 text-sm mt-2 font-bold">
+                        <svg class="w-4 h-4 text-[#4C7CDF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <span class="text-slate-800">{{ $data['kpis']['pending_tasks_count'] }}</span> Tâches à faire
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Revenue Evolution (Left - 2/3) -->
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6 flex flex-col">
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-lg font-bold text-gray-900">Répartition par Statut</h3>
-                    <div class="flex space-x-2 text-xs font-medium">
-                        <span class="px-2 py-1 bg-gray-100 text-gray-500 rounded cursor-pointer hover:bg-gray-200">Mois</span>
-                        <span class="px-2 py-1 text-gray-400 cursor-pointer hover:text-gray-500">Année</span>
-                    </div>
-                </div>
-                
-                <div class="flex-1 mt-4 relative h-[300px]">
-                    <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Pipeline Funnel (Right - 1/3) -->
-            <div class="bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-8">Par Statut</h3>
-                <div class="space-y-6">
-                     @foreach($data['charts']['pipeline_by_stage'] as $stage)
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Funnel Chart -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-slate-700 mb-8 tracking-tight">Pipeline des Opportunités</h3>
+                <div class="flex items-center gap-12">
+                    <!-- Dynamic Funnel Visualization -->
+                    <div class="flex-1 flex flex-col items-center">
                         @php
-                            $totalOps = $data['kpis']['total_leads_opps'] ?: 1;
-                            $percentage = round(($stage->count / $totalOps) * 100);
-                            $colors = [
-                                'prospection' => 'bg-blue-500',
-                                'qualification' => 'bg-indigo-500',
-                                'proposition' => 'bg-orange-500', // Matches image style
-                                'negociation' => 'bg-emerald-500',
-                                'gagne' => 'bg-green-600',
-                                'perdu' => 'bg-gray-400',
-                            ];
-                            $dotColor = match($stage->stade) {
-                                'prospection' => 'text-blue-500',
-                                'qualification' => 'text-indigo-500',
-                                'proposition' => 'text-orange-500',
-                                'negociation' => 'text-emerald-500',
-                                'cloture' => 'text-purple-500',
-                                default => 'text-gray-400'
-                            };
-                             $barColor = match($stage->stade) {
-                                'prospection' => 'bg-blue-500',
-                                'qualification' => 'bg-indigo-500',
-                                'proposition' => 'bg-orange-500',
-                                'negociation' => 'bg-emerald-500',
-                                'cloture' => 'bg-purple-500',
-                                default => 'bg-gray-400'
-                            };
+                            $stages = $data['charts']['pipeline_by_stage'];
+                            $totalCount = $stages->sum('count') ?: 1;
+                            $widths = ['100%', '80%', '60%', '25%'];
+                            $opacities = ['70', '85', '100', '100'];
                         @endphp
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full {{ $barColor }}"></span>
-                                    <span class="text-sm font-medium text-gray-600 capitalize">{{ $stage->stade }}</span>
-                                </div>
-                                <span class="text-sm font-bold text-gray-900">{{ $percentage }}%</span>
+                        @foreach($stages->take(4) as $index => $stage)
+                            <div class="relative h-16 bg-[#4C7CDF] rounded-sm flex items-center justify-center text-white font-bold opacity-{{ $opacities[$index] }} transition-all" 
+                                 style="width: {{ $widths[$index] }}; margin-bottom: 2px; border-bottom-left-radius: {{ $index == 3 ? '8px' : '0' }}; border-bottom-right-radius: {{ $index == 3 ? '8px' : '0' }}; border-top-left-radius: {{ $index == 0 ? '8px' : '0' }}; border-top-right-radius: {{ $index == 0 ? '8px' : '0' }};">
+                                {{ $stage->count }}
                             </div>
-                            <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                                <div class="h-full {{ $barColor }} rounded-full" style="width: {{ $percentage }}%"></div>
+                        @endforeach
+                    </div>
+                    <div class="space-y-6 flex-1">
+                        @foreach($stages->take(4) as $stage)
+                            <div class="flex items-center justify-between gap-8">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-slate-800 font-bold">{{ $stage->count }}</span>
+                                <span class="text-slate-800 font-bold uppercase tracking-tight">{{ $stage->stade }}</span>
+                            </div>
+                            <span class="text-slate-800 font-bold">{{ format_currency($stage->total_amount) }}</span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <!-- Combo Chart -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-lg font-bold text-slate-700 tracking-tight">CA Prévisionnel</h3>
+                    <div class="bg-[#4C7CDF] text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-2">
+                        42% <span class="bg-white text-[#4C7CDF] px-1 rounded-sm text-[10px]">▼</span>
+                    </div>
+                </div>
+                <div class="h-64 mt-4">
+                    <canvas id="comboChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4-Column Widgets -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Tasks -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Tâches à Faire</div>
+                <div class="p-4 space-y-4">
+                    @forelse($data['lists']['tasks'] as $task)
+                    <div class="flex gap-3">
+                        <div class="bg-blue-100 p-2 rounded text-[#4C7CDF] h-fit">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-slate-800">{{ $task->titre }}</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">{{ $task->assignee->name ?? 'Non assigné' }} <span class="float-right">{{ $task->created_at->diffForHumans() }}</span></p>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-xs text-slate-400 italic py-4">Aucune tâche en attente.</p>
+                    @endforelse
+                    
+                    <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-50">
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600">
+                            <svg class="w-4 h-4 opacity-40" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                            {{ $data['lists']['overdue_tasks']->count() }} Tâches en retard
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Opportunities -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Opportunités Récentes</div>
+                <div class="p-4 space-y-5">
+                    @foreach($data['lists']['latest_opportunities'] as $opp)
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-slate-100 overflow-hidden">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($opp->contact->nom_complet ?? 'NC') }}&background=E2E8F0&color=475569" alt="">
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <span class="text-xs font-bold text-slate-800">{{ Str::limit($opp->titre, 15) }}</span>
+                                <span class="text-xs font-bold text-slate-800">{{ format_currency($opp->montant_estime) }}</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-[10px] text-[#4C7CDF] font-bold">{{ $opp->contact->nom_complet ?? 'Inconnu' }}</span>
+                                <span class="text-[10px] font-bold text-[#4ED6A3]">{{ $opp->probabilite }}%</span>
                             </div>
                         </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Activités Récents</div>
+                <div class="p-4 space-y-4">
+                    @foreach($data['lists']['recent_activities'] as $activity)
+                    <div class="flex items-center gap-3">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($activity->user->name ?? 'U') }}&background=F8FAFC&color=475569" class="w-8 h-8 rounded-full border border-slate-100" alt="">
+                        <div class="flex-1 group">
+                            <h4 class="text-xs font-bold text-slate-800">{{ $activity->user->name ?? 'Système' }} <span class="float-right text-blue-400">✓</span></h4>
+                            <p class="text-[10px] text-slate-500 mt-0.5">{{ Str::limit($activity->description, 20) }} <span class="float-right">{{ $activity->created_at->diffForHumans() }}</span></p>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Recent Users -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50/50 p-4 border-b border-slate-100 font-bold text-slate-700 text-sm">Utilisateurs Récents</div>
+                <div class="p-4 space-y-4">
+                    @foreach($data['lists']['latest_users'] as $user)
+                    <div class="flex items-center gap-3">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=F1F5F9&color=475569" class="w-8 h-8 rounded-full" alt="">
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-slate-800">{{ $user->name }} <span class="float-right text-[10px] text-slate-400 font-normal italic">{{ $user->created_at->diffForHumans() }}</span></h4>
+                            <div class="flex items-center justify-between mt-0.5">
+                                <span class="text-[10px] text-slate-500 capitalize">{{ $user->role }}</span>
+                                <span class="text-[10px] bg-[#4ED6A3]/20 text-[#4ED6A3] font-bold px-1.5 rounded">Actif</span>
+                            </div>
+                        </div>
+                    </div>
                     @endforeach
                 </div>
             </div>
         </div>
+        </div>
+    </div>
 
-        <!-- Last Opportunities Table -->
-        <div class="bg-white rounded-xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100/50 overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-900">Dernières Opportunités</h3>
-                <a href="{{ route('opportunities.index') }}" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-600 rounded-lg transition-colors">
-                    Voir tout
-                </a>
+    <!-- Summary Footer Bar -->
+    <div class="bg-white border-t border-slate-100 p-8">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-lg font-bold text-slate-700 tracking-tight italic">Rapport de Ventes</h3>
+            <a href="{{ route('reports.index') }}" class="text-[#4C7CDF] text-xs font-bold flex items-center gap-2">
+                Voir Tous les Rapports 
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 items-center">
+            <div class="space-y-1">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Leads Total</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-slate-800">{{ $data['lists']['total_leads_all_time'] }}</span>
+                    <span class="text-[10px] text-[#4ED6A3] font-bold">▲ {{ $data['kpis']['leads_today'] }} <span class="text-slate-400 font-normal">Aujourd'hui</span></span>
+                </div>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-white border-b border-gray-50">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Opportunité</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Client</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Montant</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Statut</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-50">
-                        @forelse($data['lists']['latest_opportunities'] as $opp)
-                        <tr class="hover:bg-gray-50/50 transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm font-semibold text-gray-900">{{ $opp->titre }}</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center gap-3">
-                                    <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs ring-2 ring-white">
-                                        {{ substr($opp->contact->nom_complet ?? 'N', 0, 1) }}
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-600">{{ $opp->contact->nom_complet ?? 'N/A' }}</span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm font-bold text-gray-900">{{ format_currency($opp->montant_estime) }}</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @php
-                                    $statusClasses = [
-                                        'prospection' => 'bg-blue-50 text-blue-700 border-blue-100',
-                                        'qualification' => 'bg-indigo-50 text-indigo-700 border-indigo-100',
-                                        'proposition' => 'bg-orange-50 text-orange-700 border-orange-100',
-                                        'negociation' => 'bg-amber-50 text-amber-700 border-amber-100',
-                                        'gagne' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
-                                        'perdu' => 'bg-gray-50 text-gray-600 border-gray-100',
-                                    ];
-                                    $class = $statusClasses[$opp->stade] ?? 'bg-gray-50 text-gray-600 border-gray-100';
-                                @endphp
-                                <span class="px-3 py-1 rounded-full text-xs font-bold border {{ $class }} capitalize">
-                                    {{ $opp->stade }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $opp->created_at->translatedFormat('d F') }}
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-500 italic">Aucune opportunité récente.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="space-y-1">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Nouveaux Clients</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-slate-800">{{ $data['lists']['new_clients_this_week'] }}</span>
+                    <span class="text-[10px] text-[#4ED6A3] font-bold">▲ {{ $data['lists']['new_clients_this_week'] }} <span class="text-slate-400 font-normal">Cette semaine</span></span>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">CA Mensuel</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-slate-800">{{ format_currency($data['kpis']['won_this_month_revenue']) }}</span>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Tâches en Retard</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-slate-800">{{ $data['lists']['overdue_tasks']->count() }}</span>
+                    <span class="text-[10px] text-slate-400 font-normal">{{ $data['kpis']['pending_tasks_count'] }} en cours</span>
+                </div>
+            </div>
+            <div class="space-y-4">
+                 <a href="{{ route('reports.index') }}" class="w-full bg-[#4C7CDF] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm font-bold shadow-md shadow-blue-200">
+                    Générer Rapport
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                 </a>
             </div>
         </div>
     </div>
@@ -226,86 +256,57 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.x/dist/chart.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Status Chart (Stacked by Status)
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueRawData = @json($data['charts']['revenue_trend']);
-        
-        const stagesConfig = [
-            { key: 'prospection', label: 'Prospection', color: '#3B82F6' },
-            { key: 'qualification', label: 'Qualification', color: '#6366F1' },
-            { key: 'proposition', label: 'Proposition', color: '#F97316' },
-            { key: 'negociation', label: 'Négociation', color: '#10B981' },
-            { key: 'gagne', label: 'Gagné', color: '#16A34A' },
-            { key: 'perdu', label: 'Perdu', color: '#9CA3AF' }
-        ];
-
-        const labels = stagesConfig.map(s => s.label);
-        const dataValues = stagesConfig.map(s => Number(revenueRawData[s.key] || 0));
-        const backgroundColors = stagesConfig.map(s => s.color);
-
-        const revenueChart = new Chart(revenueCtx, {
+        // Combo Chart for CA Previsionnel
+        const ctx = document.getElementById('comboChart').getContext('2d');
+        const comboData = @json($data['charts']['revenue_combo']);
+        new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Opportunités',
-                    data: dataValues,
-                    backgroundColor: backgroundColors,
-                    borderRadius: 6,
-                    maxBarThickness: 50,
-                }]
+                labels: comboData.labels,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Prévision',
+                        data: comboData.forecast,
+                        borderColor: '#4ED6A3',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#4ED6A3',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        tension: 0.4,
+                        fill: false,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Réel',
+                        data: comboData.revenue,
+                        backgroundColor: '#4C7CDF',
+                        borderRadius: 4,
+                        maxBarThickness: 30,
+                        yAxisID: 'y'
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1F2937',
-                        padding: 12,
-                        cornerRadius: 8,
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y + ' opp.';
-                                }
-                                return label;
-                            }
-                        }
-                    }
+                    legend: { display: false }
                 },
                 scales: {
                     y: {
-                        stacked: false,
                         beginAtZero: true,
-                        grid: {
-                            color: '#F3F4F6',
-                            drawBorder: false,
-                        },
-                        ticks: {
-                            font: { family: "'Inter', sans-serif", size: 11 },
-                            color: '#9CA3AF',
-                            callback: function(value) {
-                                return value;
-                            }
-                        },
-                        border: { display: false }
+                        grid: { color: '#F8FAFC', drawBorder: false },
+                        ticks: { display: false }
                     },
                     x: {
-                        stacked: false,
                         grid: { display: false },
-                        ticks: {
-                            font: { family: "'Inter', sans-serif", size: 11 },
-                            color: '#9CA3AF'
-                        },
-                        border: { display: false }
+                        ticks: { color: '#94A3B8', font: { size: 12, weight: '500' } }
                     }
                 }
             }

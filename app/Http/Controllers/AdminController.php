@@ -57,6 +57,8 @@ class AdminController extends Controller
             'task_created' => 'Tâche créée',
             'task_completed' => 'Tâche terminée',
             'task_overdue' => 'Tâche en retard',
+            'performance_report' => 'Rapport de Performance',
+            'user_activity' => 'Activité Utilisateur / Sécurité',
         ];
             
         $users = User::all();
@@ -94,7 +96,8 @@ class AdminController extends Controller
             'contact_created', 'contact_updated', 'contact_deleted',
             'opportunity_created', 'opportunity_updated', 'opportunity_won', 'opportunity_lost',
             'task_created', 'task_completed', 'task_overdue',
-            'user_created', 'error'
+            'user_created', 'error',
+            'performance_report', 'user_activity'
         ];
 
         foreach ($notificationEvents as $event) {
@@ -115,7 +118,8 @@ class AdminController extends Controller
         $personalEvents = [
             'contact_created', 'contact_updated', 'opportunity_created', 
             'opportunity_updated', 'opportunity_won', 'opportunity_lost',
-            'task_created', 'task_completed', 'task_overdue'
+            'task_created', 'task_completed', 'task_overdue',
+            'performance_report', 'user_activity'
         ];
 
         foreach ($personalEvents as $event) {
