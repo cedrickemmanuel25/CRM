@@ -37,7 +37,7 @@
             <!-- Card -->
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <div class="text-center mb-4">
-                    <img src="{{ asset('images/logo.png') }}" alt="{{ company_name() }} Logo" class="h-12 w-auto mx-auto mb-3">
+                    <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-12 w-auto mx-auto mb-3">
                     <h2 class="text-lg font-bold text-gray-900 mb-0.5">Créer un compte</h2>
                     <p class="text-xs text-gray-500">Remplissez le formulaire pour demander l'accès</p>
                 </div>

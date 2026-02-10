@@ -32,6 +32,19 @@ if (!function_exists('company_name')) {
     }
 }
 
+if (!function_exists('company_logo')) {
+    /**
+     * Get the company logo from settings
+     *
+     * @return string
+     */
+    function company_logo()
+    {
+        $logo = \App\Models\Setting::get('company_logo');
+        return $logo ? asset('storage/' . $logo) : asset('images/logo.png');
+    }
+}
+
 if (!function_exists('format_currency')) {
     /**
      * Format a number as currency with the configured symbol

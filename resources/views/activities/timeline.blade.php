@@ -5,6 +5,7 @@
     </div>
 
     <!-- Add Activity Form -->
+    @if(isset($parent_type) && isset($parent_id))
     <div class="p-4 bg-white border-b border-gray-200" x-data="{ open: false }">
         <button @click="open = !open" x-show="!open" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
             <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,6 +19,10 @@
             <input type="hidden" name="parent_type" value="{{ $parent_type }}">
             <input type="hidden" name="parent_id" value="{{ $parent_id }}">
             <input type="hidden" name="date_activite" value="{{ now() }}">
+            ...
+        </form>
+    </div>
+    @endif
 
             <div class="space-y-3">
                 <!-- Type Selection -->

@@ -49,11 +49,11 @@ class OpportunityCRUDNotification extends Notification implements ShouldQueue
                     ->line($title);
 
         if (isset($this->data['montant'])) {
-            $message->line("Montant : " . number_format($this->data['montant'], 2, ',', ' ') . " €");
+            $message->line("Montant : " . number_format($this->data['montant'], 0, ',', ' ') . " FCFA");
         }
 
         return $message->action('Voir l\'opportunité', url($this->data['link'] ?? '/'))
-                    ->line('Merci d\'utiliser notre application !');
+                    ->line('Bonne chance pour cette vente !');
     }
 
     /**
@@ -62,22 +62,23 @@ class OpportunityCRUDNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'type' => $this->type,
+            'type' => "opportunity_{$this->type}",
             'entity' => 'opportunity',
             'title' => match($this->type) {
                 'created' => 'Nouvelle Opportunité',
                 'updated' => 'Opportunité Modifiée',
-                'won' => 'Opportunité GAGNÉE !',
+                'won' => 'Opportunité GAGNÉE ! 🏆',
                 'lost' => 'Opportunité Perdue',
             },
             'titre' => $this->data['titre'],
             'message' => match($this->type) {
-                'created' => "L'opportunité {$this->data['titre']} a été créée.",
-                'updated' => "L'opportunité {$this->data['titre']} a été mise à jour.",
-                'won' => "BRAVO ! L'opportunité {$this->data['titre']} a été GAGNÉE.",
-                'lost' => "Dommage, l'opportunité {$this->data['titre']} a été perdue.",
+                'created' => "Une nouvelle opportunité \"{$this->data['titre']}\" vous attend.",
+                'updated' => "L'opportunité \"{$this->data['titre']}\" a de nouvelles informations.",
+                'won' => "Félicitations ! Vous avez gagné l'opportunité \"{$this->data['titre']}\".",
+                'lost' => "L'opportunité \"{$this->data['titre']}\" est passée en perdu.",
             },
             'link' => $this->data['link'] ?? null,
+            'amount' => $this->data['montant'] ?? null,
         ];
     }
 }

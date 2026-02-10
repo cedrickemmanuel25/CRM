@@ -56,6 +56,9 @@ class DashboardController extends Controller
             'contacts_count' => Contact::count(),
             'pending_tasks_count' => \App\Models\Task::where('statut', '!=', 'done')->count(),
             'avg_conversion_rate' => $this->calculateConversionRate(),
+            'leads_today' => Contact::whereDate('created_at', Carbon::today())->count(),
+            'won_this_month_count' => Opportunity::won()->whereMonth('updated_at', Carbon::now()->month)->count(),
+            'won_this_month_revenue' => Opportunity::won()->whereMonth('updated_at', Carbon::now()->month)->sum('montant_estime'),
         ];
 
         // 1. Pipeline by Stage (Ensure all stages exist)
@@ -74,36 +77,50 @@ class DashboardController extends Controller
             ];
         });
 
-        // 2. Distribution by Status (Totals)
-        $rawTrend = Opportunity::select(
-                'stade',
-                DB::raw('count(*) as total')
-            )
-            ->groupBy('stade')
-            ->get()
-            ->keyBy('stade');
+        // 2. Revenue Trend (Combo Chart) - Last 6 months
+        $months = [];
+        $revenueData = [];
+        $forecastData = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $monthName = $date->translatedFormat('M');
+            $months[] = $monthName;
 
-        $stages = ['prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu'];
-        
-        $structuredTrend = [];
-        foreach ($stages as $stage) {
-            $structuredTrend[$stage] = (int) ($rawTrend->get($stage)->total ?? 0);
+            // Won revenue in that month
+            $revenueData[] = Opportunity::won()
+                ->whereYear('updated_at', $date->year)
+                ->whereMonth('updated_at', $date->month)
+                ->sum('montant_estime');
+
+            // Forecast (In progress) that was supposed to close in that month OR created then?
+            // Let's use date_cloture_prev for forecast
+            $forecastData[] = Opportunity::inProgress()
+                ->whereYear('date_cloture_prev', $date->year)
+                ->whereMonth('date_cloture_prev', $date->month)
+                ->sum('montant_estime');
         }
-
-        $data['charts']['revenue_trend'] = $structuredTrend;
+        $data['charts']['revenue_combo'] = [
+            'labels' => $months,
+            'revenue' => $revenueData,
+            'forecast' => $forecastData,
+        ];
 
         $data['lists'] = [
-            'recent_activities' => Activity::with(['user', 'parent'])->latest()->take(10)->get(),
+            'recent_activities' => Activity::with(['user', 'parent'])->latest()->take(4)->get(),
             'commercial_performance' => $this->getCommercialPerformance(),
-            'latest_opportunities' => Opportunity::with('contact')->latest()->take(6)->get(),
-            'tasks' => \App\Models\Task::where('statut', '!=', 'done')->latest()->take(5)->get(),
+            'latest_opportunities' => Opportunity::with('contact')->latest()->take(3)->get(),
+            'tasks' => \App\Models\Task::where('statut', '!=', 'done')->latest()->take(4)->get(),
             'overdue_tasks' => \App\Models\Task::with(['related', 'assignee'])
                 ->where('statut', '!=', 'done')
                 ->where('due_date', '<', now())
                 ->orderBy('due_date', 'asc')
                 ->take(5)
                 ->get(),
-            'latest_users' => User::latest()->take(5)->get(),
+            'latest_users' => User::latest()->take(4)->get(),
+            'total_leads_all_time' => Contact::count(),
+            'new_clients_this_week' => Contact::where('statut', 'client')
+                ->where('created_at', '>=', Carbon::now()->subDays(7))
+                ->count(),
         ];
 
         return $data;
@@ -112,6 +129,7 @@ class DashboardController extends Controller
     private function getCommercialStats(User $user, array $data)
     {
         // KPIs
+        $quota = 50000;
         $data['kpis'] = [
             'my_leads_opps' => Opportunity::byCommercial($user->id)->inProgress()->count(),
             'my_forecast_revenue' => Opportunity::byCommercial($user->id)->inProgress()->sum('montant_estime'),
@@ -124,8 +142,19 @@ class DashboardController extends Controller
                 ->where('statut', '!=', 'done')
                 ->where('due_date', '<', now())
                 ->count(),
+            'sales_quota' => $quota,
         ];
-        $data['kpis']['goal_percentage'] = $this->calculateGoalPercentage($user->id);
+        // My Forecast Revenue Change
+        $forecastPrev = Opportunity::byCommercial($user->id)
+            ->inProgress()
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->sum('montant_estime');
+        
+        $forecastCurrent = $data['kpis']['my_forecast_revenue'];
+        $data['kpis']['my_forecast_change'] = $forecastPrev > 0 ? round((($forecastCurrent - $forecastPrev) / $forecastPrev) * 100) : 0;
+
+        $data['kpis']['goal_percentage'] = $this->calculateGoalPercentage($user->id, $quota);
 
         // My Pipeline by Stage
         $data['charts']['pipeline_by_stage'] = Opportunity::byCommercial($user->id)
@@ -151,9 +180,9 @@ class DashboardController extends Controller
         $data['charts']['status_distribution'] = $structuredTrend;
 
         $data['lists'] = [
-            'recent_activities' => Activity::with('parent')->where('user_id', $user->id)->latest()->take(5)->get(),
-            'hot_opportunities' => Opportunity::byCommercial($user->id)->whereIn('stade', ['proposition', 'negociation'])->latest()->take(5)->get(),
-            'tasks' => \App\Models\Task::where('assigned_to', $user->id)->where('statut', '!=', 'done')->latest()->take(5)->get(),
+            'recent_activities' => Activity::with('parent')->where('user_id', $user->id)->latest()->take(4)->get(),
+            'hot_opportunities' => Opportunity::byCommercial($user->id)->whereIn('stade', ['proposition', 'negociation'])->latest()->take(3)->get(),
+            'tasks' => \App\Models\Task::where('assigned_to', $user->id)->where('statut', '!=', 'done')->latest()->take(4)->get(),
             'overdue_tasks' => \App\Models\Task::with(['related', 'assignee'])
                 ->where('assigned_to', $user->id)
                 ->where('statut', '!=', 'done')
@@ -259,9 +288,8 @@ class DashboardController extends Controller
 
 
 
-    private function calculateGoalPercentage($userId)
+    private function calculateGoalPercentage($userId, $target = 50000)
     {
-        $target = 50_000;
         $actual = Opportunity::byCommercial($userId)
             ->where('stade', 'gagne')
             ->whereMonth('created_at', now()->month)
