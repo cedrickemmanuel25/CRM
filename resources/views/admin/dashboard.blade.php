@@ -3,7 +3,7 @@
 @section('title', 'Tableau de bord - Nexus CRM')
 
 @section('content')
-<div class="px-8 py-2 space-y-8 bg-[#F4F7FC]/30 min-h-screen">
+<div class="px-4 sm:px-8 py-2 space-y-8 bg-[#F4F7FC]/30 min-h-screen">
     <div class="space-y-8">
         <!-- KPI Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -71,10 +71,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Funnel Chart -->
             <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                <h3 class="text-lg font-bold text-slate-700 mb-8 tracking-tight">Pipeline des Opportunités</h3>
-                <div class="flex items-center gap-12">
+                <h3 class="text-lg font-bold text-slate-700 mb-6 sm:mb-8 tracking-tight">Pipeline des Opportunités</h3>
+                <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
                     <!-- Dynamic Funnel Visualization -->
-                    <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full flex-1 flex flex-col items-center order-2 lg:order-1">
                         @php
                             $stages = $data['charts']['pipeline_by_stage'];
                             $totalCount = $stages->sum('count') ?: 1;
@@ -88,15 +88,15 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="space-y-6 flex-1">
+                    <div class="w-full space-y-4 sm:space-y-6 flex-1 order-1 lg:order-2">
                         @foreach($stages->take(4) as $stage)
-                            <div class="flex items-center justify-between gap-8">
-                                <div class="flex items-center gap-4">
-                                    <span class="text-slate-800 font-bold">{{ $stage->count }}</span>
-                                <span class="text-slate-800 font-bold uppercase tracking-tight">{{ $stage->stade }}</span>
+                            <div class="flex items-center justify-between gap-4 sm:gap-8 border-b border-slate-50 lg:border-none pb-2 lg:pb-0">
+                                <div class="flex items-center gap-3 sm:gap-4">
+                                    <span class="text-sm sm:text-base text-slate-800 font-bold">{{ $stage->count }}</span>
+                                    <span class="text-[10px] sm:text-xs text-slate-800 font-bold uppercase tracking-tight">{{ $stage->stade }}</span>
+                                </div>
+                                <span class="text-xs sm:text-sm text-slate-800 font-bold">{{ format_currency($stage->total_amount) }}</span>
                             </div>
-                            <span class="text-slate-800 font-bold">{{ format_currency($stage->total_amount) }}</span>
-                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                         42% <span class="bg-white text-[#4C7CDF] px-1 rounded-sm text-[10px]">▼</span>
                     </div>
                 </div>
-                <div class="h-64 mt-4">
+                <div class="h-48 sm:h-64 mt-4">
                     <canvas id="comboChart"></canvas>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 items-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 items-center">
             <div class="space-y-1">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Leads Total</p>
                 <div class="flex items-baseline gap-2">
