@@ -1,4 +1,8 @@
-@if(($viewType ?? 'table') === 'table')
+@php
+    $requestedView = $viewType ?? 'both';
+@endphp
+
+@if($requestedView === 'table' || $requestedView === 'both')
     <!-- TABLE_VIEW_START -->
     @forelse($contacts as $contact)
         @php
@@ -102,7 +106,9 @@
             </td>
         </tr>
     @endforelse
-@else
+@endif
+
+@if($requestedView === 'card' || $requestedView === 'both')
     <!-- CARD_VIEW_START -->
     @forelse($contacts as $contact)
         @php
@@ -126,37 +132,49 @@
                 <div class="flex items-center gap-3">
                     <img src="{{ $contact->avatar_url }}" alt="{{ $contact->nom_complet }}" class="h-12 w-12 rounded-full border border-slate-100 shadow-sm object-cover">
                     <div>
-                        <h4 class="text-sm font-bold text-slate-900">{{ $contact->prenom }} {{ $contact->nom }}</h4>
-                        <p class="text-[11px] font-medium text-slate-500 uppercase tracking-tight">{{ $contact->entreprise ?? 'Indépendant' }}</p>
+                        <h4 class="text-xs font-bold text-slate-900">{{ $contact->prenom }} {{ $contact->nom }}</h4>
+                        <p class="text-[10px] font-medium text-slate-500 uppercase tracking-tight">{{ $contact->entreprise ?? 'Indépendant' }}</p>
                     </div>
                 </div>
-                <span class="inline-flex items-center px-2 py-1 rounded-lg text-[10px] font-bold border {{ $badgeClasses }}">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-lg text-[9px] font-bold border {{ $badgeClasses }}">
                     {{ $stage['label'] ?? ucfirst($contact->statut) }}
                 </span>
             </div>
 
             <!-- Card Body -->
-            <div class="grid grid-cols-2 gap-3 pt-2">
+            <div class="grid grid-cols-2 gap-3 pt-1">
                 <div class="space-y-0.5">
-                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Email</p>
-                    <p class="text-xs text-slate-700 truncate font-medium">{{ $contact->email }}</p>
+                    <p class="text-[9px] text-slate-400 font-semibold uppercase">Email</p>
+                    <p class="text-[11px] text-slate-700 truncate font-medium">{{ $contact->email }}</p>
                 </div>
                 <div class="space-y-0.5 text-right">
-                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Téléphone</p>
-                    <p class="text-xs text-slate-700 font-medium">{{ $contact->telephone ? format_phone($contact->telephone) : '-' }}</p>
+                    <p class="text-[9px] text-slate-400 font-semibold uppercase">Téléphone</p>
+                    <p class="text-[11px] text-slate-700 font-medium">{{ $contact->telephone ? format_phone($contact->telephone) : '-' }}</p>
+                </div>
+            </div>
+
+            <!-- Card Metadata (Source & Owner) -->
+            <div class="flex items-center justify-between pt-2 text-[9px] text-slate-400 border-t border-slate-50">
+                <div class="flex items-center gap-1.5">
+                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>{{ $contact->source ?? 'Direct' }}</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>{{ $contact->owner->name ?? 'Inconnu' }}</span>
                 </div>
             </div>
 
             <!-- Card Actions -->
-            <div class="flex items-center gap-2 pt-3 border-t border-slate-50">
-                <a href="{{ route('contacts.show', $contact) }}" class="flex-1 inline-flex items-center justify-center py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 transition-colors">
-                    <svg class="h-3.5 w-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <div class="flex items-center gap-2 pt-1">
+                <a href="{{ route('contacts.show', $contact) }}" class="flex-1 inline-flex items-center justify-center py-2 bg-slate-50 text-slate-700 text-[10px] font-bold rounded-xl hover:bg-slate-100 transition-colors">
+                    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     Voir
                 </a>
                 @if($canEdit)
-                <a href="{{ route('contacts.edit', $contact) }}" class="flex-1 inline-flex items-center justify-center py-2 bg-indigo-50 text-indigo-700 text-[11px] font-bold rounded-xl hover:bg-indigo-100 transition-colors">
-                    <svg class="h-3.5 w-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    Modifier
+                <a href="{{ route('contacts.edit', $contact) }}" class="flex-1 inline-flex items-center justify-center py-2 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded-xl hover:bg-indigo-100 transition-colors">
+                    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    Éditer
                 </a>
                 @endif
                 @if($canEdit)
