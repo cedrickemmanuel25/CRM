@@ -26,7 +26,7 @@ class UpdateOpportunityRequest extends FormRequest
             'montant_estime' => 'sometimes|required|numeric|min:0',
             'stade' => 'sometimes|required|in:prospection,qualification,proposition,negociation,gagne,perdu',
             'probabilite' => 'sometimes|required|integer|between:0,100',
-            'date_cloture_prev' => 'sometimes|required|date', // Removed after:today to allow editing past dates or current dates
+            'date_cloture_prev' => 'nullable|date', // Removed after:today to allow editing past dates or current dates
             'description' => 'nullable|string|max:2000',
             'commercial_id' => 'sometimes|required|exists:users,id',
             'besoin' => 'nullable|string',
