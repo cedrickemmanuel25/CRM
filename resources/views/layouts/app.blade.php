@@ -51,9 +51,16 @@ if (auth()->check()) {
     $pendingAccessCount = 0;
 }
 @endphp
-<body class="min-h-screen bg-gray-50" x-data="{ 
+@php
+$sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
+@endphp
+<body class="min-h-screen bg-gray-50 overflow-hidden" x-data="{ 
     sidebarOpen: false, 
-    notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
+    sidebarCollapsed: {{ $sidebarCollapsed }},
+    toggleSidebar() {
+        this.sidebarCollapsed = !this.sidebarCollapsed;
+        document.cookie = 'sidebar_collapsed=' + this.sidebarCollapsed + ';path=/;max-age=' + (60*60*24*30);
+    },    notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
     unreadCount: {{ $unreadCount }},
     pendingAccessCount: {{ $pendingAccessCount }},
     showNotif(notif) {
@@ -138,17 +145,34 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     </div>
 
     <!-- Static Sidebar for Desktop -->
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-[18%] lg:flex-col">
-        <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-100 border-r border-gray-200 px-6 pb-4 custom-scrollbar">
-            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center gap-x-3 mt-4 hover:opacity-80 transition-opacity whitespace-nowrap overflow-hidden">
-                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
-                <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
+    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300"
+         :class="sidebarCollapsed ? 'lg:w-20' : 'lg:w-[18%]'">
+        <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-4 pb-4 custom-scrollbar relative">
+            <!-- Sidebar Header -->
+            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center mt-4 transition-all duration-300 overflow-hidden"
+               :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3 px-2'">
+                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 w-auto shrink-0 transition-all duration-300"
+                     :class="sidebarCollapsed ? 'scale-110' : ''">
+                <span x-show="!sidebarCollapsed" 
+                      x-transition:enter="transition ease-out duration-200"
+                      x-transition:enter-start="opacity-0 -translate-x-4"
+                      x-transition:enter-end="opacity-100 translate-x-0"
+                      class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
+
+            <!-- Toggle Button Desktop -->
+            <button @click="toggleSidebar()" 
+                    class="absolute -right-3 top-20 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 hover:text-gray-600 shadow-sm transition-all duration-300 hover:scale-110 focus:outline-none"
+                    :class="sidebarCollapsed ? 'rotate-180' : ''">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </button>
 
             <nav class="flex flex-1 flex-col mt-4">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                      <li>
-                        <ul role="list" class="-mx-2 space-y-2">
+                        <ul role="list" class="space-y-2" :class="sidebarCollapsed ? '' : '-mx-2'">
                             @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount])
                         </ul>
                     </li>
@@ -157,8 +181,9 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
         </div>
     </div>
 
-    <!-- Main ContentArea -->
-    <div class="lg:pl-[18%] min-h-screen flex flex-col">
+    <!-- Main Content Wrapper -->
+    <div class="lg:fixed lg:inset-y-0 lg:right-0 h-full flex flex-col transition-all duration-300"
+         :class="sidebarCollapsed ? 'lg:w-[calc(100%-5rem)]' : 'lg:w-[82%]'">
         <div class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                 <span class="sr-only">Ouvrir la barre latérale</span>
