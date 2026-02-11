@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Logs d\'Audit')
+@section('title', 'Logs d\'Audit v2')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-            <h1 class="text-2xl font-bold text-gray-900">Logs d'Audit</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Logs d'Audit v2</h1>
             <p class="mt-2 text-sm text-gray-700">Historique des actions sensibles et des événements système.</p>
         </div>
     </div>
@@ -120,26 +120,38 @@
                     </span>
                 </div>
 
-                <!-- Card Body -->
-                <div class="py-3 border-y border-gray-50 space-y-3">
+                <!-- Card Body (Vertical Stack) -->
+                <div class="py-4 border-y border-gray-50 space-y-4">
                     <!-- Target Row -->
-                    <div class="space-y-1">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Cible</p>
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-xs font-semibold text-gray-700">{{ $log->translated_model_type ?? '-' }}</span>
-                            @if($log->model_id)
-                                <span class="px-1.5 py-0.5 bg-gray-50 text-[10px] text-gray-500 rounded border border-gray-100 font-mono">ID: #{{ $log->model_id }}</span>
-                            @endif
+                    <div class="flex items-start gap-3">
+                        <div class="mt-0.5 flex-shrink-0">
+                            <svg class="h-4 w-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Cible de l'action</p>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-bold text-gray-700">{{ $log->translated_model_type ?? '-' }}</span>
+                                @if($log->model_id)
+                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded border border-gray-100 bg-gray-50 text-[10px] text-gray-500 font-mono">
+                                        ID #{{ $log->model_id }}
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                     
                     <!-- IP Row -->
-                    <div class="space-y-1">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Adresse IP</p>
-                        <div class="bg-gray-50/50 rounded-lg border border-gray-100 p-2">
-                            <p class="text-[11px] text-gray-600 font-medium font-mono tracking-tight break-all leading-relaxed">
-                                {{ $log->ip_address }}
-                            </p>
+                    <div class="flex items-start gap-3">
+                        <div class="mt-0.5 flex-shrink-0">
+                            <svg class="h-4 w-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.828a5 5 0 117.07 0M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Source (IP)</p>
+                            <div class="bg-gray-50 rounded-xl border border-gray-100 p-2.5">
+                                <code class="text-[11px] text-gray-600 font-mono break-all leading-relaxed block w-full">
+                                    {{ $log->ip_address }}
+                                </code>
+                            </div>
                         </div>
                     </div>
                 </div>
