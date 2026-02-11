@@ -66,9 +66,9 @@
                             </div>
                             <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-11 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Rechercher...">
                         </div>
-                        <div class="flex gap-2">
-                            <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700">Rechercher</button>
-                            <button type="button" @click="showAdvanced = !showAdvanced" class="px-4 py-2.5 border border-slate-300 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-50 bg-white" :class="showAdvanced ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : ''">
+                        <div class="flex gap-2 w-full lg:w-auto">
+                            <button type="submit" class="flex-1 lg:flex-none px-6 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-sm">Rechercher</button>
+                            <button type="button" @click="showAdvanced = !showAdvanced" class="px-4 py-2.5 border border-slate-300 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-50 bg-white transition-all shadow-sm" :class="showAdvanced ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : ''">
                                 <span x-text="showAdvanced ? 'Masquer' : 'Filtres'"></span>
                             </button>
                         </div>
@@ -116,25 +116,33 @@
         </div>
     </div>
 
-    <!-- Table Container -->
-    <div class="bg-white border-t border-slate-200 overflow-x-auto">
-        <table class="min-w-full w-full divide-y divide-slate-200 relative">
-            <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm">
-                <tr>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[40%] sm:w-[20%]">Contact</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[30%] sm:w-[15%]">Entreprise</th>
-                    <th class="hidden lg:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Coordonnées</th>
-                    <th class="hidden md:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Source</th>
-                    <th class="hidden sm:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Statut CRM</th>
-                    <th class="hidden lg:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[12%]">Propriétaire</th>
-                    <th class="hidden xl:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Création</th>
-                    <th class="px-3 py-3.5 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[30%] sm:w-[8%]">Actions</th>
-                </tr>
-            </thead>
-            <tbody x-data="contactsTable" x-init="init()" class="bg-white divide-y divide-slate-100">
-                @include('contacts._table_rows')
-            </tbody>
-        </table>
+    <!-- Dynamic Content Container -->
+    <div x-data="contactsTable" x-init="init()" class="bg-white border-t border-slate-200">
+        <!-- Table View (Desktop & Tablet) -->
+        <div class="hidden lg:block overflow-x-auto">
+            <table class="min-w-full w-full divide-y divide-slate-200 relative">
+                <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm">
+                    <tr>
+                        <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[40%] sm:w-[20%]">Contact</th>
+                        <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[30%] sm:w-[15%]">Entreprise</th>
+                        <th class="hidden lg:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Coordonnées</th>
+                        <th class="hidden md:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Source</th>
+                        <th class="hidden sm:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Statut CRM</th>
+                        <th class="hidden lg:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[12%]">Propriétaire</th>
+                        <th class="hidden xl:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Création</th>
+                        <th class="px-3 py-3.5 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[30%] sm:w-[8%]">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-100 table-view-body">
+                    @include('contacts._table_rows', ['viewType' => 'table'])
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Card View (Mobile) -->
+        <div class="lg:hidden p-4 space-y-4 card-view-body bg-slate-50/50">
+            @include('contacts._table_rows', ['viewType' => 'card'])
+        </div>
     </div>
 
     <!-- Pagination -->
@@ -196,7 +204,21 @@ document.addEventListener('alpine:init', () => {
                         bytes[i] = binaryString.charCodeAt(i);
                     }
                     const decodedHtml = new TextDecoder('utf-8').decode(bytes);
-                    this.$el.innerHTML = decodedHtml;
+                    
+                    // Si le HTML contient les deux vues (séparées par un commentaire ou un marqueur)
+                    if (decodedHtml.includes('<!-- CARD_VIEW_START -->')) {
+                        const tableHtml = decodedHtml.split('<!-- CARD_VIEW_START -->')[0].replace('<!-- TABLE_VIEW_START -->', '').trim();
+                        const cardHtml = decodedHtml.split('<!-- CARD_VIEW_START -->')[1].replace('<!-- CARD_VIEW_END -->', '').trim();
+                        
+                        const tableView = this.$el.querySelector('.table-view-body');
+                        const cardView = this.$el.querySelector('.card-view-body');
+                        
+                        if (tableView) tableView.innerHTML = tableHtml;
+                        if (cardView) cardView.innerHTML = cardHtml;
+                    } else {
+                        // Fallback pour la compatibilité
+                        this.$el.innerHTML = decodedHtml;
+                    }
                     
                     // Mettre à jour le compteur
                     const countEl = document.getElementById('contact-count');
