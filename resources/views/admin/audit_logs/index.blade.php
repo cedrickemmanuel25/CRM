@@ -121,20 +121,25 @@
                 </div>
 
                 <!-- Card Body -->
-                <div class="py-3 border-y border-gray-50 flex flex-col gap-3">
-                    <div class="flex justify-between items-start gap-2">
-                        <div class="space-y-0.5">
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Cible</p>
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="text-xs font-semibold text-gray-700">{{ $log->translated_model_type ?? '-' }}</span>
-                                @if($log->model_id)
-                                    <span class="px-1 py-0.5 bg-gray-50 text-[9px] text-gray-500 rounded border border-gray-100 font-mono">#{{ $log->model_id }}</span>
-                                @endif
-                            </div>
+                <div class="py-3 border-y border-gray-50 space-y-3">
+                    <!-- Target Row -->
+                    <div class="space-y-1">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Cible</p>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-xs font-semibold text-gray-700">{{ $log->translated_model_type ?? '-' }}</span>
+                            @if($log->model_id)
+                                <span class="px-1.5 py-0.5 bg-gray-50 text-[10px] text-gray-500 rounded border border-gray-100 font-mono">ID: #{{ $log->model_id }}</span>
+                            @endif
                         </div>
-                        <div class="space-y-0.5 text-right flex-shrink-0">
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">IP</p>
-                            <p class="text-[11px] text-gray-600 font-medium font-mono tracking-tight break-all max-w-[140px]">{{ $log->ip_address }}</p>
+                    </div>
+                    
+                    <!-- IP Row -->
+                    <div class="space-y-1">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Adresse IP</p>
+                        <div class="bg-gray-50/50 rounded-lg border border-gray-100 p-2">
+                            <p class="text-[11px] text-gray-600 font-medium font-mono tracking-tight break-all leading-relaxed">
+                                {{ $log->ip_address }}
+                            </p>
                         </div>
                     </div>
                 </div>
