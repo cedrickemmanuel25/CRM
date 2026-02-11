@@ -91,6 +91,12 @@ if (auth()->check()) {
                         <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
                         <span class="text-white font-bold text-xl">{{ company_name() }}</span>
                     </div>
+
+                    <!-- PWA Install Button Mobile -->
+                    <button id="pwa-install-btn-mobile" onclick="installPWA()" style="display: none;" class="mx-6 mt-2 mb-4 flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Installer l'App
+                    </button>
                     <nav class="flex flex-1 flex-col">
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
                             <li>
@@ -112,6 +118,12 @@ if (auth()->check()) {
                 <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto shrink-0">
                 <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
+
+            <!-- PWA Install Button Desktop -->
+            <button id="pwa-install-btn" onclick="installPWA()" style="display: none;" class="mx-4 mt-2 flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Installer l'App
+            </button>
 
             
             <nav class="flex flex-1 flex-col mt-4">
@@ -237,10 +249,34 @@ if (auth()->check()) {
     </div>
     @stack('scripts')
     <script>
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register("{{ asset('service-worker.js') }}");
             });
+        }
+
+        // PWA Install Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+        const installBtnMobile = document.getElementById('pwa-install-btn-mobile');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if(installBtn) installBtn.style.display = 'flex';
+            if(installBtnMobile) installBtnMobile.style.display = 'flex';
+        });
+
+        function installPWA() {
+            if(deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                    if(installBtn) installBtn.style.display = 'none';
+                    if(installBtnMobile) installBtnMobile.style.display = 'none';
+                });
+            }
         }
     </script>
 </body>
