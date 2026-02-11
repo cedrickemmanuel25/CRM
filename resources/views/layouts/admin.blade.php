@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr" class="h-full bg-gray-50">
+<html lang="fr" class="bg-gray-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +51,7 @@ if (auth()->check()) {
 @php
 $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
 @endphp
-<body class="h-full" x-data="{ 
+<body class="bg-gray-50" x-data="{ 
     sidebarOpen: false, 
     sidebarCollapsed: {{ $sidebarCollapsed }},
     toggleSidebar() {
@@ -109,7 +108,7 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul role="list" class="-mx-2 space-y-1">
-                                    @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount])
+                                @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => true])
                                 </ul>
                             </li>
                         </ul>
@@ -148,7 +147,7 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                      <li>
                         <ul role="list" class="space-y-2" :class="sidebarCollapsed ? '' : '-mx-2'">
-                            @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount])
+                            @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => false])
                         </ul>
                     </li>
                 </ul>
@@ -157,9 +156,9 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
     </div>
 
     <!-- Main Content -->
-    <div class="lg:fixed lg:inset-y-0 lg:right-0 h-full flex flex-col transition-all duration-300"
-         :class="sidebarCollapsed ? 'lg:w-[calc(100%-5rem)]' : 'lg:w-[82%]'">
-        <div class="flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+    <div class="flex flex-col transition-all duration-300 min-h-screen"
+         :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-[18%]'">
+        <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                 <span class="sr-only">Ouvrir la barre latérale</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -222,7 +221,7 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
             </div>
         </div>
 
-    <div class="@yield('wrapper_class', 'flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar')">
+    <div class="@yield('wrapper_class', 'flex-1 p-4 sm:p-6 lg:p-8')">
         @if (session('success'))
             <div class="mb-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
                 <div class="flex items-center">

@@ -134,7 +134,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul role="list" class="-mx-2 space-y-1">
-                                    @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount])
+                                    @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => true])
                                 </ul>
                             </li>
                         </ul>
@@ -173,7 +173,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                      <li>
                         <ul role="list" class="space-y-2" :class="sidebarCollapsed ? '' : '-mx-2'">
-                            @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount])
+                            @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => false])
                         </ul>
                     </li>
                 </ul>
@@ -182,8 +182,8 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     </div>
 
     <!-- Main Content Wrapper -->
-    <div class="lg:fixed lg:inset-y-0 lg:right-0 h-full flex flex-col transition-all duration-300"
-         :class="sidebarCollapsed ? 'lg:w-[calc(100%-5rem)]' : 'lg:w-[82%]'">
+    <div class="flex flex-col transition-all duration-300 min-h-screen"
+         :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-[18%]'">
         <div class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                 <span class="sr-only">Ouvrir la barre latérale</span>
