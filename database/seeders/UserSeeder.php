@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         if (!User::where('role', 'admin')->exists()) {
             User::create([
                 'name' => 'Administrateur',
-                'email' => 'courriel@ya-consulting.com',
+                'email' => 'guehiphilippe@ya-consulting.com',
                 'password' => Hash::make('Admin@123'),
                 'role' => 'admin',
                 'telephone' => '+33 1 23 45 67 89',
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             ]);
 
             $this->command->info('✓ Utilisateur admin créé avec succès');
-            $this->command->warn('Email: courriel@ya-consulting.com');
+            $this->command->warn('Email: guehiphilippe@ya-consulting.com');
             $this->command->warn('Mot de passe: Admin@123');
             $this->command->error('⚠ IMPORTANT: Changez ces identifiants en production!');
         } else {
