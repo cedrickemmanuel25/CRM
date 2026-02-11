@@ -32,9 +32,9 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-5 flex lg:mt-0 lg:ml-4 gap-3">
+            <div class="mt-4 flex flex-col sm:flex-row lg:mt-0 lg:ml-4 gap-3">
                 @if(!auth()->user()->isSupport())
-                <a href="{{ route('reports.export', ['type' => 'contacts'] + request()->all()) }}" class="inline-flex items-center px-4 py-2.5 border border-slate-300 shadow-sm text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-400 transition-all duration-200">
+                <a href="{{ route('reports.export', ['type' => 'contacts'] + request()->all()) }}" class="inline-flex items-center justify-center px-4 py-2.5 border border-slate-300 shadow-sm text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-400 transition-all duration-200 order-2 sm:order-1">
                     <svg class="-ml-1 mr-2 h-4 w-4 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
@@ -43,7 +43,7 @@
                 @endif
                 
                 @if(!auth()->user()->isSupport())
-                <a href="{{ route('contacts.create') }}" class="inline-flex items-center px-5 py-2.5 border border-transparent shadow-md text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200">
+                <a href="{{ route('contacts.create') }}" class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent shadow-md text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 order-1 sm:order-2">
                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
@@ -121,14 +121,14 @@
         <table class="min-w-full w-full divide-y divide-slate-200 relative">
             <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm">
                 <tr>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[20%]">Contact</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[15%]">Entreprise</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Coordonnées</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Source</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Statut CRM</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[12%]">Propriétaire</th>
-                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Création</th>
-                    <th class="px-3 py-3.5 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[8%]">Actions</th>
+                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[40%] sm:w-[20%]">Contact</th>
+                    <th class="px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[30%] sm:w-[15%]">Entreprise</th>
+                    <th class="hidden lg:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Coordonnées</th>
+                    <th class="hidden md:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Source</th>
+                    <th class="hidden sm:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Statut CRM</th>
+                    <th class="hidden lg:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[12%]">Propriétaire</th>
+                    <th class="hidden xl:table-cell px-3 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[10%]">Création</th>
+                    <th class="px-3 py-3.5 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider bg-slate-50 w-[30%] sm:w-[8%]">Actions</th>
                 </tr>
             </thead>
             <tbody x-data="contactsTable" x-init="init()" class="bg-white divide-y divide-slate-100">
