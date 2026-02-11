@@ -319,9 +319,9 @@
                         <span class="text-gray-500">Commercial</span>
                         <div class="flex items-center">
                             <div class="h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-700 mr-2">
-                                {{ substr($opportunity->commercial->name, 0, 1) }}
+                                {{ substr($opportunity->commercial?->name ?? 'N', 0, 1) }}
                             </div>
-                            <span class="font-medium text-gray-900">{{ $opportunity->commercial->name }}</span>
+                            <span class="font-medium text-gray-900">{{ $opportunity->commercial?->name ?? 'Non assigné' }}</span>
                         </div>
                     </div>
                     <div class="flex justify-between text-sm">
