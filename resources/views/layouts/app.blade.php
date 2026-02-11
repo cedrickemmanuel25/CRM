@@ -49,6 +49,7 @@ if (auth()->check()) {
     $unreadCount = 0;
     $pendingAccessCount = 0;
 }
+    $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
 @endphp
 <body class="h-full bg-gray-50 overflow-y-auto" x-data="{ 
     sidebarOpen: false, 

@@ -59,6 +59,8 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
         document.cookie = 'sidebar_collapsed=' + this.sidebarCollapsed + ';path=/;max-age=' + (60*60*24*30);
     },
     notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
+    unreadCount: {{ $unreadCount }},
+    pendingAccessCount: {{ $pendingAccessCount }},
     showNotif(notif) {
         this.notifModal = {
             open: true,
@@ -71,9 +73,31 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
         if (!notif.read_at) {
             fetch('/notifications/read/' + notif.id, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             notif.read_at = new Date();
+            this.unreadCount = Math.max(0, this.unreadCount - 1);
         }
+    },
+    pollStats() {
+        // Poll notifications
+        fetch('{{ route('notifications.fetch') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
+            .then(response => response.json())
+            .then(data => {
+                this.unreadCount = data.count;
+            })
+            .catch(error => console.error('Error polling notifications:', error));
+
+        @if(auth()->user()->isAdmin())
+        // Poll access requests (Admin only)
+        fetch('{{ route('admin.access-requests.stats') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
+            .then(response => response.json())
+            .then(data => {
+                this.pendingAccessCount = data.count;
+            })
+            .catch(error => console.error('Error polling access requests:', error));
+        @endif
     }
-}">
+}" 
+x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
+@close-sidebar.window="sidebarOpen = false">
     @include('layouts.partials._notification_modal')
 
     <!-- Mobile Sidebar Backdrop -->
