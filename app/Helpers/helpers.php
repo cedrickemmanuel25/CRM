@@ -40,8 +40,8 @@ if (!function_exists('company_logo')) {
      */
     function company_logo()
     {
-        $logo = \App\Models\Setting::get('company_logo');
-        return $logo ? asset('storage/' . $logo) : asset('images/logo.png');
+        // Return direct public path to avoid storage symlink issues on some servers
+        return asset('images/logo_main.png');
     }
 }
 
