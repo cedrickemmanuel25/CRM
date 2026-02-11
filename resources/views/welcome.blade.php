@@ -111,26 +111,26 @@
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 -translate-y-2"
                  class="md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden rounded-b-2xl mx-2 mt-2">
-                <div class="py-4 px-4 space-y-3">
-                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-all">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <div class="py-3 px-3 space-y-2">
+                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         <span>Fonctionnalités</span>
                     </a>
-                    <a href="#avantages" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-all">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <a href="#avantages" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span>Avantages</span>
                     </a>
-                    <a href="#contact" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-all">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <a href="#contact" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         <span>Contact</span>
                     </a>
                     <div class="pt-2 border-t border-gray-100">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="block px-4 py-3.5 gradient-primary text-white rounded-xl font-bold text-center shadow-lg shadow-blue-200">Mon Espace</a>
+                            <a href="{{ url('/dashboard') }}" class="block px-4 py-3 gradient-primary text-white rounded-xl text-sm font-bold text-center shadow-lg shadow-blue-200">Mon Espace</a>
                         @else
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="{{ route('login') }}" class="flex items-center justify-center p-3 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-xl font-bold transition-all">Connexion</a>
-                                <a href="{{ route('access.request') }}" class="flex items-center justify-center p-3 gradient-primary text-white rounded-xl font-bold text-center shadow-lg shadow-blue-200">Créer un compte</a>
+                            <div class="grid grid-cols-2 gap-2">
+                                <a href="{{ route('login') }}" class="flex items-center justify-center p-2.5 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-xl text-sm font-bold transition-all">Connexion</a>
+                                <a href="{{ route('access.request') }}" class="flex items-center justify-center p-2.5 gradient-primary text-white rounded-xl text-sm font-bold text-center shadow-lg shadow-blue-200">S'inscrire</a>
                             </div>
                         @endauth
                     </div>
