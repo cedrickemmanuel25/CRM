@@ -140,8 +140,8 @@
 
                     <!-- Date de clôture -->
                     <div>
-                        <label for="date_cloture_prev" class="block text-xs font-semibold text-gray-700 uppercase mb-2">Date de signature <span class="text-rose-500">*</span></label>
-                        <input type="date" name="date_cloture_prev" id="date_cloture_prev" required
+                        <label for="date_cloture_prev" class="block text-xs font-semibold text-gray-700 uppercase mb-2">Date de signature</label>
+                        <input type="date" name="date_cloture_prev" id="date_cloture_prev"
                             value="{{ old('date_cloture_prev', isset($opportunity->date_cloture_prev) ? $opportunity->date_cloture_prev->format('Y-m-d') : '') }}"
                             class="block w-full h-12 px-4 rounded-lg border-2 border-slate-200 bg-white text-sm font-semibold text-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none">
                     </div>
