@@ -112,17 +112,14 @@
                  x-transition:leave-end="opacity-0 -translate-y-2"
                  class="md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden rounded-b-2xl mx-2 mt-2 mb-6">
                 <div class="py-3 px-3 space-y-2">
-                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        <span>Fonctionnalités</span>
+                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="block p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all text-center">
+                        Fonctionnalités
                     </a>
-                    <a href="#avantages" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span>Avantages</span>
+                    <a href="#avantages" @click="mobileMenuOpen = false" class="block p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all text-center">
+                        Avantages
                     </a>
-                    <a href="#contact" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        <span>Contact</span>
+                    <a href="#contact" @click="mobileMenuOpen = false" class="block p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all text-center">
+                        Contact
                     </a>
                     <div class="pt-2 border-t border-gray-100">
                         @auth
