@@ -1,4 +1,4 @@
-<html lang="fr" class="bg-gray-50">
+<html lang="fr" class="h-full bg-gray-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +51,7 @@ if (auth()->check()) {
 @php
 $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
 @endphp
-<body class="bg-gray-50" x-data="{ 
+<body class="h-full bg-gray-50 overflow-y-auto" x-data="{ 
     sidebarOpen: false, 
     sidebarCollapsed: {{ $sidebarCollapsed }},
     toggleSidebar() {
@@ -81,22 +81,20 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
         <div x-show="sidebarOpen" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/80"></div>
 
         <div class="fixed inset-0 flex">
-            <div x-show="sidebarOpen" x-transition:enter="transition ease-in-out duration-300 transform" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="relative mr-16 flex w-full max-w-xs flex-1">
+            <div x-show="sidebarOpen" x-transition:enter="transition ease-in-out duration-300 transform" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="relative flex w-full max-w-xs flex-1">
                 
-                <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button type="button" @click="sidebarOpen = false" class="-m-2.5 p-2.5 bg-white/20 backdrop-blur-md rounded-full text-white hover:text-gray-200 transition-colors">
-                        <span class="sr-only">Fermer la barre latérale</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
                 <!-- Sidebar Component (Mobile) -->
-                <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 ring-1 ring-gray-900/5 shadow-2xl">
-                    <div class="flex h-16 shrink-0 items-center gap-x-3 border-b border-gray-50">
-                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
-                        <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() }}</span>
+                <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 ring-1 ring-gray-900/5 shadow-2xl relative">
+                    <div class="flex h-16 shrink-0 items-center justify-between border-b border-gray-50">
+                        <div class="flex items-center gap-x-3">
+                            <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
+                            <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() }}</span>
+                        </div>
+                        <button type="button" @click="sidebarOpen = false" class="-mr-2 p-2 text-gray-500 hover:text-gray-900 focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- PWA Install Button Mobile -->
@@ -156,7 +154,7 @@ $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
     </div>
 
     <!-- Main Content -->
-    <div class="flex flex-col transition-all duration-300 min-h-screen"
+    <div class="flex flex-col transition-all duration-300 min-h-full"
          :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-[18%]'">
         <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
