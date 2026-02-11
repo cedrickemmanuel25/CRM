@@ -1,3 +1,4 @@
+// Service Worker Version: 3
 self.addEventListener('install', (event) => {
     self.skipWaiting();
 });
