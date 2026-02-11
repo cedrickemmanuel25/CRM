@@ -32,12 +32,12 @@
            {{ request()->routeIs($link['route']) || request()->routeIs(explode('.', $link['route'])[0] . '.*') 
                 ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20 translate-x-1' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200' }}"
-           :class="sidebarCollapsed ? 'justify-center !px-0 !translate-x-0' : 'gap-x-2.5'">
+           :class="(sidebarCollapsed && !@json($isMobile ?? false)) ? 'justify-center !px-0 !translate-x-0' : 'gap-x-2.5'">
             <svg class="h-5 w-5 shrink-0 transition-transform duration-200 {{ request()->routeIs($link['route']) ? 'scale-110' : 'group-hover:scale-110' }}" 
                  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="{{ $link['icon'] }}" />
             </svg>
-            <span x-show="!sidebarCollapsed" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0">
+            <span x-show="!sidebarCollapsed || @json($isMobile ?? false)" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0">
                 {{ $link['label'] }}
             </span>
         </a>
@@ -46,10 +46,10 @@
 @endforeach
 
 @if(auth()->user()->isAdmin())
-<li class="mt-6 mb-3 px-3" x-show="!sidebarCollapsed">
+<li class="mt-6 mb-3 px-3" x-show="!sidebarCollapsed || @json($isMobile ?? false)">
     <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Administration</span>
 </li>
-<li class="mt-6 mb-3 flex justify-center" x-show="sidebarCollapsed">
+<li class="mt-6 mb-3 flex justify-center" x-show="sidebarCollapsed && !@json($isMobile ?? false)">
     <div class="h-px w-8 bg-gray-200"></div>
 </li>
 
@@ -60,23 +60,23 @@
        {{ request()->routeIs($link['route']) || request()->routeIs($link['route'].'*') 
             ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/20 translate-x-1' 
             : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200' }}"
-       :class="sidebarCollapsed ? 'justify-center !px-0 !translate-x-0' : 'justify-between'">
-        <div class="flex items-center" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-2.5'">
+       :class="(sidebarCollapsed && !@json($isMobile ?? false)) ? 'justify-center !px-0 !translate-x-0' : 'justify-between'">
+        <div class="flex items-center" :class="(sidebarCollapsed && !@json($isMobile ?? false)) ? 'justify-center' : 'gap-x-2.5'">
             <svg class="h-5 w-5 shrink-0 transition-transform duration-200 {{ request()->routeIs($link['route']) ? 'scale-110' : 'group-hover:scale-110' }}" 
                  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="{{ $link['icon'] }}" />
             </svg>
-            <span x-show="!sidebarCollapsed" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0">
+            <span x-show="!sidebarCollapsed || @json($isMobile ?? false)" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0">
                 {{ $link['label'] }}
             </span>
         </div>
         
         @if($link['route'] === 'admin.access-requests.index')
-            <span x-show="pendingAccessCount > 0 && !sidebarCollapsed" x-text="pendingAccessCount" class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-rose-500 text-[10px] font-bold text-white ring-2 ring-white" style="display: none;">
+            <span x-show="pendingAccessCount > 0 && (!sidebarCollapsed || @json($isMobile ?? false))" x-text="pendingAccessCount" class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-rose-500 text-[10px] font-bold text-white ring-2 ring-white" style="display: none;">
                 {{ isset($pendingAccessCount) ? $pendingAccessCount : '' }}
             </span>
             <!-- Red dot for collapsed state -->
-            <span x-show="pendingAccessCount > 0 && sidebarCollapsed" class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" style="display: none;"></span>
+            <span x-show="pendingAccessCount > 0 && sidebarCollapsed && !@json($isMobile ?? false)" class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" style="display: none;"></span>
         @endif
     </a>
 </li>
