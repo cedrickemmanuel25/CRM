@@ -6,7 +6,7 @@
     <title>Admin - {{ company_name() }}</title>
     <link rel="icon" type="image/png" href="{{ company_logo() }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
-    <link rel="manifest" href="{{ asset('manifest.json') }}?v=2">
+    <link rel="manifest" href="{{ asset('manifest.json') }}?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
