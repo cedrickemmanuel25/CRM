@@ -21,7 +21,7 @@
         <div class="text-xs font-semibold text-slate-900">{{ $contact->entreprise ?? 'Indépendant' }}</div>
         <div class="text-[10px] text-slate-500">{{ $contact->poste ?? 'Poste non précisé' }}</div>
     </td>
-    <td class="px-3 py-4">
+    <td class="hidden lg:table-cell px-3 py-4">
         <div class="space-y-1">
             <div class="flex items-start text-xs text-slate-700">
                 <svg class="h-4 w-4 text-slate-400 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -35,12 +35,12 @@
             @endif
         </div>
     </td>
-    <td class="px-3 py-4">
+    <td class="hidden md:table-cell px-3 py-4">
         <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">
             {{ $contact->source ?? 'Autre' }}
         </span>
     </td>
-    <td class="px-3 py-4">
+    <td class="hidden sm:table-cell px-3 py-4">
         @php
             $stage = \App\Models\Contact::getStages()[$contact->statut] ?? null;
             $color = $stage['color'] ?? 'slate';
@@ -58,12 +58,12 @@
             {{ $stage['label'] ?? ucfirst($contact->statut) }}
         </span>
     </td>
-    <td class="px-3 py-4 break-words">
+    <td class="hidden lg:table-cell px-3 py-4 break-words">
         <div class="flex items-center">
             <span class="text-xs font-medium text-slate-700 truncate">{{ $contact->owner->name ?? 'Inconnu' }}</span>
         </div>
     </td>
-    <td class="px-3 py-4 whitespace-nowrap">
+    <td class="hidden xl:table-cell px-3 py-4 whitespace-nowrap">
         <div class="text-xs text-slate-900 font-medium">{{ $contact->created_at->format('d/m/Y') }}</div>
         <div class="text-[10px] text-slate-500">{{ $contact->created_at->diffForHumans() }}</div>
     </td>
