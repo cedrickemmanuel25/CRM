@@ -110,7 +110,7 @@
                  x-transition:leave="transition ease-in duration-150"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden rounded-b-2xl mx-2 mt-2">
+                 class="md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden rounded-b-2xl mx-2 mt-2 mb-6">
                 <div class="py-3 px-3 space-y-2">
                     <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl text-sm font-medium transition-all">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -140,7 +140,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 relative overflow-hidden">
+    <section class="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 relative overflow-hidden">
         <div class="blob absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96"></div>
         <div class="blob absolute bottom-0 left-0 w-56 sm:w-80 h-56 sm:h-80" style="animation-delay: -6s;"></div>
         
