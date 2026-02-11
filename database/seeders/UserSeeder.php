@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         if (!User::where('role', 'admin')->exists()) {
             User::create([
                 'name' => 'Administrateur',
-                'email' => 'yaocedrickemmanuelk@gmail.com',
+                'email' => 'courriel@ya-consulting.com',
                 'password' => Hash::make('Admin@123'),
                 'role' => 'admin',
                 'telephone' => '+33 1 23 45 67 89',
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             ]);
 
             $this->command->info('✓ Utilisateur admin créé avec succès');
-            $this->command->warn('Email: yaocedrickemmanuelk@gmail.com');
+            $this->command->warn('Email: courriel@ya-consulting.com');
             $this->command->warn('Mot de passe: Admin@123');
             $this->command->error('⚠ IMPORTANT: Changez ces identifiants en production!');
         } else {
@@ -35,10 +35,10 @@ class UserSeeder extends Seeder
         // Optionnel: Créer des utilisateurs de test pour les autres rôles
         if (app()->environment('local')) {
             // Commercial de test
-            if (!User::where('email', 'yaocedrickemmanuelk+commercial@gmail.com')->exists()) {
+            if (!User::where('email', 'courriel+commercial@ya-consulting.com')->exists()) {
                 User::create([
                     'name' => 'Commercial Test',
-                    'email' => 'yaocedrickemmanuelk+commercial@gmail.com',
+                    'email' => 'courriel+commercial@ya-consulting.com',
                     'password' => Hash::make('Commercial@123'),
                     'role' => 'commercial',
                     'telephone' => '+33 1 23 45 67 90',
@@ -48,10 +48,10 @@ class UserSeeder extends Seeder
             }
 
             // Support de test
-            if (!User::where('email', 'yaocedrickemmanuelk+support@gmail.com')->exists()) {
+            if (!User::where('email', 'courriel+support@ya-consulting.com')->exists()) {
                 User::create([
                     'name' => 'Support Test',
-                    'email' => 'yaocedrickemmanuelk+support@gmail.com',
+                    'email' => 'courriel+support@ya-consulting.com',
                     'password' => Hash::make('Support@123'),
                     'role' => 'support',
                     'telephone' => '+33 1 23 45 67 91',
@@ -61,10 +61,10 @@ class UserSeeder extends Seeder
             }
 
             // Visiteur de test
-            if (!User::where('email', 'yaocedrickemmanuelk+visitor@gmail.com')->exists()) {
+            if (!User::where('email', 'courriel+visitor@ya-consulting.com')->exists()) {
                 User::create([
                     'name' => 'Visiteur Test',
-                    'email' => 'yaocedrickemmanuelk+visitor@gmail.com',
+                    'email' => 'courriel+visitor@ya-consulting.com',
                     'password' => Hash::make('Visitor@123'),
                     'role' => 'visitor',
                     'telephone' => '+33 1 23 45 67 92',
