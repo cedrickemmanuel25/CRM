@@ -599,60 +599,70 @@
             deferredPrompt = e;
         });
     </script>
-    <!-- Mobile menu overlay moved to end of body -->
+    <!-- Mobile menu flyout moved to end of body -->
     <div x-show="mobileMenuOpen" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] md:hidden overflow-hidden" 
+         class="fixed inset-0 z-[100] md:hidden" 
          style="display: none;"
          @keydown.escape.window="mobileMenuOpen = false">
         
-        <!-- Backdrop with glass effect -->
-        <div class="absolute inset-0 bg-white/80 backdrop-blur-2xl shadow-2xl" @click="mobileMenuOpen = false"></div>
+        <!-- Semi-transparent backdrop -->
+        <div x-show="mobileMenuOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" 
+             @click="mobileMenuOpen = false"></div>
         
-        <!-- Menu Content -->
-        <div class="relative h-full flex flex-col p-6 overflow-y-auto">
+        <!-- Flyout Panel -->
+        <div x-show="mobileMenuOpen"
+             x-transition:enter="transition ease-out duration-300 transform"
+             x-transition:enter-start="translate-x-full"
+             x-transition:enter-end="translate-x-0"
+             x-transition:leave="transition ease-in duration-200 transform"
+             x-transition:leave-start="translate-x-0"
+             x-transition:leave-end="translate-x-full"
+             class="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-white shadow-2xl flex flex-col">
+            
             <!-- Menu Header -->
-            <div class="flex justify-between items-center mb-12">
+            <div class="flex justify-between items-center p-6 border-b border-gray-50">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 w-auto">
-                    <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
+                    <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-6 w-auto">
+                    <span class="text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
                 </div>
-                <button @click="mobileMenuOpen = false" class="p-2 text-gray-400 hover:text-gray-600 bg-gray-100/50 rounded-xl transition-colors">
-                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="mobileMenuOpen = false" class="p-2 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg transition-colors">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex-1 flex flex-col justify-center space-y-8 pb-12 items-center">
-                <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="text-4xl font-black text-gray-900 hover:text-blue-600 transition-colors tracking-tight">
+            <nav class="flex-1 overflow-y-auto py-8 px-6 space-y-2">
+                <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
                     Fonctionnalités
                 </a>
-                <a href="#avantages" @click="mobileMenuOpen = false" class="text-4xl font-black text-gray-900 hover:text-blue-600 transition-colors tracking-tight">
+                <a href="#avantages" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
                     Avantages
                 </a>
-                <a href="#contact" @click="mobileMenuOpen = false" class="text-4xl font-black text-gray-900 hover:text-blue-600 transition-colors tracking-tight">
+                <a href="#contact" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
                     Contact
                 </a>
             </nav>
 
             <!-- Bottom Actions -->
-            <div class="pt-8 border-t border-gray-100/50 space-y-4 mt-auto">
+            <div class="p-6 border-t border-gray-50 bg-gray-50/50 space-y-3">
                 @auth
-                    <a href="{{ url('/dashboard') }}" @click="mobileMenuOpen = false" class="block w-full py-4 gradient-primary text-white rounded-2xl font-bold text-center text-lg shadow-xl shadow-blue-200/50">
+                    <a href="{{ url('/dashboard') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 gradient-primary text-white rounded-xl font-bold text-center text-sm shadow-lg shadow-blue-200/50">
                         Mon Espace Personnel
                     </a>
                 @else
-                    <a href="{{ route('access.request') }}" @click="mobileMenuOpen = false" class="block w-full py-4 gradient-primary text-white rounded-2xl font-bold text-center text-lg shadow-xl shadow-blue-200/50">
-                        Commencer gratuitement
+                    <a href="{{ route('access.request') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 gradient-primary text-white rounded-xl font-bold text-center text-sm shadow-lg shadow-blue-200/50">
+                        S'inscrire
                     </a>
-                    <a href="{{ route('login') }}" @click="mobileMenuOpen = false" class="block w-full py-4 text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 rounded-2xl font-bold text-center text-lg transition-all">
+                    <a href="{{ route('login') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl font-bold text-center text-sm transition-all shadow-sm">
                         Se connecter
                     </a>
                 @endauth
