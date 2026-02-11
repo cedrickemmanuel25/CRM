@@ -211,11 +211,11 @@
                         <div class="pt-4 border-t border-slate-100">
                             <div class="flex items-center gap-3">
                                 <div class="h-9 w-9 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-xs font-semibold text-slate-700">
-                                    {{ strtoupper(substr($contact->owner->name ?? '?', 0, 1)) }}
+                                    {{ strtoupper(substr($contact->owner?->name ?? '?', 0, 1)) }}
                                 </div>
                                 <div>
                                     <p class="text-xs font-medium text-slate-500">Responsable</p>
-                                    <p class="text-sm font-medium text-slate-900">{{ $contact->owner->name ?? 'Système' }}</p>
+                                    <p class="text-sm font-medium text-slate-900">{{ $contact->owner?->name ?? 'Système' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -315,7 +315,7 @@
                                         <div class="relative pl-4 border-l-2 border-indigo-200">
                                             <p class="text-sm text-slate-700 leading-relaxed">"{{ $note->description }}"</p>
                                             <p class="mt-1.5 text-xs text-slate-500">
-                                                {{ $note->user->name }} • {{ $note->date_activite->diffForHumans() }}
+                                                {{ $note->user?->name ?? 'Système' }} • {{ $note->date_activite->diffForHumans() }}
                                             </p>
                                         </div>
                                     @empty
@@ -422,9 +422,9 @@
                                         <td class="px-5 py-4 whitespace-nowrap">
                                             <div class="flex items-center gap-2">
                                                 <div class="h-7 w-7 rounded-full bg-slate-200 flex items-center justify-center text-xs font-semibold text-slate-700">
-                                                    {{ strtoupper(substr($opp->commercial->name ?? '?', 0, 1)) }}
+                                                    {{ strtoupper(substr($opp->commercial?->name ?? '?', 0, 1)) }}
                                                 </div>
-                                                <span class="text-sm text-slate-900">{{ $opp->commercial->name ?? 'Non assigné' }}</span>
+                                                <span class="text-sm text-slate-900">{{ $opp->commercial?->name ?? 'Non assigné' }}</span>
                                             </div>
                                         </td>
                                         <td class="px-5 py-4 text-right whitespace-nowrap">
@@ -517,7 +517,7 @@
 
                                                         <div class="flex items-center justify-between text-xs text-slate-500">
                                                             <div class="flex items-center gap-3">
-                                                                <span>{{ $activity->user->name ?? 'Système' }}</span>
+                                                                <span>{{ $activity->user?->name ?? 'Système' }}</span>
                                                                 @if($activity->duree)
                                                                     <span class="flex items-center">
                                                                         <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
@@ -583,9 +583,9 @@
                                             <div class="text-sm font-medium text-slate-900">{{ $task->titre }}</div>
                                             <div class="flex items-center mt-1">
                                                 <div class="h-5 w-5 rounded-full bg-slate-200 flex items-center justify-center text-xs font-semibold text-slate-700 mr-2">
-                                                    {{ strtoupper(substr($task->assignee->name ?? '?', 0, 1)) }}
+                                                    {{ strtoupper(substr($task->assignee?->name ?? '?', 0, 1)) }}
                                                 </div>
-                                                <span class="text-xs text-slate-500">{{ $task->assignee->name ?? 'Non assigné' }}</span>
+                                                <span class="text-xs text-slate-500">{{ $task->assignee?->name ?? 'Non assigné' }}</span>
                                             </div>
                                         </td>
                                         <td class="px-5 py-4 whitespace-nowrap">
