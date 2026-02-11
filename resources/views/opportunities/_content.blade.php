@@ -169,7 +169,7 @@
                                     besoin: `{!! addslashes($opp->besoin) !!}`,
                                     budget: '{{ (int)$opp->budget_estime }}',
                                     amount: '{{ (int)$opp->montant_estime }}',
-                                    client_name: '{{ $opp->contact->entreprise ?? $opp->contact->full_name }}'
+                                    client_name: '{{ $opp->contact?->entreprise ?? $opp->contact?->full_name }}'
                                 }
                             }))"
                             class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 transition-colors">
@@ -294,7 +294,7 @@
                                                 besoin: `{!! addslashes($opp->besoin) !!}`,
                                                 budget: '{{ (int)$opp->budget_estime }}',
                                                 amount: '{{ (int)$opp->montant_estime }}',
-                                                client_name: '{{ $opp->contact->entreprise ?? $opp->contact->full_name }}'
+                                                client_name: '{{ $opp->contact?->entreprise ?? $opp->contact?->full_name }}'
                                             }
                                         }))"
                                         class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 transition-colors cursor-pointer"
