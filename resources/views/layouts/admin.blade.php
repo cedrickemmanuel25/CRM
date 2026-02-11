@@ -252,10 +252,10 @@ if (auth()->check()) {
                             <img src="{{ company_logo() }}" alt="App Icon" class="h-8 w-8 rounded-lg">
                         </div>
                         <div class="mt-3 text-center sm:mt-5">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }}</h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500 mb-4">Pour installer l'application sur votre iPhone / iPad :</p>
-                                <ol class="text-left text-sm text-gray-600 list-decimal pl-8 space-y-2">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }} sur iPhone</h3>
+                            <div class="mt-2 text-left">
+                                <p class="text-sm text-gray-500 mb-4">Suivez ces étapes simples :</p>
+                                <ol class="text-sm text-gray-600 list-decimal pl-5 space-y-3">
                                     <li>Appuyez sur le bouton <strong>Partager</strong> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Apple_Share_Icon.png/1200px-Apple_Share_Icon.png" class="inline h-5 w-5 mx-1 align-baseline" alt="Share"> en bas de votre écran.</li>
                                     <li>Faites défiler vers le bas et appuyez sur <strong>"Sur l'écran d'accueil"</strong> <svg class="inline h-5 w-5 mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>.</li>
                                     <li>Appuyez sur <strong>Ajouter</strong> en haut à droite.</li>
@@ -271,6 +271,36 @@ if (auth()->check()) {
         </div>
     </div>
 
+    <!-- Android/Generic Install Guide Modal -->
+    <div id="android-install-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900/75 transition-opacity"></div>
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                    <div>
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
+                            <img src="{{ company_logo() }}" alt="App Icon" class="h-8 w-8 rounded-lg">
+                        </div>
+                        <div class="mt-3 text-center sm:mt-5">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }}</h3>
+                            <div class="mt-2 text-left">
+                                <p class="text-sm text-gray-500 mb-4">Si l'installation automatique ne démarre pas :</p>
+                                <ol class="text-sm text-gray-600 list-decimal pl-5 space-y-3">
+                                    <li>Appuyez sur le menu du navigateur (<strong>⋮</strong> ou <strong>☰</strong>).</li>
+                                    <li>Cherchez l'option <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.</li>
+                                    <li>Suivez les instructions à l'écran.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 sm:mt-6">
+                        <button type="button" onclick="document.getElementById('android-install-modal').classList.add('hidden')" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Compris</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @stack('scripts')
     <script>
         // Service Worker Registration
@@ -280,46 +310,51 @@ if (auth()->check()) {
             });
         }
 
-        // PWA Install Logic
+        // PWA Robust Install Logic
         let deferredPrompt;
         const installBtnMobile = document.getElementById('pwa-install-btn-mobile');
         const iosModal = document.getElementById('ios-install-modal');
+        const androidModal = document.getElementById('android-install-modal');
 
-        // Detect iOS
-        const isIos = () => {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return /iphone|ipad|ipod/.test(userAgent);
-        }
-        // Detect Standalone mode
-        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isMobile = () => /android|iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = () => ('standalone' in window.navigator && window.navigator.standalone) || (window.matchMedia('(display-mode: standalone)').matches);
 
-        // Show button for iOS if not installed
-        if (isIos() && !isInStandaloneMode() && installBtnMobile) {
+        // Always show button on mobile if not standalone
+        if (isMobile() && !isInStandaloneMode() && installBtnMobile) {
             installBtnMobile.style.display = 'flex';
+            
+            // Default Click Handler (Fallback)
             installBtnMobile.onclick = function() {
-                iosModal.classList.remove('hidden');
+                if (isIos()) {
+                    iosModal.classList.remove('hidden');
+                } else {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            deferredPrompt = null;
+                        });
+                    } else {
+                        androidModal.classList.remove('hidden');
+                    }
+                }
             };
         }
 
+        // Capture event
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            if(installBtnMobile) {
-                 installBtnMobile.style.display = 'flex';
-                 // Reset click handler to standard install if generic handling was overlaid (unlikely on Android, but safe)
-                 installBtnMobile.onclick = installPWA;
+            // Update click handler to use the prompt
+            if (installBtnMobile) {
+                installBtnMobile.onclick = function() {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        deferredPrompt = null;
+                    });
+                };
             }
         });
-
-        function installPWA() {
-            if(deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    deferredPrompt = null;
-                    if(installBtnMobile) installBtnMobile.style.display = 'none';
-                });
-            }
-        }
     </script>
 </body>
 </html>
