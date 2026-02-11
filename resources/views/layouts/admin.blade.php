@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full bg-gray-50 overflow-hidden">
+<html lang="fr" class="h-full bg-gray-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +52,7 @@ if (auth()->check()) {
 @php
 $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
 @endphp
-<body class="h-full overflow-hidden" x-data="{ 
+<body class="h-full" x-data="{ 
     sidebarOpen: false, 
     sidebarCollapsed: {{ $sidebarCollapsed }},
     toggleSidebar() {

@@ -54,7 +54,7 @@ if (auth()->check()) {
 @php
 $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
 @endphp
-<body class="min-h-screen bg-gray-50 overflow-hidden" x-data="{ 
+<body class="min-h-screen bg-gray-50" x-data="{ 
     sidebarOpen: false, 
     sidebarCollapsed: {{ $sidebarCollapsed }},
     toggleSidebar() {
