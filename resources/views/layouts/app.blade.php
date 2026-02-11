@@ -145,12 +145,6 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                 <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
-            <!-- PWA Install Button Desktop -->
-            <button id="pwa-install-btn" onclick="installPWA()" style="display: none;" class="mt-4 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm w-full">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                Installer l'App
-            </button>
-
             <nav class="flex flex-1 flex-col mt-4">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                      <li>
@@ -273,7 +267,6 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
 
         // PWA Install Logic
         let deferredPrompt;
-        const installBtn = document.getElementById('pwa-install-btn');
         const installBtnMobile = document.getElementById('pwa-install-btn-mobile');
 
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -282,7 +275,6 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
             // Update UI to notify the user they can add to home screen
-            if(installBtn) installBtn.style.display = 'flex';
             if(installBtnMobile) installBtnMobile.style.display = 'flex';
         });
 
@@ -296,7 +288,6 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                         console.log('User dismissed the A2HS prompt');
                     }
                     deferredPrompt = null;
-                    if(installBtn) installBtn.style.display = 'none';
                     if(installBtnMobile) installBtnMobile.style.display = 'none';
                 });
             }

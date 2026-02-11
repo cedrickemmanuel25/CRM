@@ -119,12 +119,6 @@ if (auth()->check()) {
                 <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
-            <!-- PWA Install Button Desktop -->
-            <button id="pwa-install-btn" onclick="installPWA()" style="display: none;" class="mx-4 mt-2 flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                Installer l'App
-            </button>
-
             
             <nav class="flex flex-1 flex-col mt-4">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -258,13 +252,11 @@ if (auth()->check()) {
 
         // PWA Install Logic
         let deferredPrompt;
-        const installBtn = document.getElementById('pwa-install-btn');
         const installBtnMobile = document.getElementById('pwa-install-btn-mobile');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            if(installBtn) installBtn.style.display = 'flex';
             if(installBtnMobile) installBtnMobile.style.display = 'flex';
         });
 
@@ -273,7 +265,6 @@ if (auth()->check()) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     deferredPrompt = null;
-                    if(installBtn) installBtn.style.display = 'none';
                     if(installBtnMobile) installBtnMobile.style.display = 'none';
                 });
             }
