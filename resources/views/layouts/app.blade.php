@@ -6,6 +6,7 @@
     <title>{{ company_name() }} - @yield('title', 'Tableau de bord')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ company_logo() }}">
+    <link rel="apple-touch-icon" href="{{ company_logo() }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Alpine.js for interactivity -->

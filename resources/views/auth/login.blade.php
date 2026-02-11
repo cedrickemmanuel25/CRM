@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Connexion - {{ company_name() }}</title>
     <link rel="icon" type="image/png" href="{{ company_logo() }}">
+    <link rel="apple-touch-icon" href="{{ company_logo() }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

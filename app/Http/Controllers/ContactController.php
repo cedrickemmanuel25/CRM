@@ -333,13 +333,17 @@ class ContactController extends Controller
             $validated['alternative_telephones'] = array_filter($validated['alternative_telephones']);
         }
 
-        $contact->update($validated);
+        try {
+            $contact->update($validated);
 
-        // Fire Event for Notifications
-        event(new \App\Events\Contact\ContactUpdated($contact));
+            // Fire Event for Notifications
+            event(new \App\Events\Contact\ContactUpdated($contact));
 
-        return redirect()->route('contacts.show', $contact)
-            ->with('success', 'Contact mis à jour avec succès.');
+            return redirect()->route('contacts.show', $contact)
+                ->with('success', 'Contact mis à jour avec succès.');
+        } catch (\Throwable $e) {
+            return back()->withInput()->withErrors(['error' => 'Erreur technique : ' . $e->getMessage()]);
+        }
     }
 
     /**
