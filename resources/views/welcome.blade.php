@@ -627,20 +627,20 @@
              class="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-white shadow-2xl flex flex-col">
             
             <!-- Menu Header -->
-            <div class="flex justify-between items-center p-6 border-b border-gray-50">
+            <div class="flex justify-between items-center p-4 border-b border-gray-50">
                 <div class="flex items-center space-x-2">
                     <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-6 w-auto">
                     <span class="text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
                 </div>
-                <button @click="mobileMenuOpen = false" class="p-2 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg transition-colors">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="mobileMenuOpen = false" class="p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg transition-colors">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex-1 overflow-y-auto py-8 px-6 space-y-2">
+            <nav class="flex-1 overflow-y-auto py-4 px-4 space-y-1">
                 <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
                     Fonctionnalités
                 </a>
@@ -653,7 +653,7 @@
             </nav>
 
             <!-- Bottom Actions -->
-            <div class="p-6 border-t border-gray-50 bg-gray-50/50 space-y-3">
+            <div class="p-4 border-t border-gray-50 bg-gray-50/50 space-y-2.5">
                 @auth
                     <a href="{{ url('/dashboard') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 gradient-primary text-white rounded-xl font-bold text-center text-sm shadow-lg shadow-blue-200/50">
                         Mon Espace Personnel
