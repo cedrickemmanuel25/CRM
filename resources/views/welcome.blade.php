@@ -69,8 +69,8 @@
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center space-x-2 sm:space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-2 sm:space-x-3">
-                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 sm:h-10 w-auto">
-                        <span class="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
+                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-7 sm:h-10 w-auto">
+                        <span class="text-base sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent truncate max-w-[150px] sm:max-w-none">{{ company_name() }}</span>
                     </a>
                 </div>
                 
@@ -110,17 +110,30 @@
                  x-transition:leave="transition ease-in duration-150"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="md:hidden bg-white border-t border-gray-200 shadow-lg">
-                <div class="py-3 px-4 space-y-2">
-                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">Fonctionnalités</a>
-                    <a href="#avantages" @click="mobileMenuOpen = false" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">Avantages</a>
-                    <a href="#contact" @click="mobileMenuOpen = false" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">Contact</a>
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="block px-4 py-2.5 gradient-primary text-white rounded-lg font-semibold text-center shadow-sm">Mon Espace</a>
-                    @else
-                        <a href="{{ route('login') }}" class="block px-4 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg font-semibold transition-colors">Connexion</a>
-                        <a href="{{ route('access.request') }}" class="block px-4 py-2.5 gradient-primary text-white rounded-lg font-semibold text-center shadow-sm">Créer un compte</a>
-                    @endauth
+                 class="md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden rounded-b-2xl mx-2 mt-2">
+                <div class="py-4 px-4 space-y-3">
+                    <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-all">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <span>Fonctionnalités</span>
+                    </a>
+                    <a href="#avantages" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-all">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Avantages</span>
+                    </a>
+                    <a href="#contact" @click="mobileMenuOpen = false" class="flex items-center space-x-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-all">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>Contact</span>
+                    </a>
+                    <div class="pt-2 border-t border-gray-100">
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="block px-4 py-3.5 gradient-primary text-white rounded-xl font-bold text-center shadow-lg shadow-blue-200">Mon Espace</a>
+                        @else
+                            <div class="grid grid-cols-2 gap-3">
+                                <a href="{{ route('login') }}" class="flex items-center justify-center p-3 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-xl font-bold transition-all">Connexion</a>
+                                <a href="{{ route('access.request') }}" class="flex items-center justify-center p-3 gradient-primary text-white rounded-xl font-bold text-center shadow-lg shadow-blue-200">Créer un compte</a>
+                            </div>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,9 +152,9 @@
                         <span class="text-xs sm:text-sm font-semibold text-blue-700">Solution CRM Professionnelle</span>
                     </div>
                     
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-tight">
+                    <h1 class="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[1.1] sm:leading-tight">
                         Gérez votre entreprise
-                        <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">intelligemment</span>
+                        <span class="block sm:inline bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">intelligemment</span>
                     </h1>
                     
                     <p class="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
@@ -214,24 +227,24 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-16 bg-white">
+    <section class="py-12 sm:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-2">98%</div>
-                    <div class="text-gray-600 font-medium">Satisfaction client</div>
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-12">
+                <div class="p-6 bg-blue-50/50 rounded-2xl border border-blue-100/50 text-center transform hover:scale-105 transition-transform">
+                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">98%</div>
+                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Satisfaction</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-2">5k+</div>
-                    <div class="text-gray-600 font-medium">Entreprises actives</div>
+                <div class="p-6 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 text-center transform hover:scale-105 transition-transform">
+                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">5k+</div>
+                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Clients</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-2">-70%</div>
-                    <div class="text-gray-600 font-medium">Temps de gestion</div>
+                <div class="p-6 bg-cyan-50/50 rounded-2xl border border-cyan-100/50 text-center transform hover:scale-105 transition-transform">
+                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">-70%</div>
+                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Temps gagné</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-2">24/7</div>
-                    <div class="text-gray-600 font-medium">Support disponible</div>
+                <div class="p-6 bg-emerald-50/50 rounded-2xl border border-emerald-100/50 text-center transform hover:scale-105 transition-transform">
+                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">24/7</div>
+                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Support</div>
                 </div>
             </div>
         </div>
@@ -240,9 +253,9 @@
     <!-- Features Section -->
     <section id="fonctionnalites" class="py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16 space-y-4">
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900">Tout ce dont vous avez besoin</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Des fonctionnalités puissantes et intuitives pour développer votre activité</p>
+            <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4">
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight">Tout ce dont vous avez besoin</h2>
+                <p class="text-sm sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">Des fonctionnalités puissantes et intuitives pour développer votre activité</p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
@@ -325,8 +338,8 @@
     <section id="avantages" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="space-y-8">
-                    <h2 class="text-4xl md:text-5xl font-black text-gray-900">Pourquoi choisir notre CRM ?</h2>
+                <div class="space-y-6 sm:space-y-8">
+                    <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight">Pourquoi choisir notre CRM ?</h2>
                     
                     <div class="space-y-6">
                         <div class="flex items-start space-x-4">
@@ -405,10 +418,10 @@
     <section class="py-24 gradient-primary relative overflow-hidden">
         <div class="absolute inset-0 bg-black opacity-5"></div>
         <div class="max-w-4xl mx-auto text-center px-4 relative z-10">
-            <h2 class="text-4xl md:text-5xl font-black text-white mb-6">
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6 leading-tight">
                 Prêt à transformer votre gestion commerciale ?
             </h2>
-            <p class="text-xl text-blue-100 mb-10 leading-relaxed">
+            <p class="text-base sm:text-xl text-blue-100 mb-8 sm:mb-10 leading-relaxed px-4">
                 Rejoignez des milliers d'entreprises qui optimisent leur performance avec notre solution
             </p>
             @auth
