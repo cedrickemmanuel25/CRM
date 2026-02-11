@@ -253,7 +253,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js');
+                navigator.serviceWorker.register("{{ asset('service-worker.js') }}");
             });
         }
     </script>
