@@ -55,7 +55,7 @@
                                      data-besoin="{{ $opp->besoin }}"
                                      data-budget="{{ (int)$opp->budget_estime }}"
                                      data-amount="{{ (int)$opp->montant_estime }}"
-                                     data-client-name="{{ $opp->contact->entreprise ?? $opp->contact->full_name }}">
+                                     data-client-name="{{ $opp->contact?->entreprise ?? $opp->contact?->full_name }}">
                                     
                                     <div class="flex items-center justify-between mb-2">
                                         <a href="{{ route('opportunities.show', $opp) }}" class="block flex-1">

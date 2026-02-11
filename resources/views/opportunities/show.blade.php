@@ -702,7 +702,7 @@
                 besoin: `{!! addslashes($opportunity->besoin) !!}`,
                 budget: {{ (int)$opportunity->budget_estime }},
                 montant: {{ (int)$opportunity->montant_estime }},
-                client_name: '{{ $opportunity->contact->entreprise ?? $opportunity->contact->full_name }}'
+                client_name: '{{ $opportunity->contact?->entreprise ?? $opportunity->contact?->full_name }}'
             },
 
             // Pipeline Modals
