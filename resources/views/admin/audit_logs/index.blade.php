@@ -121,34 +121,36 @@
                 </div>
 
                 <!-- Card Body -->
-                <div class="grid grid-cols-2 gap-4 py-2 border-y border-gray-50">
-                    <div class="space-y-1">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Cible</p>
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-semibold text-gray-700">{{ $log->translated_model_type ?? '-' }}</span>
-                            @if($log->model_id)
-                                <span class="px-1 py-0.5 bg-gray-50 text-[9px] text-gray-500 rounded border border-gray-100 font-mono">#{{ $log->model_id }}</span>
-                            @endif
+                <div class="py-3 border-y border-gray-50 flex flex-col gap-3">
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="space-y-0.5">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Cible</p>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-semibold text-gray-700">{{ $log->translated_model_type ?? '-' }}</span>
+                                @if($log->model_id)
+                                    <span class="px-1 py-0.5 bg-gray-50 text-[9px] text-gray-500 rounded border border-gray-100 font-mono">#{{ $log->model_id }}</span>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                    <div class="space-y-1 text-right">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">IP</p>
-                        <p class="text-xs text-gray-600 font-medium font-mono tracking-tight">{{ $log->ip_address }}</p>
+                        <div class="space-y-0.5 text-right flex-shrink-0">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">IP</p>
+                            <p class="text-[11px] text-gray-600 font-medium font-mono tracking-tight break-all max-w-[140px]">{{ $log->ip_address }}</p>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Card Footer/Action -->
-                <div class="flex items-center justify-between pt-1">
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
                     <div class="flex flex-col">
-                        <div class="flex items-center gap-1.5 text-[11px] text-gray-900 font-medium">
+                        <div class="flex items-center gap-1.5 text-[11px] text-gray-900 font-medium whitespace-nowrap">
                             <svg class="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             {{ $log->created_at->format('d/m/Y') }}
                         </div>
                         <p class="text-[10px] text-gray-400 ml-5">{{ $log->created_at->format('H:i') }} ({{ $log->created_at->diffForHumans() }})</p>
                     </div>
                     
-                    <div x-data="{ open: false }">
-                        <button @click="open = true" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white text-[11px] font-bold rounded-xl shadow-sm shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95">
+                    <div x-data="{ open: false }" class="flex-shrink-0">
+                        <button @click="open = true" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white text-[11px] font-bold rounded-xl shadow-sm shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95 whitespace-nowrap">
                             <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2"/></svg>
                             Détails
                         </button>
