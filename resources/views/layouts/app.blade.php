@@ -25,6 +25,19 @@
             z-index: 10; 
         }
         [x-cloak] { display: none !important; }
+
+        /* Security guards for images (prevent giant circle/logo crash) */
+        img, .header-user-avatar {
+            max-width: 100% !important;
+        }
+        .header-user-avatar {
+            max-width: 40px !important;
+            max-height: 40px !important;
+        }
+        img[src*="logo"] {
+            max-height: 80px !important;
+            width: auto !important;
+        }
     </style>
 </head>
 @php
@@ -49,15 +62,10 @@ if (auth()->check()) {
     $unreadCount = 0;
     $pendingAccessCount = 0;
 }
-    $sidebarCollapsed = $_COOKIE['sidebar_collapsed'] ?? 'false';
 @endphp
 <body class="h-full bg-gray-50 overflow-y-auto" x-data="{ 
     sidebarOpen: false, 
-    sidebarCollapsed: {{ $sidebarCollapsed }},
-    toggleSidebar() {
-        this.sidebarCollapsed = !this.sidebarCollapsed;
-        document.cookie = 'sidebar_collapsed=' + this.sidebarCollapsed + ';path=/;max-age=' + (60*60*24*30);
-    },    notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
+    notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
     unreadCount: {{ $unreadCount }},
     pendingAccessCount: {{ $pendingAccessCount }},
     showNotif(notif) {
@@ -84,7 +92,7 @@ if (auth()->check()) {
             })
             .catch(error => console.error('Error polling notifications:', error));
 
-        @if(auth()->user()->isAdmin())
+        @if(auth()->check() && auth()->user()->isAdmin())
         // Poll access requests (Admin only)
         fetch('{{ route('admin.access-requests.stats') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
             .then(response => response.json())
@@ -93,9 +101,14 @@ if (auth()->check()) {
             })
             .catch(error => console.error('Error polling access requests:', error));
         @endif
+    },
+    keepAlive() {
+        // Just a ping to keep session fresh
+        fetch('/api/user', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .catch(() => {});
     }
 }" 
-x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
+x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000); setInterval(() => keepAlive(), 900000)"
 @close-sidebar.window="sidebarOpen = false">
     @include('layouts.partials._notification_modal')
 
@@ -140,34 +153,23 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     </div>
 
     <!-- Static Sidebar for Desktop -->
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300"
-         :class="sidebarCollapsed ? 'lg:w-20' : 'lg:w-[18%]'">
+    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300 lg:w-[18%]">
+
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-4 pb-4 custom-scrollbar relative">
             <!-- Sidebar Header -->
-            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center mt-4 transition-all duration-300 overflow-hidden"
-               :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3 px-2'">
-                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 w-auto shrink-0 transition-all duration-300"
-                     :class="sidebarCollapsed ? 'scale-110' : ''">
-                <span x-show="!sidebarCollapsed" 
-                      x-transition:enter="transition ease-out duration-200"
-                      x-transition:enter-start="opacity-0 -translate-x-4"
-                      x-transition:enter-end="opacity-100 translate-x-0"
-                      class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
+            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center mt-4 gap-x-3 px-2 overflow-hidden">
+                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 w-auto shrink-0">
+                <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
-            <!-- Toggle Button Desktop -->
-            <button @click="toggleSidebar()" 
-                    class="absolute -right-3 top-20 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-gray-200 text-gray-400 hover:text-gray-600 shadow-sm transition-all duration-300 hover:scale-110 focus:outline-none"
-                    :class="sidebarCollapsed ? 'rotate-180' : ''">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                </svg>
-            </button>
+
+
 
             <nav class="flex flex-1 flex-col mt-4">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
-                     <li>
-                        <ul role="list" class="space-y-2" :class="sidebarCollapsed ? '' : '-mx-2'">
+                    <li>
+                        <ul role="list" class="space-y-2 -mx-2">
+
                             @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => false])
                         </ul>
                     </li>
@@ -177,8 +179,8 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
     </div>
 
     <!-- Main Content Wrapper -->
-    <div class="flex flex-col transition-all duration-300 min-h-full"
-         :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-[18%]'">
+    <div class="flex flex-col transition-all duration-300 min-h-full lg:pl-[18%]">
+
         <div class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                 <span class="sr-only">Ouvrir la barre latérale</span>
