@@ -154,25 +154,38 @@
                         </thead>
                         <tbody x-data="{
                             startPolling() {
-                                setInterval(() => {
-                                    if (this.openUserModal) return; // Don't poll while modal is open to avoid losing state
+                                this.pollingInterval = setInterval(() => {
+                                    if (this.openUserModal) return; 
                                     
                                     fetch(window.location.href, {
-                                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                                        headers: { 
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                            'Accept': 'text/html'
+                                        },
                                         credentials: 'same-origin'
                                     })
                                     .then(response => {
+                                        // stop polling if session expired or unauthorized
+                                        if (response.status === 419 || response.status === 401) {
+                                            clearInterval(this.pollingInterval);
+                                            console.warn('Session expired, polling stopped.');
+                                            return null;
+                                        }
                                         if (response.ok) return response.text();
                                         throw new Error('Request failed');
                                     })
                                     .then(html => {
-                                        // Simple way to check if we got back valid HTML partial
-                                        if (html.includes('<tr')) {
+                                        if (!html) return;
+                                        // Robust check: ensure we got table rows, not a full login page
+                                        if (html.includes('<tr') && !html.includes('<html')) {
                                             this.$el.innerHTML = html;
+                                        } else if (html.includes('Connexion')) {
+                                            // Safety: if we see "Connexion", it's likely the login page
+                                            clearInterval(this.pollingInterval);
                                         }
                                     })
                                     .catch(error => console.warn('Polling error:', error));
-                                }, 10000); // Polling every 10s is enough for users list
+                                }, 10000);
                             }
                         }" x-init="startPolling()" class="divide-y divide-gray-100 bg-white">
                             @include('admin.users._table_rows')
