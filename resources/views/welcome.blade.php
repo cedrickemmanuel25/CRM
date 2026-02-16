@@ -1,674 +1,254 @@
 ﻿<!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ company_name() }} - CRM Professionnel</title>
-    <link rel="icon" type="image/png" href="{{ company_logo() }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
-    <link rel="manifest" href="{{ asset('manifest.json') }}?v=3">
+    <title>{{ company_name() }} | CRM Professionnel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com/css2">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        
-        .gradient-primary {
-            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
-        }
-        
-        .gradient-accent {
-            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
-        }
-        
-        .feature-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
-        }
-        
-        .nav-glass {
-            background: rgba(255, 255, 255, 0.9);
+        :root { --accent: #3b82f6; --neon: #00f2ff; --bg: #030712; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: white; overflow-x: hidden; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+
+        .bento-card {
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 2rem;
         }
-        
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
+
+        .bento-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.08);
         }
-        
-        .blob {
-            background: linear-gradient(180deg, #2563EB 0%, #1E40AF 100%);
-            opacity: 0.08;
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            animation: blob-animation 12s ease-in-out infinite;
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+            opacity: 0.7;
+            z-index: 1;
         }
-        
-        @keyframes blob-animation {
-            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-            25% { border-radius: 60% 40% 50% 70% / 60% 30% 70% 40%; }
-            50% { border-radius: 70% 30% 40% 60% / 50% 60% 30% 60%; }
-            75% { border-radius: 40% 60% 60% 40% / 70% 30% 50% 60%; }
-        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
     </style>
 </head>
-<body class="bg-gray-50" x-data="{ mobileMenuOpen: false }">
-    <!-- Navigation -->
-    <nav class="fixed w-full top-0 z-50 transition-all duration-300 nav-glass shadow-sm" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 sm:h-20">
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <a href="{{ url('/') }}" class="flex items-center space-x-2 sm:space-x-3">
-                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-7 sm:h-10 w-auto">
-                        <span class="text-base sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent truncate max-w-[150px] sm:max-w-none">{{ company_name() }}</span>
-                    </a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#fonctionnalites" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Fonctionnalités</a>
-                    <a href="#avantages" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Avantages</a>
-                    <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Contact</a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-4">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="px-4 sm:px-6 py-2 sm:py-2.5 gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-sm sm:text-base">
-                            Mon Espace
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 font-semibold transition-colors text-sm sm:text-base">Connexion</a>
-                        <a href="{{ route('access.request') }}" class="px-4 sm:px-6 py-2 sm:py-2.5 gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-sm sm:text-base">
-                            Créer un compte
-                        </a>
-                    @endauth
-                </div>
-                
-                <!-- Mobile menu button -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+<body class="selection:bg-cyan-500 selection:text-white">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="fixed w-full z-50 px-10 py-6 flex justify-between items-center border-b border-white/5 backdrop-blur-xl">
+        <div class="flex items-center gap-4 group cursor-pointer">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
+                <img src="{{ company_logo() }}" class="w-8 brightness-0 invert">
             </div>
-            
-            <!-- Mobile menu overlay deleted from here -->
+            <span class="text-xl font-extrabold tracking-tighter uppercase">{{ company_name() }}</span>
+        </div>
+        
+        <div class="hidden lg:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            <a href="#features" class="hover:text-cyan-400 transition-colors">Fonctionnalités</a>
+            <a href="#modules" class="hover:text-cyan-400 transition-colors">Modules</a>
+            <a href="#security" class="hover:text-cyan-400 transition-colors">Sécurité</a>
+        </div>
+
+        <div class="flex items-center gap-6">
+            @auth
+                <a href="{{ url('/dashboard') }}" class="px-8 py-3 bg-white text-slate-950 font-black rounded-full text-xs uppercase hover:bg-cyan-400 transition-all">Dashboard</a>
+            @else
+                <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-cyan-400 transition-colors">Connexion</a>
+                <a href="{{ route('access.request') }}" class="px-8 py-3 bg-white text-slate-950 font-black rounded-full text-xs uppercase hover:bg-cyan-400 transition-all">Demander l'Accès</a>
+            @endauth
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 relative overflow-hidden">
-        <div class="blob absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96"></div>
-        <div class="blob absolute bottom-0 left-0 w-56 sm:w-80 h-56 sm:h-80" style="animation-delay: -6s;"></div>
-        
-        <div class="max-w-7xl mx-auto relative z-10">
-            <div class="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-                <div class="space-y-6 sm:space-y-8">
-                    <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 rounded-full px-3 sm:px-4 py-1.5 sm:py-2">
-                        <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-                        <span class="text-xs sm:text-sm font-semibold text-blue-700">Solution CRM Professionnelle</span>
-                    </div>
-                    
-                    <h1 class="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[1.1] sm:leading-tight">
-                        Gérez votre entreprise
-                        <span class="block sm:inline bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">intelligemment</span>
-                    </h1>
-                    
-                    <p class="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
-                        Une plateforme complète pour piloter votre activité commerciale, gérer vos contacts et optimiser vos processus de vente.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="group px-6 sm:px-8 py-3 sm:py-4 gradient-primary text-white rounded-xl text-base sm:text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">
-                                Accéder à mon espace
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </a>
-                        @else
-                            <a href="{{ route('access.request') }}" class="group px-6 sm:px-8 py-3 sm:py-4 gradient-primary text-white rounded-xl text-base sm:text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center justify-center">
-                                Commencer gratuitement
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </a>
-                            <a href="{{ route('login') }}" class="px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl text-base sm:text-lg font-bold hover:border-blue-600 hover:text-blue-600 transition-all inline-flex items-center justify-center">
-                                Se connecter
-                            </a>
-                        @endauth
-                    </div>
-                    
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 pt-4">
-                        <div class="flex items-center space-x-2">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="text-xs sm:text-sm text-gray-600 font-medium">Sans engagement</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="text-xs sm:text-sm text-gray-600 font-medium">Configuration rapide</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative float-animation hidden lg:block">
-                    <div class="gradient-primary rounded-3xl p-8 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                        <div class="bg-white rounded-2xl p-6 space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="h-4 bg-blue-200 rounded w-1/3"></div>
-                                <div class="flex space-x-2">
-                                    <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                                </div>
-                            </div>
-                            <div class="h-40 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl flex items-center justify-center">
-                                <svg class="w-20 h-20 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="h-3 bg-gray-200 rounded w-full"></div>
-                                <div class="h-3 bg-gray-200 rounded w-4/5"></div>
-                                <div class="h-3 bg-gray-200 rounded w-3/5"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-12 sm:py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-12">
-                <div class="p-6 bg-blue-50/50 rounded-2xl border border-blue-100/50 text-center transform hover:scale-105 transition-transform">
-                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">98%</div>
-                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Satisfaction</div>
-                </div>
-                <div class="p-6 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 text-center transform hover:scale-105 transition-transform">
-                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">5k+</div>
-                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Clients</div>
-                </div>
-                <div class="p-6 bg-cyan-50/50 rounded-2xl border border-cyan-100/50 text-center transform hover:scale-105 transition-transform">
-                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">-70%</div>
-                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Temps gagné</div>
-                </div>
-                <div class="p-6 bg-emerald-50/50 rounded-2xl border border-emerald-100/50 text-center transform hover:scale-105 transition-transform">
-                    <div class="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1 sm:mb-2">24/7</div>
-                    <div class="text-xs sm:text-base text-gray-600 font-bold uppercase tracking-wider">Support</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="fonctionnalites" class="py-24 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4">
-                <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight">Tout ce dont vous avez besoin</h2>
-                <p class="text-sm sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">Des fonctionnalités puissantes et intuitives pour développer votre activité</p>
+    <section class="relative pt-48 pb-20 px-10">
+        <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+            <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-white/10 mb-8">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                </span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-cyan-400">Plateforme Professionnelle</span>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <div class="w-14 h-14 gradient-primary rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Gestion des Contacts</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Centralisez tous vos contacts, suivez l'historique des interactions et segmentez votre base clients efficacement.
-                    </p>
-                </div>
-
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <div class="w-14 h-14 gradient-accent rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Pipeline Commercial</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Visualisez vos opportunités, suivez leur progression et optimisez votre taux de conversion avec des outils avancés.
-                    </p>
-                </div>
-
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <div class="w-14 h-14 gradient-primary rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Rapports & Analytics</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Prenez des décisions éclairées grâce à des tableaux de bord personnalisables et des rapports détaillés en temps réel.
-                    </p>
-                </div>
-
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <div class="w-14 h-14 gradient-accent rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Gestion des Tâches</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Organisez votre travail, assignez des tâches à votre équipe et ne manquez plus jamais une échéance importante.
-                    </p>
-                </div>
-
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <div class="w-14 h-14 gradient-primary rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Notifications Intelligentes</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Restez informé en temps réel des événements importants et personnalisez vos préférences de notification.
-                    </p>
-                </div>
-
-                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <div class="w-14 h-14 gradient-accent rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Sécurité Avancée</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Vos données sont protégées avec un chiffrement de niveau entreprise et des contrôles d'accès granulaires.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section id="avantages" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="space-y-6 sm:space-y-8">
-                    <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight">Pourquoi choisir notre CRM ?</h2>
-                    
-                    <div class="space-y-6">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 w-12 h-12 gradient-primary rounded-xl flex items-center justify-center shadow-lg">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Interface Intuitive</h3>
-                                <p class="text-gray-600 leading-relaxed">Prise en main immédiate sans formation complexe. Design moderne et ergonomique pensé pour la productivité.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 w-12 h-12 gradient-accent rounded-xl flex items-center justify-center shadow-lg">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Performance Optimale</h3>
-                                <p class="text-gray-600 leading-relaxed">Temps de chargement ultra-rapides et synchronisation en temps réel pour une expérience fluide.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 w-12 h-12 gradient-primary rounded-xl flex items-center justify-center shadow-lg">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Support Dédié</h3>
-                                <p class="text-gray-600 leading-relaxed">Une équipe d'experts disponible 24/7 pour vous accompagner et répondre à toutes vos questions.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <div class="gradient-primary rounded-3xl p-8 shadow-2xl">
-                        <div class="bg-white rounded-2xl p-6 space-y-6">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 text-center">
-                                    <div class="text-4xl font-black text-blue-600 mb-2">+45%</div>
-                                    <div class="text-sm text-gray-600 font-medium">Productivité</div>
-                                </div>
-                                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 text-center">
-                                    <div class="text-4xl font-black text-blue-600 mb-2">-60%</div>
-                                    <div class="text-sm text-gray-600 font-medium">Temps admin</div>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                    <span class="text-sm font-medium text-gray-700">Contacts gérés</span>
-                                    <span class="text-sm font-bold text-blue-600">12,450</span>
-                                </div>
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                    <span class="text-sm font-medium text-gray-700">Opportunités actives</span>
-                                    <span class="text-sm font-bold text-cyan-600">847</span>
-                                </div>
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                    <span class="text-sm font-medium text-gray-700">Taux de conversion</span>
-                                    <span class="text-sm font-bold text-green-600">68%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-24 gradient-primary relative overflow-hidden">
-        <div class="absolute inset-0 bg-black opacity-5"></div>
-        <div class="max-w-4xl mx-auto text-center px-4 relative z-10">
-            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6 leading-tight">
-                Prêt à transformer votre gestion commerciale ?
-            </h2>
-            <p class="text-base sm:text-xl text-blue-100 mb-8 sm:mb-10 leading-relaxed px-4">
-                Rejoignez des milliers d'entreprises qui optimisent leur performance avec notre solution
+            <h1 class="reveal text-7xl lg:text-[110px] font-extrabold leading-none tracking-tighter mb-8">
+                CRM <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-300">Intelligent</span>
+            </h1>
+            
+            <p class="reveal text-lg text-slate-400 max-w-2xl mb-12">
+                Gérez vos contacts, opportunités et pipelines de vente avec une plateforme CRM moderne. Centralisez vos données clients et boostez vos performances commerciales.
             </p>
-            @auth
-                <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-10 py-5 bg-white text-blue-600 rounded-xl text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1">
-                    Accéder au tableau de bord
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                    </svg>
-                </a>
-            @else
-                <a href="{{ route('access.request') }}" class="inline-flex items-center px-10 py-5 bg-white text-blue-600 rounded-xl text-lg font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1">
-                    Créer mon compte maintenant
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                    </svg>
-                </a>
-            @endauth
+
+            <div class="reveal flex gap-4">
+                <a href="{{ route('access.request') }}" class="px-12 py-5 bg-blue-600 rounded-2xl font-bold shadow-2xl shadow-blue-500/40 hover:scale-105 transition-transform">Démarrer Maintenant</a>
+                <a href="#features" class="px-12 py-5 glass rounded-2xl font-bold hover:bg-white/5 transition-colors">Découvrir</a>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-16">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div class="space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+    <section id="features" class="max-w-7xl mx-auto px-10 py-32">
+        <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-auto md:h-[850px]">
+            
+            <!-- Gestion des Contacts -->
+            <div class="md:col-span-2 md:row-span-2 bento-card glass relative group overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-cyan-500/10"></div>
+                <div class="absolute inset-0 opacity-10">
+                    <svg class="w-full h-full" viewBox="0 0 400 400">
+                        <circle cx="200" cy="200" r="150" fill="none" stroke="url(#grad1)" stroke-width="2" opacity="0.3"/>
+                        <circle cx="200" cy="200" r="100" fill="none" stroke="url(#grad1)" stroke-width="2" opacity="0.5"/>
+                        <circle cx="200" cy="200" r="50" fill="url(#grad1)" opacity="0.3"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="image-overlay"></div>
+                <div class="relative z-10 p-10 h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm border border-blue-400/30">
+                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold text-white">{{ company_name() }}</span>
+                        <h3 class="text-3xl font-bold mb-4">Gestion Contacts 360°</h3>
+                        <p class="text-slate-300 max-w-xs">Centralisez toutes les informations de vos clients et prospects. Historique complet des interactions, notes, documents et communications.</p>
                     </div>
-                    <p class="text-sm leading-relaxed">La solution CRM complète pour gérer et développer votre activité commerciale efficacement.</p>
-                </div>
-                
-                <div>
-                    <h4 class="text-white font-bold mb-4">Produit</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#fonctionnalites" class="hover:text-white transition-colors">Fonctionnalités</a></li>
-                        <li><a href="#avantages" class="hover:text-white transition-colors">Avantages</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Tarifs</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Sécurité</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-white font-bold mb-4">Entreprise</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">À propos</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Carrières</a></li>
-                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-white font-bold mb-4">Support</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Centre d'aide</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Tutoriels</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">API</a></li>
-                    </ul>
+                    <div class="flex gap-2">
+                        <span class="px-3 py-1 glass text-[10px] font-bold uppercase rounded-lg">Temps réel</span>
+                        <span class="px-3 py-1 glass text-[10px] font-bold uppercase rounded-lg">Historique</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <p class="text-sm">&copy; 2026 {{ company_name() }}. Tous droits réservés.</p>
-                <div class="flex space-x-6 text-sm">
-                    <a href="#" class="hover:text-white transition-colors">Mentions légales</a>
-                    <a href="#" class="hover:text-white transition-colors">Confidentialité</a>
-                    <a href="#" class="hover:text-white transition-colors">CGU</a>
-                </div>
-            </div>
-        </div>
-    </footer>
 
-    <!-- iOS Install Guide Modal -->
-    <div id="ios-install-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-gray-900/75 transition-opacity"></div>
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                    <div>
-                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                            <img src="{{ company_logo() }}" alt="App Icon" class="h-8 w-8 rounded-lg">
+            <!-- Pipeline de Vente -->
+            <div class="md:col-span-2 glass bento-card relative group overflow-hidden h-[350px] md:h-auto">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-cyan-500/10 to-transparent"></div>
+                <div class="absolute right-0 top-0 w-2/3 h-full opacity-20">
+                    <svg class="w-full h-full" viewBox="0 0 300 200">
+                        <path d="M 0,100 Q 75,50 150,80 T 300,60" fill="none" stroke="#3b82f6" stroke-width="3" opacity="0.5"/>
+                        <path d="M 0,120 Q 75,90 150,110 T 300,100" fill="none" stroke="#06b6d4" stroke-width="3" opacity="0.5"/>
+                        <circle cx="75" cy="70" r="8" fill="#3b82f6"/>
+                        <circle cx="150" cy="80" r="8" fill="#06b6d4"/>
+                        <circle cx="225" cy="60" r="8" fill="#3b82f6"/>
+                    </svg>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-r from-bg to-transparent z-10"></div>
+                <div class="relative z-20 p-10 flex items-center justify-between h-full">
+                    <div class="w-2/3">
+                        <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4 backdrop-blur-sm border border-cyan-400/30">
+                            <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
                         </div>
-                        <div class="mt-3 text-center sm:mt-5">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }} sur iPhone</h3>
-                            <div class="mt-2 text-left">
-                                <p class="text-sm text-gray-500 mb-4">Suivez ces étapes simples :</p>
-                                <ol class="text-sm text-gray-600 list-decimal pl-5 space-y-3">
-                                    <li>Appuyez sur le bouton <strong>Partager</strong> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Apple_Share_Icon.png/1200px-Apple_Share_Icon.png" class="inline h-5 w-5 mx-1 align-baseline" alt="Share"> en bas de votre écran.</li>
-                                    <li>Faites défiler vers le bas et appuyez sur <strong>"Sur l'écran d'accueil"</strong> <svg class="inline h-5 w-5 mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>.</li>
-                                    <li>Appuyez sur <strong>Ajouter</strong> en haut à droite.</li>
-                                </ol>
-                            </div>
-                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Pipeline de Vente</h3>
+                        <p class="text-sm text-slate-400">Suivez vos opportunités à travers chaque étape du cycle commercial. Tableaux Kanban, prévisions et analyses de conversion.</p>
                     </div>
-                    <div class="mt-5 sm:mt-6">
-                        <button type="button" onclick="document.getElementById('ios-install-modal').classList.add('hidden')" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Compris</button>
+                    <div class="w-24 h-24 bg-cyan-500/10 rounded-full flex items-center justify-center border border-cyan-500/20 backdrop-blur-md">
+                        <span class="text-3xl font-black text-cyan-400">+45%</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Android/Generic Install Guide Modal -->
-    <div id="android-install-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-gray-900/75 transition-opacity"></div>
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                    <div>
-                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                            <img src="{{ company_logo() }}" alt="App Icon" class="h-8 w-8 rounded-lg">
-                        </div>
-                        <div class="mt-3 text-center sm:mt-5">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }}</h3>
-                            <div class="mt-2 text-left">
-                                <p class="text-sm text-gray-500 mb-4">Si l'installation automatique ne démarre pas :</p>
-                                <ol class="text-sm text-gray-600 list-decimal pl-5 space-y-3">
-                                    <li>Appuyez sur le menu du navigateur (<strong>⋮</strong> ou <strong>☰</strong>).</li>
-                                    <li>Cherchez l'option <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.</li>
-                                    <li>Suivez les instructions à l'écran.</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 sm:mt-6">
-                        <button type="button" onclick="document.getElementById('android-install-modal').classList.add('hidden')" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Compris</button>
-                    </div>
+            <!-- Sécurité -->
+            <div class="glass bento-card p-8 flex flex-col justify-center">
+                <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 backdrop-blur-sm border border-blue-400/30">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
+                <h4 class="font-bold mb-1">Sécurité Avancée</h4>
+                <p class="text-xs text-slate-500">Chiffrement des données et contrôle d'accès par rôles pour protéger vos informations sensibles.</p>
             </div>
-        </div>
-    </div>
 
-    <!-- PWA Install Button Mobile (Welcome Page Specific) -->
-    <div id="pwa-install-btn-mobile-welcome" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:hidden">
-        <button onclick="installPWAWithModal()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-full shadow-xl text-base font-bold transition-transform hover:scale-105 animate-bounce">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            Installer l'App
-        </button>
-    </div>
+            <!-- Rapports -->
+            <div class="glass bento-card p-8 flex flex-col justify-center">
+                <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4 backdrop-blur-sm border border-cyan-400/30">
+                    <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <h4 class="font-bold mb-1">Rapports & Analytics</h4>
+                <p class="text-xs text-slate-500">Tableaux de bord personnalisables et rapports détaillés pour piloter votre activité.</p>
+            </div>
+
+        </div>
+    </section>
 
     <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('nav-glass', 'shadow-lg');
-            } else {
-                navbar.classList.remove('nav-glass', 'shadow-lg');
-            }
+        // --- ANIMATION 3D : Particules ---
+        const canvas = document.querySelector('#bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const counts = 2500;
+        const positions = new Float32Array(counts * 3);
+
+        for(let i = 0; i < counts * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 50;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: '#3b82f6',
+            transparent: true,
+            opacity: 0.6
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 15;
+
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.0008;
+            const targetX = (mouseX / window.innerWidth - 0.5) * 2;
+            const targetY = (mouseY / window.innerHeight - 0.5) * 2;
+            particlesMesh.rotation.x += (targetY - particlesMesh.rotation.x) * 0.02;
+            particlesMesh.rotation.y += (targetX - particlesMesh.rotation.y) * 0.02;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // --- GSAP REVEAL ---
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.reveal').forEach((el, i) => {
+            gsap.from(el, {
+                y: 30,
+                opacity: 0,
+                duration: 1.2,
+                delay: i * 0.1,
+                ease: "power4.out"
             });
         });
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register("{{ asset('service-worker.js') }}");
-            });
-        }
-
-        // PWA Robust Install Logic (Welcome Page)
-        let deferredPrompt;
-        const installBtnWelcome = document.getElementById('pwa-install-btn-mobile-welcome');
-        const iosModal = document.getElementById('ios-install-modal');
-        const androidModal = document.getElementById('android-install-modal');
-
-        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isMobile = () => /android|iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isInStandaloneMode = () => ('standalone' in window.navigator && window.navigator.standalone) || (window.matchMedia('(display-mode: standalone)').matches);
-
-        function installPWAWithModal() {
-            if (isIos()) {
-                iosModal.classList.remove('hidden');
-            } else {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        deferredPrompt = null;
-                        if(installBtnWelcome) installBtnWelcome.style.display = 'none';
-                    });
-                } else {
-                    androidModal.classList.remove('hidden');
-                }
-            }
-        }
-
-        // Always show button on mobile if not standalone
-        if (isMobile() && !isInStandaloneMode() && installBtnWelcome) {
-            installBtnWelcome.style.display = 'flex';
-        }
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
-    <!-- Mobile menu flyout moved to end of body -->
-    <div x-show="mobileMenuOpen" 
-         class="fixed inset-0 z-[100] md:hidden" 
-         style="display: none;"
-         @keydown.escape.window="mobileMenuOpen = false">
-        
-        <!-- Semi-transparent backdrop -->
-        <div x-show="mobileMenuOpen"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" 
-             @click="mobileMenuOpen = false"></div>
-        
-        <!-- Flyout Panel -->
-        <div x-show="mobileMenuOpen"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="translate-x-full"
-             x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition ease-in duration-200 transform"
-             x-transition:leave-start="translate-x-0"
-             x-transition:leave-end="translate-x-full"
-             class="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-white shadow-2xl flex flex-col">
-            
-            <!-- Menu Header -->
-            <div class="flex justify-between items-center p-4 border-b border-gray-50">
-                <div class="flex items-center space-x-2">
-                    <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-6 w-auto">
-                    <span class="text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">{{ company_name() }}</span>
-                </div>
-                <button @click="mobileMenuOpen = false" class="p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg transition-colors">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Navigation Links -->
-            <nav class="flex-1 overflow-y-auto py-4 px-4 space-y-1">
-                <a href="#fonctionnalites" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
-                    Fonctionnalités
-                </a>
-                <a href="#avantages" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
-                    Avantages
-                </a>
-                <a href="#contact" @click="mobileMenuOpen = false" class="flex items-center p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-semibold transition-all">
-                    Contact
-                </a>
-            </nav>
-
-            <!-- Bottom Actions -->
-            <div class="p-4 border-t border-gray-50 bg-gray-50/50 space-y-2.5">
-                @auth
-                    <a href="{{ url('/dashboard') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 gradient-primary text-white rounded-xl font-bold text-center text-sm shadow-lg shadow-blue-200/50">
-                        Mon Espace Personnel
-                    </a>
-                @else
-                    <a href="{{ route('access.request') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 gradient-primary text-white rounded-xl font-bold text-center text-sm shadow-lg shadow-blue-200/50">
-                        S'inscrire
-                    </a>
-                    <a href="{{ route('login') }}" @click="mobileMenuOpen = false" class="block w-full py-3.5 text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl font-bold text-center text-sm transition-all shadow-sm">
-                        Se connecter
-                    </a>
-                @endauth
-            </div>
-        </div>
-    </div>
 </body>
 </html>
-
