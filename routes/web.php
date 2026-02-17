@@ -126,6 +126,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/debug-routing-controller', [App\Http\Controllers\OpportunityController::class, 'getRoutingDiagnostic']);
     Route::get('/debug-routing-simple', function() { return "Simple routing works - " . now(); });
 
+
     // All roles can view opportunities (wildcard routes last)
     Route::get('/opportunities', [App\Http\Controllers\OpportunityController::class, 'index'])->name('opportunities.index');
     Route::get('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'show'])->name('opportunities.show');

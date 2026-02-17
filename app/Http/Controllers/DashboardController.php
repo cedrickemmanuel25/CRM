@@ -99,6 +99,29 @@ class DashboardController extends Controller
                 ->whereMonth('date_cloture_prev', $date->month)
                 ->sum('montant_estime');
         }
+        // 3. Lead Source Distribution
+        $data['charts']['sources'] = Contact::select('source', DB::raw('count(*) as count'))
+            ->whereNotNull('source')
+            ->where('source', '!=', '')
+            ->groupBy('source')
+            ->get();
+
+        // 4. Leads & Opps Trend (Last 15 days)
+        $dates = [];
+        $leadsCounts = [];
+        $oppsCounts = [];
+        for ($i = 14; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $dates[] = $date->translatedFormat('d M');
+            $leadsCounts[] = Contact::whereDate('created_at', $date)->count();
+            $oppsCounts[] = (int) Opportunity::whereDate('created_at', $date)->count();
+        }
+        $data['charts']['leads_trend'] = [
+            'labels' => $dates,
+            'leads' => $leadsCounts,
+            'opps' => $oppsCounts,
+        ];
+
         $data['charts']['revenue_combo'] = [
             'labels' => $months,
             'revenue' => $revenueData,

@@ -28,11 +28,11 @@
     </div>
 
     <!-- Error Toast -->
-    <div x-show="showErrorToast" x-transition class="fixed bottom-4 right-4 z-[100] w-full max-w-sm rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 p-4" style="display: none;">
+    <div x-show="showErrorToast" x-transition class="fixed bottom-4 right-4 z-[100] w-full max-w-sm rounded-lg bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 p-4" style="display: none;">
         <div class="flex items-start">
              <div class="flex-shrink-0"><svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
-             <div class="ml-3 w-0 flex-1 pt-0.5"><p class="text-sm font-medium text-gray-900">Erreur</p><p class="mt-1 text-sm text-gray-500" x-text="errorMessage"></p></div>
-             <div class="ml-4 flex flex-shrink-0"><button @click="showErrorToast = false" class="bg-white rounded-md text-gray-400 hover:text-gray-500"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></button></div>
+             <div class="ml-3 w-0 flex-1 pt-0.5"><p class="text-sm font-medium text-white">Erreur</p><p class="mt-1 text-sm text-slate-400" x-text="errorMessage"></p></div>
+             <div class="ml-4 flex flex-shrink-0"><button @click="showErrorToast = false" class="bg-slate-800 rounded-md text-slate-400 hover:text-slate-300"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></button></div>
         </div>
     </div>
 
@@ -44,8 +44,8 @@
         <div class="mb-6 sm:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Pipeline des Ventes</h1>
-                    <p class="mt-1 text-sm text-gray-600">Gérez et suivez vos opportunités commerciales</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white">Pipeline des Ventes</h1>
+                    <p class="mt-1 text-sm text-slate-400">Gérez et suivez vos opportunités commerciales</p>
                 </div>
                 
                 <div class="flex items-center gap-3">
@@ -61,47 +61,47 @@
 
             <!-- Métriques clés -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Total Pipeline</p>
-                            <p class="mt-2 text-3xl font-bold text-gray-900" id="total-pipeline-value">{{ format_currency($totalPipelineValue) }}</p>
+                            <p class="text-sm font-medium text-slate-400">Total Pipeline</p>
+                            <p class="mt-2 text-3xl font-bold text-white" id="total-pipeline-value">{{ format_currency($totalPipelineValue) }}</p>
                         </div>
-                        <div class="h-12 w-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                            <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <div class="h-12 w-12 bg-indigo-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Valeur Pondérée</p>
-                            <p class="mt-2 text-3xl font-bold text-emerald-600" id="weighted-pipeline-value">{{ format_currency($weightedPipelineValue) }}</p>
+                            <p class="text-sm font-medium text-slate-400">Valeur Pondérée</p>
+                            <p class="mt-2 text-3xl font-bold text-emerald-400" id="weighted-pipeline-value">{{ format_currency($weightedPipelineValue) }}</p>
                         </div>
-                        <div class="h-12 w-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <svg class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="h-12 w-12 bg-emerald-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Opportunités Actives</p>
-                            <p class="mt-2 text-3xl font-bold text-gray-900" id="active-opportunities-count">{{ $opportunities->total() }}</p>
+                            <p class="text-sm font-medium text-slate-400">Opportunités Actives</p>
+                            <p class="mt-2 text-3xl font-bold text-white" id="active-opportunities-count">{{ $opportunities->total() }}</p>
                         </div>
-                        <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <div class="h-12 w-12 bg-blue-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Taux de Conversion</p>
-                            <p class="mt-2 text-3xl font-bold text-purple-600" id="win-rate">
+                            <p class="text-sm font-medium text-slate-400">Taux de Conversion</p>
+                            <p class="mt-2 text-3xl font-bold text-purple-400" id="win-rate">
                                 @php
                                     $total = collect($pipeline)->flatten()->count();
                                     $won = isset($pipeline['gagne']) ? $pipeline['gagne']->count() : 0;
@@ -110,8 +110,8 @@
                                 {{ $rate }}%
                             </p>
                         </div>
-                        <div class="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <div class="h-12 w-12 bg-purple-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                         </div>
                     </div>
                 </div>
@@ -119,22 +119,22 @@
         </div>
 
         <!-- Barre de contrôles -->
-        <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 mb-4 sm:mb-6">
+        <div class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-3 sm:p-4 mb-4 sm:mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <!-- Toggle de vue -->
-                <div class="inline-flex bg-gray-100 rounded-lg p-1 w-full sm:w-auto">
-                    <button @click="switchView('pipeline')" :class="viewMode === 'pipeline' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
+                <div class="inline-flex bg-slate-900/50 rounded-lg p-1 w-full sm:w-auto">
+                    <button @click="switchView('pipeline')" :class="viewMode === 'pipeline' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
                         <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
                         Pipeline
                     </button>
-                    <button @click="switchView('list')" :class="viewMode === 'list' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
+                    <button @click="switchView('list')" :class="viewMode === 'list' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
                         <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                         Liste
                     </button>
                 </div>
 
                 <!-- Bouton filtres -->
-                <button @click="showFilters = !showFilters" :class="showFilters ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'bg-white text-gray-700 border-gray-300'" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-all w-full sm:w-auto">
+                <button @click="showFilters = !showFilters" :class="showFilters ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500' : 'bg-slate-800 text-slate-300 border-white/10 hover:bg-slate-700'" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-all w-full sm:w-auto">
                     <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     Filtres
                 </button>
@@ -142,57 +142,57 @@
         </div>
 
         <!-- Panneau de filtres -->
-        <div x-show="showFilters" x-transition class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div x-show="showFilters" x-transition class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6 mb-6">
             <form action="{{ route('opportunities.index') }}" method="GET">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="lg:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Recherche</label>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher..." class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Recherche</label>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher..." class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Commercial</label>
-                        <select name="commercial_id" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                            <option value="">Tous</option>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Commercial</label>
+                        <select name="commercial_id" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            <option value="" class="text-gray-900">Tous</option>
                             @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ request('commercial_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                            <option value="{{ $user->id }}" {{ request('commercial_id') == $user->id ? 'selected' : '' }} class="text-gray-900">{{ $user->name }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Stade</label>
-                        <select name="stade" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                            <option value="">Tous</option>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Stade</label>
+                        <select name="stade" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            <option value="" class="text-gray-900">Tous</option>
                             @foreach(['prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu'] as $s)
-                            <option value="{{ $s }}" {{ request('stade') == $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                            <option value="{{ $s }}" {{ request('stade') == $s ? 'selected' : '' }} class="text-gray-900">{{ ucfirst($s) }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date début</label>
-                        <input type="date" name="date_close_start" value="{{ request('date_close_start') }}" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Date début</label>
+                        <input type="date" name="date_close_start" value="{{ request('date_close_start') }}" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date fin</label>
-                        <input type="date" name="date_close_end" value="{{ request('date_close_end') }}" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Date fin</label>
+                        <input type="date" name="date_close_end" value="{{ request('date_close_end') }}" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Montant min (€)</label>
-                        <input type="number" name="amount_min" value="{{ request('amount_min') }}" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Montant min (€)</label>
+                        <input type="number" name="amount_min" value="{{ request('amount_min') }}" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Montant max (€)</label>
-                        <input type="number" name="amount_max" value="{{ request('amount_max') }}" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Montant max (€)</label>
+                        <input type="number" name="amount_max" value="{{ request('amount_max') }}" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
-                    <a href="{{ route('opportunities.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+                <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-white/5">
+                    <a href="{{ route('opportunities.index') }}" class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
                         Réinitialiser
                     </a>
                     <button type="submit" class="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">

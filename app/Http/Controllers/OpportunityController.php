@@ -121,10 +121,11 @@ class OpportunityController extends Controller
      */
     public function create()
     {
-        $contacts = \App\Models\Contact::orderBy('nom')->get();
-        // if (auth()->user()->isCommercial()) {
-        //     $contacts = \App\Models\Contact::byUser(auth()->id())->orderBy('nom')->get();
-        // }
+        if (auth()->user()->isCommercial()) {
+            $contacts = \App\Models\Contact::byUser(auth()->id())->orderBy('nom')->get();
+        } else {
+            $contacts = \App\Models\Contact::orderBy('nom')->get();
+        }
         
         $users = \App\Models\User::whereIn('role', ['admin', 'commercial'])->orderBy('name')->get();
 
@@ -237,10 +238,11 @@ class OpportunityController extends Controller
             abort(403);
         }
 
-        $contacts = \App\Models\Contact::orderBy('nom')->get();
-        // if (auth()->user()->isCommercial()) {
-        //     $contacts = \App\Models\Contact::byUser(auth()->id())->orderBy('nom')->get();
-        // }
+        if (auth()->user()->isCommercial()) {
+            $contacts = \App\Models\Contact::byUser(auth()->id())->orderBy('nom')->get();
+        } else {
+            $contacts = \App\Models\Contact::orderBy('nom')->get();
+        }
         
         $users = \App\Models\User::whereIn('role', ['admin', 'commercial'])->orderBy('name')->get();
 

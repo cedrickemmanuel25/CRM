@@ -32,22 +32,18 @@ class TaskController extends Controller
         $contacts = \App\Models\Contact::orderBy('nom')->get();
         $opportunities = \App\Models\Opportunity::active()->orderBy('titre')->get();
 
-        // 2. Fetch Tasks for the Board/List
-        $query = Task::with(['assignee', 'related']);
+        // 2. Fetch Tasks for the Board/List - Show all active tasks, not filtered by selected date
+        $tasksQueryBoard = Task::with(['assignee', 'related']);
         
-        // Apply filters
+        // Apply filters (except date for the board)
         if ($request->filled('assigned_to')) {
-            $query->byUser($request->assigned_to);
+            $tasksQueryBoard->byUser($request->assigned_to);
         }
         if (!auth()->user()->isAdmin() && !$request->filled('assigned_to')) {
-             $query->byUser(auth()->id());
+             $tasksQueryBoard->byUser(auth()->id());
         }
         
-        if ($request->filled('date')) {
-            $query->whereDate('due_date', $request->date);
-        }
-
-        $allTasks = $query->orderBy('due_date')->get();
+        $allTasks = $tasksQueryBoard->orderBy('priority', 'desc')->orderBy('due_date')->get();
         $tasks = [
             'todo' => $allTasks->where('statut', 'todo'),
             'in_progress' => $allTasks->where('statut', 'in_progress'),
