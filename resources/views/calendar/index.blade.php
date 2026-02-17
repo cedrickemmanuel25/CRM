@@ -3,131 +3,135 @@
 @section('title', 'Calendrier & Tâches')
 
 @section('content')
-<div class="min-h-screen bg-slate-50" x-data="unifiedTaskApp()">
+<div class="min-h-screen bg-[#020617] text-slate-300" x-data="unifiedTaskApp()" x-init="if({{ $errors->any() ? 'true' : 'false' }}) openTaskModal = true">
     
-    <!-- Top Header -->
-    <div class="bg-white border-b border-slate-200 sticky top-16 z-30">
-        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
+    <!-- Top Header : Enterprise Context -->
+    <div class="bg-slate-900/50 backdrop-blur-xl border-b border-white/10 sticky top-16 z-30">
+        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 py-5">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="w-12 h-12 bg-blue-600/10 rounded-2xl flex items-center justify-center border border-blue-500/20 shadow-lg shadow-blue-500/5">
+                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-900">Agenda & Tâches</h1>
-                        <p class="text-sm text-slate-500" x-text="selectedDateLabel"></p>
+                        <h1 class="text-2xl font-black text-white tracking-tighter uppercase">Agenda & Tâches</h1>
+                        <p class="text-[10px] font-black text-blue-500/60 uppercase tracking-[0.3em] mt-1">{{ now()->translatedFormat('l d F Y') }}</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 w-full sm:w-auto">
-                    <button @click="openTaskModal = true" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+                <div class="flex items-center gap-4 w-full sm:w-auto">
+                    <button @click="showFullCalendar = !showFullCalendar" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-3 bg-white/5 border border-white/10 text-slate-300 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white/10 hover:text-white transition-all">
+                        <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16m-7 6h7"/>
+                        </svg>
+                        <span x-text="showFullCalendar ? 'Tableau Kanban' : 'Vue Agenda'"></span>
+                    </button>
+                    <button @click="console.log('Button Clicked'); openTaskModal = true" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
                         </svg>
                         <span>Nouvelle Tâche</span>
-                    </button>
-                    <button @click="showFullCalendar = !showFullCalendar" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-colors shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
-                        </svg>
-                        <span x-text="showFullCalendar ? 'Vue Kanban' : 'Vue Agenda'"></span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="max-w-[1800px] mx-auto px-4 pt-10 pb-12">
         <div class="flex flex-col lg:flex-row gap-6 items-start">
             
             <!-- Left Sidebar: Mini Calendar -->
-            <div class="w-full lg:w-80 flex-shrink-0 space-y-6">
+            <div class="w-full lg:w-64 flex-shrink-0 space-y-6">
                 
                 <!-- Mini Calendar Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                        <h3 class="text-sm font-bold text-slate-900" x-text="currentMonthLabel"></h3>
-                        <div class="flex gap-1">
-                            <button @click="prevMonth()" class="p-1.5 hover:bg-white rounded-lg transition-colors text-slate-500 border border-transparent hover:border-slate-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                <div class="bg-slate-900/50 backdrop-blur-xl rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden group">
+                    <div class="px-6 py-5 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                        <h3 class="text-[10px] font-black text-white uppercase tracking-[0.2em]" x-text="currentMonthLabel"></h3>
+                        <div class="flex gap-1.5">
+                            <button @click="prevMonth()" class="p-2 hover:bg-white/10 rounded-xl transition-all text-slate-500 hover:text-white border border-transparent hover:border-white/10 shadow-inner">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                             </button>
-                            <button @click="nextMonth()" class="p-1.5 hover:bg-white rounded-lg transition-colors text-slate-500 border border-transparent hover:border-slate-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            <button @click="nextMonth()" class="p-2 hover:bg-white/10 rounded-xl transition-all text-slate-500 hover:text-white border border-transparent hover:border-white/10 shadow-inner">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                             </button>
                         </div>
                     </div>
                     
-                    <div class="p-3">
-                        <div class="grid grid-cols-7 mb-2">
+                    <div class="p-5">
+                        <div class="grid grid-cols-7 mb-4">
                             <template x-for="day in ['L','M','M','J','V','S','D']">
-                                <div class="text-[10px] font-bold text-slate-400 text-center py-1 uppercase tracking-wider" x-text="day"></div>
+                                <div class="text-[10px] font-black text-slate-600 text-center py-2 uppercase tracking-[0.2em]" x-text="day"></div>
                             </template>
                         </div>
-                        <div class="grid grid-cols-7 gap-px">
+                        <div class="grid grid-cols-7 gap-1">
                             <template x-for="day in monthDays" :key="day.date">
                                 <button @click="selectDate(day.date)" 
-                                        class="aspect-square flex flex-col items-center justify-center rounded-lg text-xs transition-all relative group"
+                                        class="aspect-square flex flex-col items-center justify-center rounded-xl text-xs font-bold transition-all relative group"
                                         :class="{
-                                            'text-slate-300': !day.isCurrentMonth,
-                                            'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-100': isSelected(day.date),
-                                            'hover:bg-slate-100 text-slate-700': day.isCurrentMonth && !isSelected(day.date),
-                                            'ring-1 ring-inset ring-indigo-200': isToday(day.date) && !isSelected(day.date)
+                                            'text-slate-700': !day.isCurrentMonth,
+                                            'bg-blue-600 text-white shadow-lg shadow-blue-500/20 scale-110 z-10': isSelected(day.date),
+                                            'hover:bg-white/5 text-slate-400 hover:text-white': day.isCurrentMonth && !isSelected(day.date),
+                                            'border border-blue-500/30 text-blue-400': isToday(day.date) && !isSelected(day.date)
                                         }">
                                     <span x-text="day.dayNumber"></span>
                                     <!-- Indicator for events -->
                                     <div x-show="hasEvents(day.date)" 
-                                         class="w-1 h-1 rounded-full mt-0.5"
-                                         :class="isSelected(day.date) ? 'bg-white' : 'bg-indigo-400'"></div>
+                                         class="w-1 h-1 rounded-full mt-1"
+                                         :class="isSelected(day.date) ? 'bg-white/50' : 'bg-blue-500'"></div>
                                 </button>
                             </template>
                         </div>
                     </div>
+
+                    <!-- Selected Date Label -->
+                    <div class="p-6 bg-blue-500/5 border-t border-white/5">
+                        <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] text-center" x-text="selectedDateLabel"></p>
+                    </div>
                 </div>
 
                 <!-- Legend Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hidden lg:block">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Légende</h3>
-                    <div class="space-y-3">
+                <div class="bg-slate-900/50 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl hidden lg:block">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Légende </h3>
+                    <div class="space-y-4">
                         <template x-for="(color, type) in legend" :key="type">
-                            <div class="flex items-center gap-3">
-                                <span class="w-2.5 h-2.5 rounded-full" :class="color"></span>
-                                <span class="text-sm text-slate-600 capitalize" x-text="type"></span>
+                            <div class="flex items-center gap-4 group cursor-default">
+                                <span class="w-3 h-3 rounded-full shadow-lg transition-transform group-hover:scale-125" :class="color"></span>
+                                <span class="text-xs font-bold text-slate-400 capitalize group-hover:text-slate-200 transition-colors" x-text="type"></span>
                             </div>
                         </template>
                     </div>
                 </div>
             </div>
 
-            <!-- Main Content: Task Board or Full Calendar -->
-            <div class="flex-1 min-w-0 w-full">
-                
                 <!-- Full Calendar View (Alt) -->
-                <div x-show="showFullCalendar" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-                        <h2 class="font-bold text-slate-900" x-text="calendarView === 'week' ? 'Agenda hebdomadaire' : 'Agenda du jour'"></h2>
-                        <div class="flex bg-slate-100 rounded-lg p-1">
-                            <button @click="calendarView = 'week'" :class="calendarView === 'week' ? 'bg-white shadow-sm' : ''" class="px-3 py-1 text-xs font-semibold rounded-md transition-all">Semaine</button>
-                            <button @click="calendarView = 'day'" :class="calendarView === 'day' ? 'bg-white shadow-sm' : ''" class="px-3 py-1 text-xs font-semibold rounded-md transition-all">Jour</button>
+                <div x-show="showFullCalendar" x-cloak class="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
+                    <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between bg-white/5">
+                        <h2 class="text-[10px] font-black text-white uppercase tracking-[0.2em]" x-text="calendarView === 'week' ? 'Plan hebdomadaire' : 'Focus Journalier'"></h2>
+                        <div class="flex bg-slate-800/60 rounded-xl p-1.5 border border-white/5">
+                            <button @click="calendarView = 'week'" :class="calendarView === 'week' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-400 hover:text-white'" class="px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all">Semaine</button>
+                            <button @click="calendarView = 'day'" :class="calendarView === 'day' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-400 hover:text-white'" class="px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all">Jour</button>
                         </div>
                     </div>
-                    <div class="p-0 overflow-x-auto min-h-[600px]">
+                    <div class="p-0 overflow-x-auto min-h-[650px] custom-scrollbar">
                         <!-- Week View -->
-                        <div x-show="calendarView === 'week'" class="grid grid-cols-7 divide-x divide-slate-100">
+                        <div x-show="calendarView === 'week'" class="grid grid-cols-7 divide-x divide-white/5">
                             <template x-for="day in weekDays" :key="day.date">
-                                <div class="min-h-[500px] p-2">
-                                    <div class="text-center py-2 mb-3 rounded-lg" :class="isToday(day.date) ? 'bg-indigo-50' : ''">
-                                        <div class="text-[10px] font-bold text-slate-400 uppercase" x-text="day.dayName"></div>
-                                        <div class="text-sm font-bold" :class="isToday(day.date) ? 'text-indigo-600' : 'text-slate-700'" x-text="day.dayNumber"></div>
+                                <div class="min-h-[500px] p-3 transition-colors hover:bg-white/[0.02]">
+                                    <div class="text-center py-4 mb-6 rounded-2xl transition-all" :class="isToday(day.date) ? 'bg-blue-600/10 border border-blue-500/20 shadow-lg shadow-blue-500/5' : ''">
+                                        <div class="text-[10px] font-black uppercase tracking-[0.2em]" :class="isToday(day.date) ? 'text-blue-400' : 'text-slate-500'" x-text="day.dayName"></div>
+                                        <div class="text-xl font-black mt-1" :class="isToday(day.date) ? 'text-white' : 'text-slate-200'" x-text="day.dayNumber"></div>
                                     </div>
-                                    <div class="space-y-2">
+                                    <div class="space-y-3">
                                         <template x-for="event in getEventsForDate(day.date)" :key="event.id + '-' + event.type">
                                             <div @click="openEventDetail(event)" 
-                                                 class="p-2 rounded-lg text-[10px] border leading-tight cursor-pointer hover:scale-[1.02] transition-transform"
-                                                 :class="event.className">
-                                                <div class="font-bold truncate" x-text="event.title"></div>
-                                                <div class="opacity-80 mt-1" x-text="formatTime(event.start)"></div>
+                                                 class="p-4 rounded-xl text-[10px] border relative overflow-hidden leading-tight cursor-pointer hover:scale-[1.02] active:scale-95 transition-all group shadow-lg"
+                                                 :class="event.className.replace('bg-', 'bg-').replace('border-', 'border-') + ' backdrop-blur-md'">
+                                                <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                <div class="relative z-10 font-black text-white uppercase tracking-wider line-clamp-2" x-text="event.title"></div>
+                                                <div class="relative z-10 opacity-70 mt-2 font-bold flex items-center gap-1.5">
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                    <span x-text="formatTime(event.start)"></span>
+                                                </div>
                                             </div>
                                         </template>
                                     </div>
@@ -135,23 +139,32 @@
                             </template>
                         </div>
                         <!-- Day View -->
-                        <div x-show="calendarView === 'day'" class="p-6">
-                            <div class="max-w-xl mx-auto">
+                        <div x-show="calendarView === 'day'" class="p-10">
+                            <div class="max-w-2xl mx-auto space-y-6">
                                 <template x-for="event in getEventsForDate(selectedDate)" :key="event.id + '-' + event.type">
                                     <div @click="openEventDetail(event)" 
-                                         class="mb-3 p-4 rounded-xl border-l-4 shadow-sm cursor-pointer hover:translate-x-1 transition-transform flex items-center justify-between"
-                                         :class="event.className + ' border-slate-200 bg-white'">
-                                        <div>
-                                            <div class="text-xs font-bold uppercase opacity-60 mb-1" x-text="event.type === 'task' ? 'Tâche' : 'Activité'"></div>
-                                            <div class="text-sm font-bold text-slate-900" x-text="event.title"></div>
+                                         class="group p-6 rounded-[2rem] border-l-4 shadow-2xl cursor-pointer hover:translate-x-2 transition-all flex items-center justify-between border-white/5 bg-slate-900/40 backdrop-blur-xl relative overflow-hidden"
+                                         :class="event.className.replace('bg-', 'border-').replace('text-', 'text-')">
+                                        <div class="absolute inset-0 bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <div class="relative z-10">
+                                            <div class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-2 flex items-center gap-2">
+                                                <div class="w-2 h-2 rounded-full" :class="event.className"></div>
+                                                <span x-text="event.type === 'task' ? 'Flux Opérationnel' : 'Activité Client'"></span>
+                                            </div>
+                                            <div class="text-base font-black text-white tracking-tight" x-text="event.title"></div>
                                         </div>
-                                        <div class="text-xs font-medium text-slate-500 whitespace-nowrap ml-4" x-text="formatTime(event.start)"></div>
+                                        <div class="relative z-10 flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5 font-black text-[10px] text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-all">
+                                            <svg class="w-4 h-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            <span x-text="formatTime(event.start)"></span>
+                                        </div>
                                     </div>
                                 </template>
                                 <template x-if="getEventsForDate(selectedDate).length === 0">
-                                    <div class="text-center py-20 text-slate-400">
-                                        <svg class="w-12 h-12 mx-auto mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                        <p>Aucun événement pour ce jour</p>
+                                    <div class="flex flex-col items-center justify-center py-32 text-slate-600">
+                                        <div class="w-24 h-24 bg-white/5 rounded-[2.5rem] flex items-center justify-center mb-8 border border-white/5 shadow-inner">
+                                            <svg class="w-10 h-10 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </div>
+                                        <p class="text-[10px] font-black uppercase tracking-[0.3em]">Aucune activité détectée</p>
                                     </div>
                                 </template>
                             </div>
@@ -173,19 +186,28 @@
 
     <!-- Task Creation Modal -->
     <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-[60] overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 p-4">
-            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-            <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden" x-show="openTaskModal" x-transition>
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-slate-900">Nouvelle tâche</h3>
-                    <button @click="openTaskModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <div class="flex items-center justify-center min-h-screen px-4 p-8">
+            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
+            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-2xl w-full overflow-hidden border border-white/10" x-show="openTaskModal" x-transition>
+                <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <span class="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">Nouvelle Unité Action</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white uppercase tracking-tight">Planification Tâche</h3>
+                    </div>
+                    <button @click="openTaskModal = false" class="p-3 text-slate-500 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
-                <div class="px-6 py-6">
+                <div class="px-8 py-8">
                     <form action="{{ route('tasks.store') }}" method="POST">
                         @csrf
-                        @include('tasks._form')
+                        @include('tasks._form', [
+                            'users' => $users,
+                            'contacts' => $contacts,
+                            'opportunities' => $opportunities
+                        ])
                     </form>
                 </div>
             </div>
@@ -194,35 +216,40 @@
 
     <!-- Event Detail Modal -->
     <div x-show="selectedEvent" x-cloak class="fixed inset-0 z-[70] overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 p-4">
-            <div @click="selectedEvent = null" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-            <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden" x-show="selectedEvent" x-transition>
-                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between" :class="selectedEvent?.className">
-                    <h3 class="text-lg font-bold text-white" x-text="selectedEvent?.type === 'task' ? 'Détails de la tâche' : 'Détails de l\'activité'"></h3>
-                    <button @click="selectedEvent = null" class="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <div class="flex items-center justify-center min-h-screen px-4 p-8">
+            <div @click="selectedEvent = null" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
+            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-lg w-full overflow-hidden border border-white/10" x-show="selectedEvent" x-transition>
+                <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between transition-colors" :class="selectedEvent?.className.replace('bg-', 'bg-').replace('text-', 'text-')">
+                    <div>
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.3em]">Analyse de Flux</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white uppercase tracking-tight" x-text="selectedEvent?.type === 'task' ? 'Fiche d\'action' : 'Mémo Activité'"></h3>
+                    </div>
+                    <button @click="selectedEvent = null" class="p-3 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
-                <div class="p-6">
-                    <div class="mb-6">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Titre / Description</label>
-                        <p class="text-slate-900 font-semibold" x-text="selectedEvent?.title"></p>
+                <div class="p-8 space-y-8">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 block">Désignation / Contexte</label>
+                        <p class="text-lg font-black text-white tracking-tight leading-snug" x-text="selectedEvent?.title"></p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Date</label>
-                            <p class="text-slate-700 text-sm" x-text="new Date(selectedEvent?.start).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })"></p>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1.5 block">Planification</label>
+                            <p class="text-white font-black text-sm" x-text="new Date(selectedEvent?.start).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })"></p>
                         </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Heure</label>
-                            <p class="text-slate-700 text-sm" x-text="formatTime(selectedEvent?.start)"></p>
+                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1.5 block">Horodatage</label>
+                            <p class="text-white font-black text-sm" x-text="formatTime(selectedEvent?.start)"></p>
                         </div>
                     </div>
-                    <div class="flex justify-end pt-4 border-t border-slate-100">
+                    <div class="flex justify-end pt-8 border-t border-white/5 gap-4">
                         <template x-if="selectedEvent?.type === 'task'">
-                            <a :href="'/tasks/' + selectedEvent.id" class="px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition-colors">Voir la tâche</a>
+                            <a :href="'/tasks/' + selectedEvent.id" class="px-8 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">Inspecter</a>
                         </template>
-                        <button @click="selectedEvent = null" class="ml-3 px-4 py-2 bg-slate-100 text-slate-600 text-sm font-bold rounded-lg hover:bg-slate-200 transition-colors">Fermer</button>
+                        <button @click="selectedEvent = null" class="px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all">Fermer</button>
                     </div>
                 </div>
             </div>
@@ -248,6 +275,7 @@ window.unifiedTaskApp = function() {
         weekDays: [],
         
         init() {
+            console.log('Unified Task App Initializing...');
             this.generateMonthDays();
             this.generateWeekDays();
             this.startPolling();
@@ -342,20 +370,32 @@ window.unifiedTaskApp = function() {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     credentials: 'same-origin'
                 });
-                if (!response.ok) throw new Error('Unauthenticated or server error');
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('Session expirée, redirection...');
+                        window.location.reload();
+                        return;
+                    }
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
                 const data = await response.json();
                 if (data.html) {
-                    const binaryString = atob(data.html);
-                    const bytes = new Uint8Array(binaryString.length);
-                    for (let i = 0; i < binaryString.length; i++) {
-                        bytes[i] = binaryString.charCodeAt(i);
+                    if (this.$refs.taskBoard) {
+                        const binaryString = atob(data.html);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const decodedHtml = new TextDecoder('utf-8').decode(bytes);
+                        this.$refs.taskBoard.innerHTML = decodedHtml;
+                        this.events = data.events || this.events;
+                    } else {
+                        console.debug('taskBoard ref not found, skipping partial replacement');
                     }
-                    const decodedHtml = new TextDecoder('utf-8').decode(bytes);
-                    this.$refs.taskBoard.innerHTML = decodedHtml;
-                    this.events = data.events;
                 }
             } catch (error) {
-                console.warn('Polling error:', error);
+                console.warn('Polling error or network failure:', error.message);
             }
         },
         
@@ -369,9 +409,34 @@ window.unifiedTaskApp = function() {
 
 <style>
 [x-cloak] { display: none !important; }
-.custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+/* Supprimer absolument toutes les barres de défilement horizontales */
+html, body {
+    overflow-x: hidden !important;
+    width: 100%;
+}
+
+* {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE 10+ */
+}
+
+::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+    display: none !important;
+}
+
+.custom-scrollbar {
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
 </style>
 @endsection

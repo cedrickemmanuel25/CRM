@@ -1,4 +1,4 @@
-<html lang="fr" class="h-full bg-gray-50">
+<html lang="fr" class="h-full bg-[#030712]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,37 +6,48 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ company_logo() }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
-    <link rel="manifest" href="{{ asset('manifest.json') }}?v=3">
+    <link rel="manifest" href="{{ asset('manifest.json') }}?v=4">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Alpine.js for interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap" rel="stylesheet">
+    
     <!-- intl-tel-input for phone numbers -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.css">
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
+
     <style>
-        .iti { 
-            width: 100% !important; 
-            direction: ltr !important;
+        :root { --accent: #3b82f6; --neon: #00f2ff; --bg: #030712; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: white; }
+
+        .iti { width: 100% !important; direction: ltr !important; }
+        .iti__flag-container { left: 0 !important; right: auto !important; z-index: 10; }
+        .iti__selected-flag { background: rgba(255, 255, 255, 0.05) !important; border-radius: 0.5rem 0 0 0.5rem !important; }
+        .iti__country-list { background-color: #0a0f1d !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
+        .iti__country:hover { background-color: rgba(255, 255, 255, 0.05) !important; }
+
+        .glass-sidebar {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .iti__flag-container { 
-            left: 0 !important; 
-            right: auto !important;
-            z-index: 10; 
+
+        .glass-topbar {
+            background: rgba(3, 7, 18, 0.7);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+
         [x-cloak] { display: none !important; }
 
-        /* Security guards for images (prevent giant circle/logo crash) */
-        img, .header-user-avatar {
-            max-width: 100% !important;
-        }
-        .header-user-avatar {
-            max-width: 40px !important;
-            max-height: 40px !important;
-        }
-        img[src*="logo"] {
-            max-height: 80px !important;
-            width: auto !important;
+        /* Utilities */
+        .text-gradient {
+            background: linear-gradient(to r, #3b82f6, #00f2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
@@ -44,26 +55,20 @@
 if (auth()->check()) {
     $user = auth()->user();
     $unreadCount = $user->unreadNotifications()->count();
-    $notifData = $user->unreadNotifications()
-        ->latest()
-        ->limit(5)
-        ->get()
-        ->map(function($n) {
-            return [
-                'id' => $n->id,
-                'read_at' => $n->read_at,
-                'created_at_human' => $n->created_at->translatedFormat('d M à H:i'),
-                'data' => $n->data
-            ];
-        })->toArray();
+    $notifData = $user->unreadNotifications()->latest()->limit(5)->get()->map(function($n) {
+        return [
+            'id' => $n->id,
+            'read_at' => $n->read_at,
+            'created_at_human' => $n->created_at->translatedFormat('d M à H:i'),
+            'data' => $n->data
+        ];
+    })->toArray();
     $pendingAccessCount = $user->isAdmin() ? \App\Models\AccessRequest::pending()->count() : 0;
 } else {
-    $notifData = [];
-    $unreadCount = 0;
-    $pendingAccessCount = 0;
+    $notifData = []; $unreadCount = 0; $pendingAccessCount = 0;
 }
 @endphp
-<body class="h-full bg-gray-50 overflow-y-auto" x-data="{ 
+<body class="h-full overflow-y-auto selection:bg-cyan-500 selection:text-white" x-data="{ 
     sidebarOpen: false, 
     notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
     unreadCount: {{ $unreadCount }},
@@ -84,67 +89,38 @@ if (auth()->check()) {
         }
     },
     pollStats() {
-        // Poll notifications
         fetch('{{ route('notifications.fetch') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
-            .then(response => response.json())
-            .then(data => {
-                this.unreadCount = data.count;
-            })
-            .catch(error => console.error('Error polling notifications:', error));
-
+            .then(response => response.json()).then(data => { this.unreadCount = data.count; });
         @if(auth()->check() && auth()->user()->isAdmin())
-        // Poll access requests (Admin only)
         fetch('{{ route('admin.access-requests.stats') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
-            .then(response => response.json())
-            .then(data => {
-                this.pendingAccessCount = data.count;
-            })
-            .catch(error => console.error('Error polling access requests:', error));
+            .then(response => response.json()).then(data => { this.pendingAccessCount = data.count; });
         @endif
-    },
-    keepAlive() {
-        // Just a ping to keep session fresh
-        fetch('/api/user', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .catch(() => {});
     }
-}" 
-x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000); setInterval(() => keepAlive(), 900000)"
-@close-sidebar.window="sidebarOpen = false">
+}" x-init="setInterval(() => pollStats(), 30000)">
     @include('layouts.partials._notification_modal')
 
-    <!-- Mobile Sidebar Backdrop -->
-    <div x-show="sidebarOpen" x-cloak class="relative z-[100] lg:hidden" role="dialog" aria-modal="true">
-        <div x-show="sidebarOpen" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/80"></div>
-
+    <!-- Mobile Sidebar -->
+    <div x-show="sidebarOpen" x-cloak class="relative z-[100] lg:hidden">
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"></div>
         <div class="fixed inset-0 flex">
-            <div x-show="sidebarOpen" x-transition:enter="transition ease-in-out duration-300 transform" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="relative flex w-full max-w-xs flex-1">
-                
-                <!-- Sidebar Component (Mobile) -->
-                <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 ring-1 ring-gray-900/5 shadow-2xl relative">
-                    <div class="flex h-16 shrink-0 items-center justify-between border-b border-gray-50">
+            <div x-show="sidebarOpen" class="relative flex w-full max-w-xs flex-1">
+                <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-[#030712] border-r border-white/10 px-6 pb-4">
+                    <div class="flex h-16 shrink-0 items-center justify-between">
                         <div class="flex items-center gap-x-3">
-                            <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
-                            <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() }}</span>
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-lg flex items-center justify-center rotate-3">
+                                <img src="{{ company_logo() }}" class="h-6 w-auto brightness-0 invert">
+                            </div>
+                            <span class="text-white font-black text-xl tracking-tighter uppercase">{{ company_name() }}</span>
                         </div>
-                        <button type="button" @click="sidebarOpen = false" class="-mr-2 p-2 text-gray-500 hover:text-gray-900 focus:outline-none">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                        <button @click="sidebarOpen = false" class="text-slate-400 hover:text-white">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
-                    
-                    <!-- PWA Install Button Mobile -->
-                    <button id="pwa-install-btn-mobile" onclick="installPWA()" style="display: none;" class="mt-2 mb-4 flex items-center justify-center gap-2 gradient-primary text-white px-3 py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-200/50 transform active:scale-95">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Installer l'App
-                    </button>
                     <nav class="flex flex-1 flex-col">
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
-                            <li>
-                                <ul role="list" class="-mx-2 space-y-1">
-                                    @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => true])
-                                </ul>
-                            </li>
+                            <li><ul role="list" class="-mx-2 space-y-1">
+                                @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => true])
+                            </ul></li>
                         </ul>
                     </nav>
                 </div>
@@ -152,248 +128,77 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000); setInterval(
         </div>
     </div>
 
-    <!-- Static Sidebar for Desktop -->
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300 lg:w-[18%]">
-
-        <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-4 pb-4 custom-scrollbar relative">
-            <!-- Sidebar Header -->
-            <a href="{{ route('dashboard') }}" class="flex h-16 shrink-0 items-center mt-4 gap-x-3 px-2 overflow-hidden">
-                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 w-auto shrink-0">
-                <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
+    <!-- Desktop Sidebar -->
+    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col lg:w-[18%] transition-all duration-300">
+        <div class="flex grow flex-col gap-y-5 overflow-y-auto glass-sidebar px-4 pb-4 custom-scrollbar">
+            <a href="{{ route('dashboard') }}" class="flex h-20 shrink-0 items-center mt-4 gap-x-3 px-2">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 shadow-lg shadow-blue-500/20">
+                    <img src="{{ company_logo() }}" class="h-8 w-auto brightness-0 invert">
+                </div>
+                <span class="text-white font-black text-xl tracking-tighter uppercase leading-none">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
-
-
-
-
             <nav class="flex flex-1 flex-col mt-4">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
-                    <li>
-                        <ul role="list" class="space-y-2 -mx-2">
-
-                            @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => false])
-                        </ul>
-                    </li>
+                    <li><ul role="list" class="space-y-2 -mx-2">
+                        @include('layouts.partials.admin_sidebar_links', ['pendingAccessCount' => $pendingAccessCount, 'isMobile' => false])
+                    </ul></li>
                 </ul>
             </nav>
         </div>
     </div>
 
-    <!-- Main Content Wrapper -->
+    <!-- Main Wrapper -->
     <div class="flex flex-col transition-all duration-300 min-h-full lg:pl-[18%]">
-
-        <div class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-            <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
-                <span class="sr-only">Ouvrir la barre latérale</span>
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
+        <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 glass-topbar px-4 sm:gap-x-6 sm:px-6 lg:px-8">
+            <button type="button" @click="sidebarOpen = true" class="-m-2.5 p-2.5 text-slate-400 lg:hidden">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
             </button>
-
-            <!-- Topbar Separator -->
-            <div class="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true"></div>
-
             <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-                <!-- Spacer -->
                 <div class="flex-1"></div>
-                
                 <div class="flex items-center gap-x-4 lg:gap-x-6">
-                    <!-- Date Display -->
-                    <span class="text-sm font-medium text-gray-600 hidden sm:block bg-gray-100/50 px-3 py-1 rounded-full border border-gray-200 capitalize">
-                        {{ now()->translatedFormat('d F Y') }}
+                    <span class="text-[10px] font-black tracking-widest text-slate-500 uppercase hidden sm:block">
+                        {{ now()->translatedFormat('l d F Y') }}
                     </span>
-
-                    <!-- Notifications Dropdown -->
                     @include('partials.navbar-notifications')
-
-                    <div class="h-6 w-px bg-gray-200" aria-hidden="true"></div>
-
-                    <!-- Profile dropdown -->
-                    <div class="relative" x-data="{ userOpen: false }">
-                        <button type="button" @click="userOpen = !userOpen" @click.away="userOpen = false" class="-m-1.5 flex items-center p-1.5" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                            <span class="sr-only">Open user menu</span>
-                            <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200 header-user-avatar" style="{{ auth()->user()->avatar ? 'background-image: url(' . asset('storage/' . auth()->user()->avatar) . '); background-size: cover;' : '' }}">
-                                {{ auth()->user()->avatar ? '' : substr(auth()->user()->name, 0, 1) }}
-                            </div>
-                            <span class="hidden lg:flex lg:items-center">
-                                <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">{{ auth()->user()->name }}</span>
-                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                                </svg>
-                            </span>
-                        </button>
-                        <div x-show="userOpen" style="display: none;" class="absolute right-0 z-10 mt-2.5 w-48 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                            <div class="px-3 py-2 border-b border-gray-100 text-center">
-                                <p class="text-xs text-gray-500">Compte</p>
-                            </div>
-                            <a href="{{ auth()->user()->isAdmin() ? route('admin.profile.edit') : route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Mon Profil</a>
-                            @if(!auth()->user()->isAdmin())
-                                <a href="{{ route('notifications.settings') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Préférences Notifications</a>
-                            @endif
-                            @if(auth()->user()->isAdmin())
-                                <a href="{{ route('admin.settings') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50 font-bold border-t border-gray-100" role="menuitem" tabindex="-1">Paramètres Système</a>
-                            @endif
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="block w-full text-left px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50" role="menuitem" tabindex="-1">Déconnexion</button>
-                            </form>
+                    <div class="h-6 w-px bg-white/5"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600/20 to-cyan-400/20 border border-white/10 flex items-center justify-center text-cyan-400 font-black shadow-inner" style="{{ auth()->user()->avatar ? 'background-image: url(' . asset('storage/' . auth()->user()->avatar) . '); background-size: cover;' : '' }}">
+                            {{ auth()->user()->avatar ? '' : substr(auth()->user()->name, 0, 1) }}
                         </div>
+                        <span class="hidden lg:block text-xs font-bold text-slate-300 uppercase tracking-wider">{{ auth()->user()->name }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <main class="flex-1 p-4 sm:p-6 lg:p-8">
+        <main class="flex-1 p-6 lg:p-10">
             @if(session('success'))
-                <div class="mb-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                        </svg>
-                        <p class="text-green-800 text-sm font-medium">{{ session('success') }}</p>
+                <div class="mb-6 bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-2xl flex items-center gap-4">
+                    <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     </div>
+                    <p class="text-emerald-400 text-xs font-bold uppercase tracking-wide">{{ session('success') }}</p>
                 </div>
             @endif
 
             @if($errors->any())
-                <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                            </svg>
+                <div class="mb-6 bg-rose-500/10 border border-rose-500/20 p-4 rounded-2xl">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-8 h-8 bg-rose-500/20 rounded-lg flex items-center justify-center text-rose-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-medium text-red-800">Des erreurs ont été trouvées dans le formulaire :</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-red-700">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <p class="text-rose-400 text-xs font-bold uppercase tracking-wide">Erreur de validation</p>
                     </div>
+                    <ul class="list-disc list-inside text-rose-300/80 text-xs space-y-1 ml-12">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
-
             @yield('content')
         </main>
     </div>
-
-    <!-- iOS Install Guide Modal -->
-    <div id="ios-install-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-gray-900/75 transition-opacity"></div>
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                    <div>
-                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                            <img src="{{ company_logo() }}" alt="App Icon" class="h-8 w-8 rounded-lg">
-                        </div>
-                        <div class="mt-3 text-center sm:mt-5">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }} sur iPhone</h3>
-                            <div class="mt-2 text-left">
-                                <p class="text-sm text-gray-500 mb-4">Suivez ces étapes simples :</p>
-                                <ol class="text-sm text-gray-600 list-decimal pl-5 space-y-3">
-                                    <li>Appuyez sur le bouton <strong>Partager</strong> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Apple_Share_Icon.png/1200px-Apple_Share_Icon.png" class="inline h-5 w-5 mx-1 align-baseline" alt="Share"> en bas de votre écran.</li>
-                                    <li>Faites défiler vers le bas et appuyez sur <strong>"Sur l'écran d'accueil"</strong> <svg class="inline h-5 w-5 mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>.</li>
-                                    <li>Appuyez sur <strong>Ajouter</strong> en haut à droite.</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 sm:mt-6">
-                        <button type="button" onclick="document.getElementById('ios-install-modal').classList.add('hidden')" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Compris</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Android/Generic Install Guide Modal -->
-    <div id="android-install-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-gray-900/75 transition-opacity"></div>
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                    <div>
-                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                            <img src="{{ company_logo() }}" alt="App Icon" class="h-8 w-8 rounded-lg">
-                        </div>
-                        <div class="mt-3 text-center sm:mt-5">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Installer {{ company_name() }}</h3>
-                            <div class="mt-2 text-left">
-                                <p class="text-sm text-gray-500 mb-4">Si l'installation automatique ne démarre pas :</p>
-                                <ol class="text-sm text-gray-600 list-decimal pl-5 space-y-3">
-                                    <li>Appuyez sur le menu du navigateur (<strong>⋮</strong> ou <strong>☰</strong>).</li>
-                                    <li>Cherchez l'option <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.</li>
-                                    <li>Suivez les instructions à l'écran.</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 sm:mt-6">
-                        <button type="button" onclick="document.getElementById('android-install-modal').classList.add('hidden')" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Compris</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @stack('scripts')
-    <script>
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register("{{ asset('service-worker.js') }}");
-            });
-        }
-
-        // PWA Robust Install Logic
-        let deferredPrompt;
-        const installBtnMobile = document.getElementById('pwa-install-btn-mobile');
-        const iosModal = document.getElementById('ios-install-modal');
-        const androidModal = document.getElementById('android-install-modal');
-
-        // Utils
-        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isMobile = () => /android|iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isInStandaloneMode = () => ('standalone' in window.navigator && window.navigator.standalone) || (window.matchMedia('(display-mode: standalone)').matches);
-
-        // Always show button on mobile if not standalone
-        if (isMobile() && !isInStandaloneMode() && installBtnMobile) {
-            installBtnMobile.style.display = 'flex';
-            
-            // Default Click Handler (Fallback)
-            installBtnMobile.onclick = function() {
-                if (isIos()) {
-                    iosModal.classList.remove('hidden');
-                } else {
-                    // Try to trigger deferred prompt if available, else show Android manual instructions
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        deferredPrompt.userChoice.then((choiceResult) => {
-                            deferredPrompt = null;
-                        });
-                    } else {
-                        androidModal.classList.remove('hidden');
-                    }
-                }
-            };
-        }
-
-        // Capture event
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            // Update click handler to use the prompt
-            if (installBtnMobile) {
-                installBtnMobile.onclick = function() {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        deferredPrompt = null;
-                    });
-                };
-            }
-        });
-    </script>
 </body>
 </html>

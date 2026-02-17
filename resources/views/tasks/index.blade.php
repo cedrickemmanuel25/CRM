@@ -2,117 +2,121 @@
 
 @section('title', 'Mes Tâches')
 
-
-
 @section('content')
-<div class="w-full flex flex-col bg-slate-50" x-data="{ openTaskModal: false }">
+<style>
+    :root {
+        --enterprise-bg: #0f172a;
+        --enterprise-card: rgba(30, 41, 59, 0.4);
+        --enterprise-border: rgba(255, 255, 255, 0.08);
+        --enterprise-accent: #3b82f6;
+    }
+
+    .saas-card {
+        background: var(--enterprise-card);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--enterprise-border);
+        border-radius: 1.25rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .label-caps {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #64748b;
+    }
+
+    .metric-value {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #f1f5f9;
+        letter-spacing: -0.025em;
+    }
+</style>
+
+<div class="w-full flex flex-col bg-[#020617] text-slate-300 min-h-screen" x-data="{ openTaskModal: false }">
     
     <!-- Fixed Top Section (Header, Stats, Filters) -->
     <div class="flex-shrink-0">
         <!-- Header professionnel -->
-        <div class="bg-white border-b border-slate-200">
-            <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-slate-900/50 backdrop-blur-xl border-b border-white/10">
+            <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-6">
+                        <div class="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-lg shadow-indigo-500/5">
+                            <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-semibold text-slate-900">Tâches</h1>
-                            <p class="text-sm text-slate-500">Gérez vos tâches et suivez leur progression</p>
+                            <h1 class="text-2xl font-black text-white tracking-tighter uppercase">Tâches & Missions</h1>
+                            <p class="text-[10px] font-black text-indigo-500/60 uppercase tracking-[0.3em] mt-1">{{ count($tasks['todo']) + count($tasks['in_progress']) + count($tasks['done']) }} flux opérationnels</p>
                         </div>
                     </div>
                     
-                    <div class="flex items-center gap-3">
-                        <a href="{{ route('calendar') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    <div class="flex items-center gap-4 w-full sm:w-auto">
+                        <a href="{{ route('calendar') }}" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-3 bg-white/5 border border-white/10 text-slate-300 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white/10 hover:text-white transition-all">
+                            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
-                            Calendrier
+                            Agenda
                         </a>
-                        <button @click="openTaskModal = true" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 rounded-lg text-sm font-medium text-white hover:bg-indigo-700 transition-colors shadow-sm">
+                        <button @click="openTaskModal = true" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path>
                             </svg>
-                            Nouvelle tâche
+                            <span>Nouvelle Tâche</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
             <!-- Statistiques -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <!-- Stats markup remains same but inside this wrapper -->
-                <div class="bg-white rounded-lg border border-slate-200 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-medium text-slate-600">Total des tâches</span>
-                        <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path></svg>
-                        </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-8">
+                <div class="saas-card p-6">
+                    <span class="label-caps mb-3">Total</span>
+                    <div class="flex items-baseline gap-2">
+                        <span class="metric-value" id="total-tasks">{{ $tasks['todo']->count() + $tasks['in_progress']->count() + $tasks['done']->count() }}</span>
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Missions</span>
                     </div>
-                    <p class="text-3xl font-semibold text-slate-900" id="total-tasks">{{ $tasks['todo']->count() + $tasks['in_progress']->count() + $tasks['done']->count() }}</p>
                 </div>
 
-                <div class="bg-white rounded-lg border border-slate-200 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-medium text-slate-600">En cours</span>
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        </div>
-                    </div>
-                    <p class="text-3xl font-semibold text-blue-600">{{ $tasks['in_progress']->count() }}</p>
+                <div class="saas-card p-6 border-l-2 border-l-blue-500">
+                    <span class="label-caps mb-3">En cours</span>
+                    <span class="metric-value text-blue-500">{{ $tasks['in_progress']->count() }}</span>
                 </div>
 
-                <div class="bg-white rounded-lg border border-slate-200 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-medium text-slate-600">Terminées</span>
-                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                    </div>
-                    <p class="text-3xl font-semibold text-green-600">{{ $tasks['done']->count() }}</p>
+                <div class="saas-card p-6 border-l-2 border-l-emerald-500">
+                    <span class="label-caps mb-3">Terminées</span>
+                    <span class="metric-value text-emerald-500">{{ $tasks['done']->count() }}</span>
                 </div>
 
-                <div class="bg-white rounded-lg border border-slate-200 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-medium text-slate-600">À faire aujourd'hui</span>
-                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
-                    </div>
-                    <p class="text-3xl font-semibold text-amber-600" id="tasks-due-today">{{ \App\Models\Task::whereDate('due_date', today())->count() }}</p>
+                <div class="saas-card p-6 border-l-2 border-l-amber-500">
+                    <span class="label-caps mb-3">Aujourd'hui</span>
+                    <span class="metric-value text-amber-500" id="tasks-due-today">{{ \App\Models\Task::whereDate('due_date', today())->count() }}</span>
                 </div>
 
-                <div class="bg-white rounded-lg border border-slate-200 p-5">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-medium text-slate-600">Priorité haute</span>
-                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                    </div>
-                    <p class="text-3xl font-semibold text-red-600" id="tasks-high-priority">{{ \App\Models\Task::where('priority', 'high')->count() }}</p>
+                <div class="saas-card p-6 border-l-2 border-l-rose-500 hidden lg:block">
+                    <span class="label-caps mb-3">Priorité Haute</span>
+                    <span class="metric-value text-rose-500" id="tasks-high-priority">{{ \App\Models\Task::where('priority', 'high')->count() }}</span>
                 </div>
             </div>
 
             <!-- Filtres -->
-            <div class="bg-white rounded-lg border border-slate-200 p-6 mb-6">
-                <!-- Filter form content remains largely same -->
+            <div class="bg-slate-900/30 border border-white/5 rounded-3xl p-6 mb-10 backdrop-blur-md">
                 <form action="{{ route('tasks.index') }}" method="GET">
-                    <div class="flex flex-wrap items-center gap-2 mb-6 pb-5 border-b border-slate-200">
-                        <span class="text-sm font-medium text-slate-700 mr-2">Filtres rapides:</span>
-                        <a href="{{ route('tasks.index', ['my_tasks' => 1]) }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors {{ request('my_tasks') ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mr-4 ml-2">Séquenceur:</span>
+                        <a href="{{ route('tasks.index', ['my_tasks' => 1]) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ request('my_tasks') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/5' }}">
                             Mes tâches
                         </a>
-                        <a href="{{ route('tasks.index') }}" class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors {{ !request()->hasAny(['my_tasks', 'overdue']) ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">Toutes</a>
-                        <a href="{{ route('tasks.index', ['overdue' => 1]) }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors {{ request('overdue') ? 'bg-red-600 text-white' : 'bg-red-50 text-red-600 hover:bg-red-100' }}">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path></svg>
-                            En retard
-                            <span class="px-2 py-0.5 bg-white/20 rounded text-xs font-semibold">{{ \App\Models\Task::overdue()->count() }}</span>
+                        <a href="{{ route('tasks.index') }}" class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ !request()->hasAny(['my_tasks', 'overdue']) ? 'bg-slate-800 text-white border border-white/10' : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/5' }}">Vecteur Complet</a>
+                        <a href="{{ route('tasks.index', ['overdue' => 1]) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ request('overdue') ? 'bg-rose-600 text-white shadow-lg shadow-rose-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20' }}">
+                            Point Critique
+                            <span class="px-2 py-0.5 bg-black/30 rounded text-xs font-black">{{ \App\Models\Task::overdue()->count() }}</span>
                         </a>
                     </div>
                 </form>
@@ -121,7 +125,7 @@
     </div>
 
     <!-- Scrollable Kanban Board -->
-    <div class="overflow-x-auto pb-8 bg-slate-50 px-4 sm:px-6 lg:px-8">
+    <div class="overflow-x-auto pb-12 px-4 sm:px-6 lg:px-8 no-scrollbar scroll-smooth">
         <div x-data="{
             startPolling() {
                 setInterval(() => {
@@ -131,21 +135,22 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        // Décoder le HTML base64 en gérant correctement l'UTF-8
-                        const binaryString = atob(data.html);
-                        const bytes = new Uint8Array(binaryString.length);
-                        for (let i = 0; i < binaryString.length; i++) {
-                            bytes[i] = binaryString.charCodeAt(i);
+                        if (data.html) {
+                            const binaryString = atob(data.html);
+                            const bytes = new Uint8Array(binaryString.length);
+                            for (let i = 0; i < binaryString.length; i++) {
+                                bytes[i] = binaryString.charCodeAt(i);
+                            }
+                            const decodedHtml = new TextDecoder('utf-8').decode(bytes);
+                            this.$el.innerHTML = decodedHtml;
                         }
-                        const decodedHtml = new TextDecoder('utf-8').decode(bytes);
-                        this.$el.innerHTML = decodedHtml;
                         
-                        // Update metrics
-                        document.getElementById('total-tasks').innerText = data.total_tasks;
-                        document.getElementById('tasks-due-today').innerText = data.tasks_due_today;
-                        document.getElementById('tasks-high-priority').innerText = data.tasks_high_priority;
-                    });
-                }, 5000);
+                        if (document.getElementById('total-tasks')) document.getElementById('total-tasks').innerText = data.total_tasks;
+                        if (document.getElementById('tasks-due-today')) document.getElementById('tasks-due-today').innerText = data.tasks_due_today;
+                        if (document.getElementById('tasks-high-priority')) document.getElementById('tasks-high-priority').innerText = data.tasks_high_priority;
+                    })
+                    .catch(err => console.debug('Polling background silence'));
+                }, 10000);
             }
         }" x-init="startPolling()">
             @include('tasks._board')
@@ -153,24 +158,29 @@
     </div>
 
     <!-- Modal -->
-    <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20">
-            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity"></div>
-            <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
-                <div class="px-6 py-4 border-b border-slate-200">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-slate-900">Nouvelle tâche</h3>
-                        <button @click="openTaskModal = false" class="text-slate-400 hover:text-slate-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
+    <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-[60] overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 p-8">
+            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
+            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-2xl w-full overflow-hidden border border-white/10" x-show="openTaskModal" x-transition>
+                <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <span class="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">Nouvelle Unité Action</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white uppercase tracking-tight">Planification Tâche</h3>
                     </div>
+                    <button @click="openTaskModal = false" class="p-3 text-slate-500 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 </div>
-                <div class="px-6 py-6">
+                <div class="px-8 py-8">
                     <form action="{{ route('tasks.store') }}" method="POST">
                         @csrf
-                        @include('tasks._form')
+                        @include('tasks._form', [
+                            'users' => $users ?? \App\Models\User::all(),
+                            'contacts' => $contacts ?? \App\Models\Contact::all(),
+                            'opportunities' => $opportunities ?? \App\Models\Opportunity::all()
+                        ])
                     </form>
                 </div>
             </div>
@@ -180,10 +190,11 @@
 
 <style>
 [x-cloak] { display: none !important; }
-.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 3px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
 .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 @endsection

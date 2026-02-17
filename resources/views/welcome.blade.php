@@ -49,12 +49,12 @@
 
     <canvas id="bg-canvas"></canvas>
 
-    <nav class="fixed w-full z-50 px-10 py-6 flex justify-between items-center border-b border-white/5 backdrop-blur-xl">
-        <div class="flex items-center gap-4 group cursor-pointer">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
-                <img src="{{ company_logo() }}" class="w-8 brightness-0 invert">
+    <nav class="fixed w-full z-50 px-4 sm:px-10 py-4 sm:py-6 flex justify-between items-center border-b border-white/5 backdrop-blur-xl">
+        <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
+                <img src="{{ company_logo() }}" class="w-6 sm:w-8 brightness-0 invert">
             </div>
-            <span class="text-xl font-extrabold tracking-tighter uppercase">{{ company_name() }}</span>
+            <span class="text-base sm:text-xl font-extrabold tracking-tighter uppercase truncate max-w-[120px] sm:max-w-none">{{ company_name() }}</span>
         </div>
         
         <div class="hidden lg:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-slate-400">
@@ -63,12 +63,12 @@
             <a href="#security" class="hover:text-cyan-400 transition-colors">Sécurité</a>
         </div>
 
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3 sm:gap-6">
             @auth
-                <a href="{{ url('/dashboard') }}" class="px-8 py-3 bg-white text-slate-950 font-black rounded-full text-xs uppercase hover:bg-cyan-400 transition-all">Dashboard</a>
+                <a href="{{ url('/dashboard') }}" class="px-6 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[10px] sm:text-xs uppercase hover:bg-cyan-400 transition-all">Dashboard</a>
             @else
-                <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-cyan-400 transition-colors">Connexion</a>
-                <a href="{{ route('access.request') }}" class="px-8 py-3 bg-white text-slate-950 font-black rounded-full text-xs uppercase hover:bg-cyan-400 transition-all">Demander l'Accès</a>
+                <a href="{{ route('login') }}" class="text-[10px] sm:text-sm font-bold text-white hover:text-cyan-400 transition-colors">Connexion</a>
+                <a href="{{ route('access.request') }}" class="px-4 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[10px] sm:text-xs uppercase hover:bg-cyan-400 transition-all">Demander l'Accès</a>
             @endauth
         </div>
     </nav>
@@ -83,17 +83,17 @@
                 <span class="text-[10px] font-bold tracking-widest uppercase text-cyan-400">Plateforme Professionnelle</span>
             </div>
             
-            <h1 class="reveal text-7xl lg:text-[110px] font-extrabold leading-none tracking-tighter mb-8">
+            <h1 class="reveal text-5xl sm:text-7xl lg:text-[110px] font-extrabold leading-tight lg:leading-none tracking-tighter mb-8">
                 CRM <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-300">Intelligent</span>
             </h1>
             
-            <p class="reveal text-lg text-slate-400 max-w-2xl mb-12">
+            <p class="reveal text-sm sm:text-lg text-slate-400 max-w-2xl mb-12 px-4 sm:px-0">
                 Gérez vos contacts, opportunités et pipelines de vente avec une plateforme CRM moderne. Centralisez vos données clients et boostez vos performances commerciales.
             </p>
 
-            <div class="reveal flex gap-4">
-                <a href="{{ route('access.request') }}" class="px-12 py-5 bg-blue-600 rounded-2xl font-bold shadow-2xl shadow-blue-500/40 hover:scale-105 transition-transform">Démarrer Maintenant</a>
-                <a href="#features" class="px-12 py-5 glass rounded-2xl font-bold hover:bg-white/5 transition-colors">Découvrir</a>
+            <div class="reveal flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-10 sm:px-0">
+                <a href="{{ route('access.request') }}" class="px-8 sm:px-12 py-4 sm:py-5 bg-blue-600 rounded-2xl font-bold shadow-2xl shadow-blue-500/40 hover:scale-105 transition-transform text-sm sm:text-base">Démarrer Maintenant</a>
+                <a href="#features" class="px-8 sm:px-12 py-4 sm:py-5 glass rounded-2xl font-bold hover:bg-white/5 transition-colors text-sm sm:text-base">Découvrir</a>
             </div>
         </div>
     </section>
