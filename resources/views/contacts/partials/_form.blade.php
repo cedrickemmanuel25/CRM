@@ -46,7 +46,7 @@
                     </div>
 
                     <!-- Core Fields: Restored Grid for Perfect Alignment -->
-                    <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-7">
+                    <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
                         <div class="col-span-1 space-y-2">
                             <label for="prenom" class="label-caps">Prénom</label>
                             <input type="text" name="prenom" id="prenom" value="{{ old('prenom', $isEdit ? $contact->prenom : '') }}" 
@@ -65,7 +65,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-2 space-y-2 pt-2">
+                        <div class="col-span-1 sm:col-span-2 space-y-2 pt-2">
                             <label for="entreprise" class="label-caps">Organisation / Entreprise</label>
                             <div class="relative group">
                                 <span class="absolute inset-y-0 left-0 pl-5 flex items-center text-slate-500 group-focus-within:text-blue-400 transition-colors">
@@ -79,7 +79,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-2 space-y-2 border-t border-white/5 pt-8 mt-4">
+                        <div class="col-span-1 sm:col-span-2 space-y-2 border-t border-white/5 pt-8 mt-4">
                             <label for="poste" class="label-caps">Intitulé de Poste / Fonction</label>
                             <input type="text" name="poste" id="poste" value="{{ old('poste', $isEdit ? $contact->poste : '') }}" 
                                 class="block w-full px-5 py-3.5 border border-white/10 rounded-xl text-sm text-slate-100 bg-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none placeholder-slate-600" placeholder="Ex: Directeur Commercial">
