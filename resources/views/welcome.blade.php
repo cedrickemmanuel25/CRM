@@ -21,6 +21,10 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
+        @media (max-width: 380px) {
+            .xs\:inline { display: none; }
+        }
+
         .bento-card {
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
@@ -63,18 +67,18 @@
             <a href="#security" class="hover:text-cyan-400 transition-colors">Sécurité</a>
         </div>
 
-        <div class="flex items-center gap-3 sm:gap-6">
+        <div class="flex items-center gap-2 sm:gap-6">
             <!-- PWA Install Button Mobile -->
-            <button id="pwa-install-btn-mobile" style="display: none;" class="lg:hidden flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20 transform active:scale-95">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                Télécharger
+            <button id="pwa-install-btn-mobile" style="display: none;" class="flex lg:hidden items-center justify-center gap-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-3 py-2 rounded-full text-[8px] font-black uppercase tracking-tight transition-all shadow-lg shadow-blue-500/20 transform active:scale-95 flex-shrink-0">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span class="hidden xs:inline">Télécharger</span>
             </button>
 
             @auth
-                <a href="{{ url('/dashboard') }}" class="px-6 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[10px] sm:text-xs uppercase hover:bg-cyan-400 transition-all">Dashboard</a>
+                <a href="{{ url('/dashboard') }}" class="px-4 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[9px] sm:text-xs uppercase hover:bg-cyan-400 transition-all flex-shrink-0">Dashboard</a>
             @else
-                <a href="{{ route('login') }}" class="text-[10px] sm:text-sm font-bold text-white hover:text-cyan-400 transition-colors">Connexion</a>
-                <a href="{{ route('access.request') }}" class="px-4 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[10px] sm:text-xs uppercase hover:bg-cyan-400 transition-all">Demander l'Accès</a>
+                <a href="{{ route('login') }}" class="text-[9px] sm:text-sm font-bold text-white hover:text-cyan-400 transition-colors flex-shrink-0">Connexion</a>
+                <a href="{{ route('access.request') }}" class="px-4 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[9px] sm:text-xs uppercase hover:bg-cyan-400 transition-all flex-shrink-0">Accès</a>
             @endauth
         </div>
     </nav>
@@ -350,21 +354,28 @@
 
         function triggerInstall() {
             if (isIos()) {
+                // iPhone: Show steps guide
                 iosModal.classList.remove('hidden');
             } else {
+                // Android & Others: Direct native prompt
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
                         if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
+                            if (installBtnMobile) installBtnMobile.style.display = 'none';
                         }
                         deferredPrompt = null;
                     });
                 } else {
-                    // Fallback to guide if prompt not yet captured
+                    // Only show guide if the browser doesn't support/hasn't triggered beforeinstallprompt
                     androidModal.classList.remove('hidden');
                 }
             }
+        }
+
+        // Auto-detect standalone and hide
+        if (isInStandaloneMode() && installBtnMobile) {
+            installBtnMobile.style.display = 'none';
         }
 
         // Always show button on mobile if not standalone
@@ -377,10 +388,15 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            console.log('beforeinstallprompt event fired');
             if (installBtnMobile) {
                 installBtnMobile.onclick = triggerInstall;
             }
+        });
+
+        // Hide button when installed
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('App successfully installed');
+            if (installBtnMobile) installBtnMobile.style.display = 'none';
         });
     </script>
 </body>
