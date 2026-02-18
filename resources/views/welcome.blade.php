@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ company_name() }} | CRM Professionnel</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="{{ company_name() }}">
+    <meta name="theme-color" content="#030712">
+    <link rel="icon" type="image/png" href="{{ company_logo() }}">
+    <link rel="apple-touch-icon" href="{{ company_logo() }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -398,7 +408,7 @@
                         deferredPrompt = null;
                     });
                 } else {
-                    // Strictly NO guide for Android as per user request
+                    // This fallback should rarely happen now that we hide the button until prompt is ready
                     console.log('Installation prompt not yet triggered by browser');
                 }
             }
@@ -409,17 +419,21 @@
             installBtnMobile.style.display = 'none';
         }
 
-        // Always show button on mobile if not standalone
+        // Show button immediately only on iOS (for the guide)
         if (isMobile() && !isInStandaloneMode() && installBtnMobile) {
-            installBtnMobile.style.display = 'flex';
-            installBtnMobile.onclick = triggerInstall;
+            if (isIos()) {
+                installBtnMobile.style.display = 'flex';
+                installBtnMobile.onclick = triggerInstall;
+            }
         }
 
-        // Capture event and immediately bind to button for direct action
+        // Capture event and show button for Android
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            if (installBtnMobile) {
+            console.log('beforeinstallprompt event fired');
+            if (isMobile() && !isInStandaloneMode() && installBtnMobile && !isIos()) {
+                installBtnMobile.style.display = 'flex';
                 installBtnMobile.onclick = triggerInstall;
             }
         });
