@@ -1,483 +1,419 @@
-# Guide Utilisateur Officiel — CRM Nexus Pro
-**Document de Référence Opérationnelle**
-*Version Définitive — Tous Rôles Confondus*
+# Rapport de Présentation
+# CRM Nexus Pro — Plateforme de Gestion de la Relation Client
 
 ---
 
-## Table des Matières
-
-1. Pages Publiques
-2. Tableau de Bord
-3. Module Contacts
-4. Module Opportunités
-5. Module Agenda & Tâches
-6. Module Utilisateurs & Accès
-7. Journal & Suivi
-8. Profil Utilisateur
-9. Paramètres du Système
-10. Gestion des Rôles et des Accès
+**Document :** Rapport de Présentation Fonctionnelle et Opérationnelle
+**Objet :** Description exhaustive de la plateforme CRM Nexus Pro, de ses modules et de ses modalités d'utilisation
+**Destinataires :** Direction, Équipes Commerciales, Administrateurs Système
 
 ---
 
-## 1. Pages Publiques
+## Avant-Propos
 
-Les pages publiques sont accessibles à toute personne disposant de l'URL de l'application, sans nécessiter de connexion préalable.
-
-### 1.1. Page d'Accueil
-
-**Rôle :** Vitrine institutionnelle de la plateforme et point d'entrée principal.
-
-**Description :** Cette page présente l'identité de l'entreprise, les fonctionnalités clés du CRM et les modalités d'accès. Elle constitue également le point de départ pour l'installation de l'application en mode PWA (Progressive Web App), permettant à l'utilisateur d'ajouter le CRM à son écran d'accueil comme une application native.
-
-**Éléments interactifs :**
-- **Bouton "Connexion"** : Redirige vers la page d'authentification.
-- **Bouton "Télécharger / Installer l'App"** : Déclenche la procédure d'installation PWA selon la plateforme détectée (Android ou iOS). Sur Android, une fenêtre native du navigateur s'affiche. Sur iOS, un guide visuel explique la procédure via le menu "Partager" de Safari.
+Ce rapport a pour vocation de présenter de manière exhaustive la plateforme **CRM Nexus Pro**, un outil de gestion de la relation client développé sur mesure pour répondre aux besoins opérationnels des équipes commerciales et administratives. Il décrit l'ensemble des fonctionnalités disponibles, les modalités d'accès et d'utilisation, ainsi que les règles de gouvernance applicables selon les profils d'utilisateurs.
 
 ---
 
-### 1.2. Page de Connexion
+## Partie I — Présentation Générale de l'Application
 
-**Rôle :** Portail d'authentification sécurisé.
+### 1.1. Qu'est-ce qu'un CRM ?
 
-**Description :** L'utilisateur saisit ses identifiants (adresse e-mail et mot de passe) pour accéder à son espace de travail. Le système vérifie les informations d'identification, génère un jeton de session sécurisé et redirige l'utilisateur vers le tableau de bord correspondant à son rôle.
+Un **CRM** (Customer Relationship Management, ou Gestion de la Relation Client) est un système d'information centralisé qui permet à une organisation de gérer, suivre et analyser l'ensemble de ses interactions avec ses clients et prospects. Il constitue la mémoire institutionnelle de l'activité commerciale : chaque contact, chaque échange, chaque opportunité de vente y est enregistré, structuré et exploitable.
 
-**Éléments interactifs :**
-- **Champ "Adresse e-mail"** : Identifiant unique de l'utilisateur dans le système.
-- **Champ "Mot de passe"** : Authentifiant confidentiel, masqué à la saisie.
-- **Bouton "Se connecter"** : Soumet le formulaire et initie la vérification d'identité.
-- **Lien "Demander un accès"** : Redirige les nouveaux utilisateurs vers le formulaire de demande d'accès.
+Sans CRM, les informations clients sont dispersées dans des fichiers Excel, des carnets de notes ou des boîtes email individuelles, rendant toute collaboration difficile et toute analyse impossible. Le CRM centralise cette connaissance et la met à disposition de toute l'équipe, en temps réel.
 
-**Note technique :** La session est maintenue active grâce à un mécanisme de "Heartbeat" (requête silencieuse toutes les 5 minutes). La durée de vie de la session est configurée à 10 ans, garantissant une continuité de service sans interruption.
+### 1.2. Présentation de Nexus Pro
 
----
+**Nexus Pro** est une plateforme CRM développée avec le framework **Laravel** (PHP), reconnue pour sa robustesse et sa sécurité. L'interface utilisateur est construite avec **Tailwind CSS** et **Alpine.js**, garantissant une expérience moderne, réactive et fluide sur tous les types d'appareils.
 
-### 1.3. Page de Demande d'Accès
+La plateforme est déployée en tant que **Progressive Web App (PWA)**, ce qui signifie qu'elle combine les avantages d'un site web (accessible depuis n'importe quel navigateur) et d'une application mobile native (installable sur l'écran d'accueil, utilisable hors connexion partielle, notifications push).
 
-**Rôle :** Formulaire d'inscription pour les nouveaux collaborateurs.
+### 1.3. Objectifs de la Plateforme
 
-**Description :** Un utilisateur n'ayant pas encore de compte peut soumettre une demande d'accès. Cette demande est transmise à l'administrateur système, qui la valide ou la rejette depuis le module d'administration. L'accès à la plateforme reste bloqué jusqu'à la validation explicite par un administrateur.
+La plateforme Nexus Pro a été conçue pour atteindre les objectifs stratégiques suivants :
 
-**Éléments interactifs :**
-- **Champs du formulaire** : Nom, prénom, adresse e-mail professionnelle, poste occupé.
-- **Bouton "Soumettre ma demande"** : Enregistre la demande et notifie l'administrateur.
+- **Centralisation de la donnée client** : Regrouper en un seul endroit toutes les informations relatives aux contacts, aux entreprises et aux historiques d'échanges.
+- **Pilotage du cycle de vente** : Offrir une visibilité complète sur l'état du pipeline commercial, de la prospection à la conclusion de la vente.
+- **Amélioration de la productivité** : Automatiser les rappels, les notifications et les tâches récurrentes pour que les commerciaux se concentrent sur la vente.
+- **Reporting et aide à la décision** : Fournir à la direction des indicateurs de performance fiables et actualisés en temps réel.
+- **Sécurité et traçabilité** : Garantir que chaque action effectuée dans le système est enregistrée, attribuée et auditable.
 
 ---
 
-## 2. Tableau de Bord
+## Partie II — Accès et Installation
 
-### 2.1. Tableau de Bord Principal
+### 2.1. Modalités d'Accès
 
-**Rôle :** Centre de pilotage stratégique et opérationnel.
+L'application est accessible via un navigateur web standard (Google Chrome, Mozilla Firefox, Safari, Microsoft Edge) à l'adresse URL fournie par l'administrateur système. Aucune installation de logiciel supplémentaire n'est requise pour une utilisation basique.
 
-**Description :** Le tableau de bord est la première page affichée après la connexion. Il agrège en temps réel les données critiques de l'ensemble des modules pour offrir une vision synthétique de l'activité commerciale. Les données affichées sont filtrées selon le rôle de l'utilisateur connecté : un Administrateur voit les statistiques globales de toute l'équipe, tandis qu'un Commercial ne voit que ses propres données.
+L'accès est conditionné à la possession d'un compte utilisateur valide, créé et activé par un administrateur. Tout nouveau collaborateur souhaitant accéder à la plateforme doit soumettre une demande d'accès via le formulaire dédié, qui sera ensuite validée par un administrateur.
 
-**Composants et leur utilité :**
-- **Cartes KPI (Indicateurs Clés de Performance)** : Affichent des métriques essentielles telles que le nombre total de contacts actifs, la valeur totale du pipeline commercial, le nombre d'opportunités en cours et le nombre de tâches en retard.
-- **Graphique "Sources d'Acquisition"** : Diagramme circulaire ou en barres indiquant la provenance des contacts (Web, Téléphone, Email, Référencement, etc.). Permet d'identifier les canaux d'acquisition les plus performants.
-- **Graphique "Évolution du Pipeline"** : Courbe temporelle représentant la progression du chiffre d'affaires potentiel sur une période donnée.
-- **Liste "Tâches Urgentes"** : Affiche les rappels et tâches dont l'échéance est imminente ou dépassée, permettant une réaction immédiate.
+### 2.2. Installation en Mode Application (PWA)
 
-**Lien avec les autres modules :** Le tableau de bord est un agrégateur de données. Il ne permet pas de modifier les informations directement, mais chaque élément cliquable redirige vers le module source correspondant (ex : cliquer sur le nombre de contacts ouvre la liste des contacts).
+Pour une expérience optimale, notamment sur mobile, il est fortement recommandé d'installer l'application sur l'écran d'accueil de l'appareil. Cette procédure, appelée installation PWA, transforme le site web en une application à part entière, avec sa propre icône et son propre écran de lancement.
+
+**Sur Android (navigateur Google Chrome) :**
+1. Ouvrir l'URL de l'application dans Chrome.
+2. Un bouton **"Installer l'App"** ou **"Télécharger"** apparaît dans l'en-tête de la page.
+3. Cliquer sur ce bouton. Une fenêtre de confirmation native d'Android s'affiche.
+4. Confirmer l'installation. L'icône de l'application apparaît sur l'écran d'accueil.
+
+**Sur iPhone / iPad (navigateur Safari) :**
+1. Ouvrir l'URL de l'application dans Safari.
+2. Cliquer sur le bouton **"Télécharger"** dans l'en-tête pour afficher le guide d'installation.
+3. Appuyer sur l'icône **"Partager"** de Safari (le carré avec une flèche vers le haut, situé en bas de l'écran).
+4. Faire défiler les options et sélectionner **"Sur l'écran d'accueil"**.
+5. Confirmer en appuyant sur **"Ajouter"**.
+
+### 2.3. Ergonomie selon le Support
+
+L'interface s'adapte automatiquement à la taille de l'écran de l'appareil utilisé.
+
+**Sur ordinateur de bureau :** L'interface affiche une barre de navigation latérale permanente sur la gauche de l'écran. Cette barre liste tous les modules disponibles et reste visible en permanence, permettant de naviguer rapidement d'un module à l'autre sans perdre le contexte de travail. Le contenu principal occupe le reste de l'écran.
+
+**Sur smartphone et tablette :** Pour maximiser l'espace d'affichage, la barre latérale est masquée par défaut. L'utilisateur accède au menu de navigation en appuyant sur l'icône **"Hamburger" (☰)**, située en haut à droite de l'écran. Ce menu déroule l'ensemble des rubriques disponibles. Les boutons et zones de saisie sont dimensionnés pour une manipulation confortable au doigt.
+
+### 2.4. Persistance de Session
+
+L'application intègre un mécanisme de maintien de session actif, communément appelé **"Heartbeat"**. Ce système envoie automatiquement une requête silencieuse au serveur toutes les cinq minutes, tant que l'onglet de l'application est ouvert dans le navigateur. Ce mécanisme garantit que la session de l'utilisateur ne sera jamais interrompue de manière intempestive, même après une longue période d'inactivité. La durée de vie de la session est configurée à dix ans, assurant une continuité de service totale pour les utilisateurs réguliers.
 
 ---
 
-## 3. Module Contacts
+## Partie III — Description Détaillée des Modules
 
-Le module Contacts est le référentiel central de toutes les personnes et entreprises avec lesquelles l'équipe commerciale interagit.
+### 3.1. Pages Publiques
 
-### 3.1. Liste des Contacts
+Les pages publiques sont accessibles sans authentification. Elles constituent le portail d'entrée de la plateforme.
 
-**Rôle :** Répertoire centralisé et point d'entrée du module.
+#### 3.1.1. Page d'Accueil
 
-**Description :** Affiche l'ensemble des contacts enregistrés sous forme de tableau. Chaque ligne représente un contact avec ses informations essentielles (nom, entreprise, statut, commercial assigné, date de création).
+La page d'accueil est la vitrine institutionnelle de la plateforme. Elle présente l'identité de l'entreprise, les fonctionnalités clés du CRM et les modalités d'accès. C'est également depuis cette page que l'utilisateur peut initier la procédure d'installation de l'application en mode PWA, avant même de se connecter. Elle comporte un bouton de connexion permettant d'accéder directement au formulaire d'authentification.
 
-**Éléments interactifs :**
-- **Barre de recherche** : Filtre instantané sur le nom, le prénom ou l'entreprise. La liste se met à jour en temps réel à chaque frappe.
-- **Filtres (Source, Statut, Commercial)** : Permettent de segmenter la liste selon des critères métier précis pour cibler une analyse.
-- **Bouton "+ Nouveau Contact"** : Ouvre le formulaire de création d'un nouveau contact.
-- **Icône "Voir"** (œil) : Ouvre la fiche détaillée du contact.
-- **Icône "Modifier"** (crayon) : Ouvre le formulaire d'édition du contact.
-- **Icône "Supprimer"** (corbeille) : Supprime définitivement le contact après confirmation. *Réservé aux Administrateurs.*
+#### 3.1.2. Page de Connexion
+
+La page de connexion est le portail d'authentification sécurisé de la plateforme. L'utilisateur y saisit son adresse e-mail et son mot de passe. Le système vérifie les informations d'identification, génère un jeton de session chiffré et redirige l'utilisateur vers le tableau de bord correspondant à son rôle. En cas d'identifiants incorrects, un message d'erreur explicite est affiché sans révéler si c'est l'email ou le mot de passe qui est erroné, conformément aux bonnes pratiques de sécurité.
+
+#### 3.1.3. Page de Demande d'Accès
+
+Cette page est destinée aux nouveaux collaborateurs qui ne disposent pas encore d'un compte. L'utilisateur remplit un formulaire avec ses informations personnelles et professionnelles (nom, prénom, adresse e-mail, poste). Une fois soumise, la demande est transmise à l'administrateur système, qui reçoit une notification. L'accès à la plateforme reste bloqué jusqu'à ce que l'administrateur valide explicitement la demande et crée le compte.
 
 ---
 
-### 3.2. Nouveau Contact
+### 3.2. Tableau de Bord
 
-**Rôle :** Formulaire de création et d'enregistrement d'un nouveau prospect ou client.
+#### 3.2.1. Tableau de Bord Principal
 
-**Description :** Ce formulaire permet de saisir l'ensemble des informations qualifiantes d'un nouveau contact. Remplir ce formulaire avec précision est fondamental car ces données alimenteront les analyses du tableau de bord et le pipeline commercial.
+Le tableau de bord est la première page affichée après la connexion. Il constitue le centre de pilotage stratégique et opérationnel de la plateforme. Son rôle est de fournir une vision synthétique et immédiate de l'état de l'activité commerciale, sans qu'il soit nécessaire de naviguer dans les différents modules.
 
-**Champs du formulaire et leur utilité :**
-- **Prénom / Nom** : Identité civile du contact.
+Les données affichées sont dynamiques et calculées en temps réel à partir des informations enregistrées dans l'ensemble des modules. Elles sont filtrées selon le rôle de l'utilisateur connecté : un Administrateur visualise les statistiques consolidées de toute l'équipe, tandis qu'un Commercial ne voit que les données relatives à son propre portefeuille.
+
+**Composants du tableau de bord :**
+
+- **Indicateurs Clés de Performance (KPIs)** : Quatre à six cartes de synthèse affichent les métriques les plus importantes : le nombre total de contacts actifs dans la base, la valeur cumulée du pipeline commercial (somme des montants de toutes les opportunités en cours), le nombre d'opportunités ouvertes, et le nombre de tâches dont l'échéance est dépassée ou imminente. Ces indicateurs permettent à l'utilisateur d'identifier en un coup d'œil les points d'attention prioritaires.
+
+- **Graphique des Sources d'Acquisition** : Ce graphique représente la répartition des contacts selon leur canal d'origine (ex : site web, appel téléphonique, salon professionnel, recommandation). Il permet à la direction d'évaluer l'efficacité de chaque canal marketing et d'orienter les investissements en conséquence.
+
+- **Graphique d'Évolution du Pipeline** : Une courbe temporelle représente la progression du chiffre d'affaires potentiel sur une période glissante. Elle permet de visualiser les tendances et d'anticiper les variations d'activité.
+
+- **Liste des Tâches Urgentes** : Un récapitulatif des actions planifiées dont l'échéance est proche ou dépassée. Chaque élément est cliquable et redirige directement vers la tâche concernée dans le module Agenda.
+
+---
+
+### 3.3. Module Contacts
+
+Le module Contacts est le référentiel central de la plateforme. Il regroupe l'ensemble des personnes physiques et morales avec lesquelles l'entreprise entretient ou a entretenu une relation commerciale. C'est le point de départ de tout cycle de vente.
+
+#### 3.3.1. Liste des Contacts
+
+La liste des contacts est le tableau de bord du module. Elle affiche l'ensemble des contacts enregistrés sous forme de tableau paginé, avec pour chaque entrée les informations essentielles : nom complet, entreprise, statut commercial, commercial assigné et date de dernière interaction.
+
+L'utilisateur dispose de plusieurs outils pour naviguer efficacement dans cette liste :
+
+- **La barre de recherche** filtre instantanément les résultats à mesure que l'utilisateur tape, sans nécessiter de validation. La recherche porte sur le nom, le prénom, l'entreprise et l'adresse e-mail.
+- **Les filtres avancés** permettent de segmenter la liste selon des critères métier précis : la source d'acquisition, le statut commercial (Prospect, Client, Inactif) ou le commercial responsable. Ces filtres peuvent être combinés pour des analyses très ciblées.
+- **Le bouton "+ Nouveau Contact"** ouvre le formulaire de création d'un nouveau contact.
+- **Les icônes d'action** sur chaque ligne permettent d'accéder à la fiche détaillée (icône œil), d'ouvrir le formulaire de modification (icône crayon) ou de supprimer le contact (icône corbeille, réservée aux Administrateurs).
+
+#### 3.3.2. Nouveau Contact
+
+Le formulaire de création d'un nouveau contact permet d'enregistrer l'ensemble des informations qualifiantes d'un prospect ou d'un client. La qualité des informations saisies à cette étape est déterminante pour la pertinence des analyses futures.
+
+Les champs disponibles sont les suivants :
+- **Prénom et Nom** : Identité civile du contact.
+- **Adresse e-mail** : Coordonnée principale pour les échanges écrits.
+- **Numéro de téléphone** : Coordonnée pour les échanges oraux.
 - **Entreprise** : Organisation à laquelle le contact est rattaché.
-- **Email / Téléphone** : Coordonnées directes pour les échanges.
-- **Source** : Canal par lequel le contact a été acquis (ex : Salon professionnel, Site web, Recommandation). Donnée cruciale pour le reporting marketing.
-- **Statut** : Qualification du contact (ex : Prospect, Client, Inactif).
-- **Commercial assigné** : Membre de l'équipe responsable du suivi de ce contact.
+- **Poste occupé** : Fonction du contact au sein de son organisation, utile pour adapter le discours commercial.
+- **Source** : Canal par lequel le contact a été acquis. Cette information est cruciale pour le reporting marketing et l'analyse des canaux d'acquisition.
+- **Statut** : Qualification commerciale du contact (Prospect, Client, Partenaire, Inactif).
+- **Commercial assigné** : Membre de l'équipe commerciale responsable du suivi de ce contact.
+- **Notes initiales** : Champ libre pour consigner les premières observations ou le contexte de la prise de contact.
 
-**Boutons :**
-- **"Enregistrer"** : Valide le formulaire et crée la fiche contact dans la base de données.
-- **"Annuler"** : Abandonne la saisie et retourne à la liste des contacts.
+Une fois le formulaire validé, la fiche contact est créée et l'utilisateur est redirigé vers la vue détaillée du nouveau contact.
 
----
+#### 3.3.3. Détail d'un Contact
 
-### 3.3. Détail d'un Contact
+La fiche détaillée d'un contact est l'écran le plus riche et le plus important du module. Elle centralise l'intégralité des informations et des interactions liées à un contact spécifique, organisées en onglets thématiques.
 
-**Rôle :** Vue exhaustive et historique complète de la relation avec un contact.
+- **Onglet "Vue d'ensemble"** : Affiche les informations de base du contact (coordonnées, entreprise, statut) et un résumé des dernières activités enregistrées.
+- **Onglet "Journal d'activité"** : Historique chronologique complet de toutes les interactions avec ce contact. Chaque entrée est horodatée, attribuée à un utilisateur et catégorisée par type (note interne, appel téléphonique, email, réunion). Ce journal constitue la mémoire vivante de la relation commerciale.
+- **Onglet "Opportunités"** : Liste de toutes les affaires commerciales associées à ce contact, avec leur stade actuel et leur montant estimé. Permet de visualiser immédiatement l'état de la relation commerciale.
+- **Onglet "Tâches & Rappels"** : Actions planifiées en lien avec ce contact, avec leur priorité et leur date d'échéance.
 
-**Description :** C'est l'écran le plus riche du module. Il centralise toutes les informations et interactions liées à un contact spécifique, organisées en onglets thématiques pour faciliter la navigation.
+Les boutons d'action principaux disponibles sur cette page sont :
+- **"Modifier"** : Ouvre le formulaire d'édition des informations du contact.
+- **"Convertir en Opportunité"** : Action stratégique qui crée automatiquement une nouvelle opportunité commerciale pré-remplie avec les informations du contact (nom, entreprise, commercial assigné), évitant toute ressaisie et garantissant la continuité de l'historique.
+- **"Ajouter une Note"** : Ouvre un champ de saisie pour consigner un commentaire interne, une observation ou le compte-rendu d'un échange. Ces notes sont visibles par tous les membres de l'équipe ayant accès au contact.
+- **"Exporter"** : Génère une fiche PDF synthétique du contact, utilisable hors de la plateforme pour des réunions ou des présentations.
 
-**Onglets et leur contenu :**
-- **Vue d'ensemble** : Récapitulatif des informations de base et des dernières activités.
-- **Journal d'activité** : Historique chronologique de toutes les interactions (appels, emails, notes, réunions). Chaque entrée est horodatée et attribuée à un utilisateur.
-- **Opportunités liées** : Liste des affaires commerciales associées à ce contact. Permet de voir d'un coup d'œil l'état de la relation commerciale.
-- **Tâches & Rappels** : Actions planifiées en lien avec ce contact.
+#### 3.3.4. Modifier un Contact
 
-**Boutons d'action principaux :**
-- **"Modifier"** : Accède au formulaire d'édition des informations du contact.
-- **"Convertir en Opportunité"** : Action stratégique qui crée automatiquement une nouvelle opportunité commerciale pré-remplie avec les informations du contact, sans ressaisie.
-- **"Ajouter une Note"** : Ouvre un champ de texte pour consigner un commentaire interne, une observation ou le compte-rendu d'un échange.
-- **"Exporter"** : Génère une fiche PDF du contact pour une utilisation hors-ligne.
+Le formulaire de modification est identique au formulaire de création, mais pré-rempli avec les données actuelles du contact. L'utilisateur peut mettre à jour n'importe quel champ. Toute modification est automatiquement enregistrée dans le journal d'audit du système, avec l'identité de l'auteur de la modification et l'horodatage.
 
 ---
 
-### 3.4. Modifier un Contact
+### 3.4. Module Opportunités
 
-**Rôle :** Mise à jour des informations d'un contact existant.
+Le module Opportunités gère le cycle de vie complet des affaires commerciales. Il offre deux modes de visualisation complémentaires : une vue tabulaire pour l'analyse et une vue Kanban pour la gestion opérationnelle.
 
-**Description :** Formulaire pré-rempli avec les données actuelles du contact. L'utilisateur peut modifier n'importe quel champ et enregistrer les changements. Toute modification est tracée dans le journal d'audit du système.
+#### 3.4.1. Liste des Opportunités
 
-**Boutons :**
-- **"Mettre à jour"** : Sauvegarde les modifications apportées.
-- **"Annuler"** : Abandonne les modifications et retourne à la fiche détail.
+La liste des opportunités présente l'ensemble du portefeuille commercial sous forme de tableau. Pour chaque opportunité, les informations affichées sont : l'intitulé de l'affaire, le contact associé, le montant estimé, la probabilité de succès, le stade actuel dans le tunnel de vente et la date de clôture prévue.
 
----
+Des filtres permettent de segmenter le portefeuille par stade, par commercial responsable ou par période. Un bouton permet de basculer vers la vue Pipeline (Kanban).
 
-## 4. Module Opportunités
+#### 3.4.2. Vue Pipeline (Kanban)
 
-Le module Opportunités gère le cycle de vie complet des affaires commerciales, de la prospection à la conclusion.
+La vue Pipeline est la représentation visuelle et interactive du tunnel de vente. Les opportunités sont organisées en colonnes verticales, chacune correspondant à un stade du processus commercial : Prospection, Qualification, Proposition commerciale, Négociation, Gagné, Perdu.
 
-### 4.1. Liste des Opportunités
+Chaque opportunité est représentée par une carte affichant son intitulé, le nom du contact associé et le montant estimé. L'utilisateur peut faire glisser une carte d'une colonne à l'autre (Drag & Drop) pour signifier la progression de l'affaire dans le tunnel. Cette action déclenche automatiquement un formulaire de qualification permettant de documenter le changement de stade (raison du passage, informations complémentaires).
 
-**Rôle :** Vue tabulaire de toutes les affaires en cours.
+Cette vue offre une lecture immédiate de la santé du pipeline commercial : une colonne "Prospection" surchargée et une colonne "Négociation" vide indiquent un problème de conversion à mi-parcours.
 
-**Description :** Tableau récapitulatif listant chaque opportunité avec son nom, le contact associé, le montant estimé, la probabilité de succès, le stade actuel et la date de clôture prévue.
+#### 3.4.3. Nouvelle Opportunité
 
-**Éléments interactifs :**
-- **Filtres (Stade, Commercial, Période)** : Permettent de segmenter le portefeuille pour des analyses ciblées.
-- **Bouton "+ Nouvelle Opportunité"** : Ouvre le formulaire de création.
-- **Bouton "Vue Pipeline"** : Bascule vers la vue Kanban visuelle.
+Le formulaire de création d'une opportunité permet de définir les paramètres d'une nouvelle affaire commerciale. Il peut être initié manuellement depuis la liste des opportunités, ou automatiquement via le bouton "Convertir en Opportunité" depuis une fiche contact.
 
----
+Les champs clés sont :
+- **Nom de l'opportunité** : Intitulé descriptif et identifiable de l'affaire.
+- **Contact associé** : Lien vers la fiche du prospect ou client concerné.
+- **Montant estimé** : Valeur financière potentielle de l'affaire, exprimée dans la devise de l'entreprise.
+- **Probabilité de succès** : Estimation en pourcentage de la chance de conclure l'affaire, utilisée pour calculer le chiffre d'affaires prévisionnel pondéré.
+- **Date de clôture prévue** : Échéance cible pour la conclusion de l'affaire.
+- **Stade initial** : Positionnement de départ de l'affaire dans le tunnel de vente.
 
-### 4.2. Vue Pipeline (Kanban)
+#### 3.4.4. Modifier une Opportunité
 
-**Rôle :** Représentation visuelle et interactive du tunnel de vente.
+Permet d'actualiser les paramètres d'une affaire en cours : révision du montant suite à une négociation, ajustement de la probabilité, report de la date de clôture. Toute modification est tracée dans le journal d'audit.
 
-**Description :** Les opportunités sont organisées en colonnes correspondant aux stades du processus commercial (ex : Prospection → Qualification → Proposition → Négociation → Gagné/Perdu). Chaque opportunité est représentée par une "carte" contenant les informations clés.
+#### 3.4.5. Détail d'une Opportunité
 
-**Manipulation :**
-- **Glisser-Déposer (Drag & Drop)** : L'utilisateur fait glisser une carte d'une colonne à l'autre pour signifier la progression de l'affaire. Cette action déclenche automatiquement un formulaire de qualification pour documenter le changement de stade.
-- **Clic sur une carte** : Ouvre la vue détaillée de l'opportunité.
+La vue détaillée d'une opportunité regroupe l'ensemble des informations de l'affaire, l'historique complet des transitions de stades avec les commentaires associés, et les tâches planifiées en lien avec cette affaire.
 
----
-
-### 4.3. Nouvelle Opportunité
-
-**Rôle :** Création d'un nouveau dossier commercial.
-
-**Description :** Formulaire permettant de définir les paramètres d'une nouvelle affaire. Il peut être créé manuellement ou automatiquement via le bouton "Convertir" depuis une fiche contact.
-
-**Champs clés :**
-- **Nom de l'opportunité** : Intitulé descriptif de l'affaire (ex : "Contrat Maintenance Annuel - Société X").
-- **Contact associé** : Lien vers la fiche contact du prospect ou client concerné.
-- **Montant estimé** : Valeur financière potentielle de l'affaire.
-- **Probabilité de succès (%)** : Estimation subjective de la chance de conclure l'affaire.
-- **Date de clôture prévue** : Échéance cible pour la conclusion.
-- **Stade initial** : Positionnement de départ dans le tunnel de vente.
+Les boutons d'action principaux sont :
+- **"Marquer comme Gagnée"** : Clôture positivement l'affaire. Le montant de l'opportunité est comptabilisé dans le chiffre d'affaires réel affiché sur le tableau de bord.
+- **"Marquer comme Perdue"** : Clôture négativement l'affaire. Un motif d'échec peut être renseigné pour alimenter l'analyse des performances et identifier les axes d'amélioration.
 
 ---
 
-### 4.4. Modifier une Opportunité
+### 3.5. Module Agenda & Tâches
 
-**Rôle :** Mise à jour des paramètres d'une affaire en cours.
+Le module Agenda & Tâches est le gestionnaire de productivité de la plateforme. Il permet aux utilisateurs de planifier, suivre et prioriser l'ensemble de leurs actions commerciales : relances téléphoniques, envois de propositions, réunions, suivis post-vente.
 
-**Description :** Permet d'ajuster le montant, la probabilité, la date de clôture ou le stade d'une opportunité au fil de l'avancement des négociations.
+#### 3.5.1. Vue Liste des Tâches
 
----
+La vue liste affiche l'ensemble des tâches et rappels sous forme de tableau, triées par date d'échéance et par niveau de priorité. Chaque tâche est associée à un contact ou une opportunité pour maintenir le contexte métier.
 
-### 4.5. Détail d'une Opportunité
+Un code couleur visuel permet d'identifier immédiatement les tâches urgentes (rouge), en cours (orange) et planifiées (vert). Une case à cocher permet de marquer une tâche comme terminée, la retirant de la file d'attente active.
 
-**Rôle :** Dossier complet de l'affaire commerciale.
+#### 3.5.2. Vue Agenda (Calendrier)
 
-**Description :** Vue exhaustive regroupant toutes les informations de l'opportunité, l'historique des transitions de stades, les notes de négociation et les tâches associées.
+La vue agenda présente les tâches sous forme de calendrier mensuel. Chaque tâche apparaît sur le jour correspondant à son échéance, avec un code couleur selon sa priorité. Cette vue permet une planification visuelle de l'activité et une identification rapide des journées surchargées.
 
-**Boutons d'action :**
-- **"Marquer comme Gagnée"** : Clôture positivement l'affaire. Le montant est comptabilisé dans le chiffre d'affaires réel du tableau de bord.
-- **"Marquer comme Perdue"** : Clôture négativement l'affaire. Un motif d'échec peut être renseigné pour alimenter l'analyse des performances.
-- **"Modifier"** : Accède au formulaire d'édition.
+Un clic sur une tâche affiche ses détails dans une fenêtre contextuelle. Un clic sur un jour vide ouvre directement le formulaire de création d'une nouvelle tâche avec la date pré-remplie.
 
----
+#### 3.5.3. Nouvelle Tâche
 
-## 5. Module Agenda & Tâches
-
-### 5.1. Agenda & Tâches (Vue Liste)
-
-**Rôle :** Gestionnaire de productivité et de suivi des actions commerciales.
-
-**Description :** Affiche l'ensemble des tâches et rappels sous forme de liste, triées par priorité et par date d'échéance. Chaque tâche est associée à un contact ou une opportunité pour maintenir le contexte métier.
-
-**Éléments interactifs :**
-- **Filtres (Priorité, Statut, Assigné à)** : Permettent de cibler les tâches urgentes ou en retard.
-- **Case à cocher** : Marque une tâche comme "Terminée", la retirant de la file d'attente active.
-- **Bouton "+ Nouvelle Tâche"** : Ouvre le formulaire de création.
-
----
-
-### 5.2. Vue Agenda (Calendrier)
-
-**Rôle :** Planification visuelle des activités sur une vue mensuelle.
-
-**Description :** Représentation calendaire de toutes les tâches planifiées. Chaque tâche apparaît sur le jour correspondant à son échéance, avec un code couleur selon sa priorité.
-
-**Navigation :**
-- **Flèches "Mois précédent / Mois suivant"** : Naviguent dans le temps.
-- **Clic sur une tâche** : Affiche le détail de la tâche dans une fenêtre contextuelle.
-- **Clic sur un jour vide** : Ouvre le formulaire de création d'une nouvelle tâche avec la date pré-remplie.
-
----
-
-### 5.3. Nouvelle Tâche
-
-**Rôle :** Planification d'une action de suivi.
-
-**Description :** Formulaire permettant de créer un rappel ou une action à effectuer, lié à un contact ou une opportunité spécifique.
-
-**Champs clés :**
-- **Titre** : Description concise de l'action (ex : "Relance téléphonique", "Envoi de devis").
-- **Type** : Catégorie de la tâche (Appel, Email, Réunion, Autre).
-- **Priorité** : Niveau d'urgence (Haute, Moyenne, Faible).
+Le formulaire de création d'une tâche permet de définir une action à effectuer et de la planifier dans le temps. Les champs disponibles sont :
+- **Titre** : Description concise et actionnable de la tâche.
+- **Type** : Catégorie de l'action (Appel téléphonique, Email, Réunion, Envoi de document, Autre).
+- **Priorité** : Niveau d'urgence de la tâche (Haute, Moyenne, Faible).
 - **Date d'échéance** : Date limite pour l'exécution de la tâche.
-- **Contact / Opportunité associé(e)** : Lien contextuel vers l'entité concernée.
-- **Notes** : Description détaillée ou instructions complémentaires.
+- **Contact ou Opportunité associé(e)** : Lien contextuel vers l'entité concernée, permettant de retrouver facilement le contexte de la tâche.
+- **Notes** : Description détaillée, instructions complémentaires ou informations de contexte.
 
 ---
 
-## 6. Module Utilisateurs & Accès
+### 3.6. Module Utilisateurs & Accès
 
-*Ce module est réservé aux utilisateurs ayant le rôle Administrateur.*
+*Ce module est exclusivement accessible aux utilisateurs ayant le rôle Administrateur.*
 
-### 6.1. Utilisateurs
+#### 3.6.1. Gestion des Utilisateurs
 
-**Rôle :** Gestion centralisée des comptes utilisateurs de la plateforme.
+Cet écran liste l'ensemble des comptes utilisateurs enregistrés sur la plateforme, avec pour chaque compte : le nom complet, l'adresse e-mail, le rôle attribué et le statut du compte (Actif ou Inactif).
 
-**Description :** Tableau listant tous les utilisateurs enregistrés avec leur nom, email, rôle et statut (Actif/Inactif). L'administrateur peut créer, modifier ou désactiver des comptes depuis cet écran.
+L'administrateur dispose des actions suivantes :
+- **Créer un nouvel utilisateur** : Ouvre un formulaire permettant de créer manuellement un compte, en définissant le nom, l'email, le rôle et un mot de passe temporaire. Cette option est utilisée pour les créations directes, sans passer par le processus de demande d'accès.
+- **Modifier un utilisateur** : Permet de changer le rôle d'un utilisateur, de mettre à jour ses informations ou de modifier son statut.
+- **Réinitialiser le mot de passe** : Génère un nouveau mot de passe temporaire et l'envoie automatiquement à l'utilisateur par e-mail. L'utilisateur sera invité à le changer lors de sa prochaine connexion.
+- **Désactiver un compte** : Bloque l'accès d'un utilisateur à la plateforme sans supprimer son historique ni ses données. Cette option est préférable à la suppression définitive pour conserver la traçabilité des actions passées.
 
-**Boutons d'action :**
-- **"+ Nouvel Utilisateur"** : Ouvre un formulaire pour créer un compte manuellement, sans passer par la demande d'accès.
-- **"Modifier"** (icône crayon) : Permet de changer le rôle, le nom ou l'email d'un utilisateur.
-- **"Réinitialiser le mot de passe"** : Génère un nouveau mot de passe temporaire et l'envoie à l'utilisateur par email.
-- **"Désactiver / Activer"** : Bloque ou restaure l'accès d'un utilisateur sans supprimer son historique.
+#### 3.6.2. Demandes d'Accès
 
----
+Cet écran liste toutes les demandes d'accès soumises via la page publique de demande d'accès. Pour chaque demande, l'administrateur voit le nom du demandeur, son adresse e-mail, son poste et la date de soumission.
 
-### 6.2. Demandes d'Accès
-
-**Rôle :** Validation des nouvelles inscriptions.
-
-**Description :** Liste des demandes d'accès soumises via la page publique. L'administrateur examine chaque demande et prend une décision.
-
-**Boutons d'action :**
-- **"Approuver"** : Crée le compte utilisateur et envoie les identifiants de connexion par email.
-- **"Rejeter"** : Refuse la demande et notifie le demandeur.
+L'administrateur peut :
+- **Approuver la demande** : Crée automatiquement le compte utilisateur avec le rôle par défaut et envoie les identifiants de connexion au demandeur par e-mail.
+- **Rejeter la demande** : Refuse l'accès et notifie le demandeur de la décision.
 
 ---
 
-## 7. Journal & Suivi
+### 3.7. Journal d'Audit
 
-### 7.1. Journal d'Audit
+*Ce module est exclusivement accessible aux utilisateurs ayant le rôle Administrateur.*
 
-**Rôle :** Registre de traçabilité et outil de conformité.
+#### 3.7.1. Journal d'Audit
 
-**Description :** Le journal d'audit enregistre automatiquement chaque action critique effectuée dans le système : création, modification ou suppression d'un contact, d'une opportunité ou d'un utilisateur. Chaque entrée contient l'identité de l'auteur de l'action, la nature de l'action, l'entité concernée et l'horodatage précis.
+Le journal d'audit est le registre de traçabilité de la plateforme. Il enregistre automatiquement et de manière exhaustive chaque action critique effectuée dans le système : création, modification ou suppression d'un contact, d'une opportunité ou d'un utilisateur ; changement de stade d'une opportunité ; connexion et déconnexion d'un utilisateur.
 
-**Utilité :**
-- **Sécurité** : Permet de détecter toute modification non autorisée.
-- **Responsabilité** : Attribue chaque action à un utilisateur identifié.
-- **Conformité** : Répond aux exigences de traçabilité des données (RGPD).
+Pour chaque entrée du journal, les informations suivantes sont disponibles :
+- **L'auteur de l'action** : Nom et identifiant de l'utilisateur qui a effectué l'action.
+- **La nature de l'action** : Type d'opération réalisée (Création, Modification, Suppression, Connexion).
+- **L'entité concernée** : L'objet sur lequel l'action a porté (nom du contact, intitulé de l'opportunité).
+- **L'horodatage précis** : Date et heure exactes de l'action.
 
-**Éléments interactifs :**
-- **Filtres (Utilisateur, Type d'action, Période)** : Permettent de retrouver rapidement un événement spécifique.
-- **Barre de recherche** : Recherche par mot-clé dans les descriptions des actions.
-
-*Accès réservé aux Administrateurs.*
-
----
-
-## 8. Profil Utilisateur
-
-### 8.1. Mon Profil
-
-**Rôle :** Espace personnel de gestion du compte utilisateur.
-
-**Description :** Chaque utilisateur accède à son profil en cliquant sur son avatar ou ses initiales dans le coin supérieur droit de l'interface. Cet espace est organisé en sous-sections.
+Ce journal remplit trois fonctions essentielles :
+- **Sécurité** : Il permet de détecter et d'investiguer toute modification non autorisée ou suspecte.
+- **Responsabilité** : Il attribue chaque action à un utilisateur identifié, renforçant la responsabilisation des équipes.
+- **Conformité réglementaire** : Il répond aux exigences de traçabilité des données personnelles imposées par le Règlement Général sur la Protection des Données (RGPD).
 
 ---
 
-### 8.2. Informations Personnelles
+### 3.8. Profil Utilisateur
 
-**Description :** Permet à l'utilisateur de mettre à jour ses informations d'identité.
+Chaque utilisateur peut accéder à son espace personnel en cliquant sur son avatar ou ses initiales, situés dans le coin supérieur droit de l'interface. Cet espace est organisé en trois sous-sections.
 
-**Champs modifiables :**
-- **Prénom / Nom**
-- **Adresse e-mail**
-- **Numéro de téléphone**
-- **Photo de profil (Avatar)**
+#### 3.8.1. Informations Personnelles
 
-**Bouton :**
-- **"Enregistrer les modifications"** : Sauvegarde les changements.
+Permet à l'utilisateur de mettre à jour ses informations d'identité : prénom, nom, adresse e-mail et numéro de téléphone. L'utilisateur peut également télécharger une photo de profil (avatar) qui sera affichée dans l'interface et dans les journaux d'activité.
 
----
+#### 3.8.2. Sécurité
 
-### 8.3. Sécurité
+Interface dédiée à la gestion du mot de passe. Pour modifier son mot de passe, l'utilisateur doit saisir son mot de passe actuel (mesure de sécurité pour prévenir les modifications non autorisées), puis saisir et confirmer le nouveau mot de passe. Le système vérifie que le nouveau mot de passe respecte les critères de complexité définis par l'administrateur.
 
-**Description :** Interface dédiée à la gestion du mot de passe.
+#### 3.8.3. Activité Système
 
-**Procédure de changement de mot de passe :**
-1. Saisir le mot de passe actuel.
-2. Saisir le nouveau mot de passe.
-3. Confirmer le nouveau mot de passe.
-4. Cliquer sur **"Mettre à jour le mot de passe"**.
+Historique personnel des actions effectuées par l'utilisateur dans le système. Contrairement au journal d'audit global (réservé aux administrateurs), cette vue est filtrée et ne présente que les actions de l'utilisateur connecté. Elle lui permet de consulter ses dernières connexions et les dernières modifications qu'il a apportées.
 
 ---
 
-### 8.4. Activité Système
+### 3.9. Paramètres du Système
 
-**Description :** Historique personnel des actions effectuées par l'utilisateur dans le système. Permet à chaque collaborateur de consulter ses propres connexions récentes et les dernières modifications qu'il a apportées.
+*Ce module est exclusivement accessible aux utilisateurs ayant le rôle Administrateur.*
 
----
+#### 3.9.1. Paramètres Généraux
 
-## 9. Paramètres du Système
+Permet de configurer l'identité institutionnelle de la plateforme. Les paramètres disponibles incluent le nom de l'entreprise (affiché dans la barre de navigation et les documents exportés), le logo de l'entreprise et les coordonnées de contact de l'organisation. Ces informations sont propagées automatiquement sur l'ensemble de l'interface.
 
-*Ce module est réservé aux utilisateurs ayant le rôle Administrateur.*
+#### 3.9.2. Notifications
 
-### 9.1. Paramètres Généraux
+Permet à l'administrateur de configurer les règles d'envoi des alertes automatiques du système. Il peut définir quels événements déclenchent une notification (nouvelle demande d'accès, création d'un contact, tâche en retard) et à qui cette notification est envoyée (administrateur, commercial assigné, tous les utilisateurs).
 
-**Rôle :** Configuration de l'identité de la plateforme.
+#### 3.9.3. Export & Rapports
 
-**Description :** Permet de personnaliser l'apparence et les informations institutionnelles du CRM.
+Permet de générer des documents de synthèse à partir des données de la plateforme, pour une utilisation en dehors du CRM (réunions de direction, présentations clients, analyses externes).
 
-**Paramètres disponibles :**
-- **Nom de l'entreprise** : Affiché dans la barre latérale et les en-têtes.
-- **Logo de l'entreprise** : Image affichée dans la navigation et les documents exportés.
-- **Coordonnées de contact** : Informations de référence de l'organisation.
+Deux formats sont disponibles :
+- **CSV (Comma-Separated Values)** : Format tableur compatible avec Microsoft Excel et Google Sheets. Idéal pour des analyses personnalisées et des croisements de données.
+- **PDF (Portable Document Format)** : Document formaté, prêt à l'impression et à la diffusion. Adapté aux présentations et aux rapports de direction.
 
----
+Les types de rapports disponibles incluent : rapport des contacts, rapport du pipeline commercial, rapport des performances par commercial et rapport des tickets de support.
 
-### 9.2. Notifications
+#### 3.9.4. Maintenance
 
-**Rôle :** Configuration des alertes automatiques du système.
+Regroupe les fonctions techniques avancées pour assurer la pérennité et la sécurité des données de la plateforme.
 
-**Description :** Permet à l'administrateur de définir quels événements déclenchent une notification et à qui elle est envoyée.
-
-**Exemples de règles configurables :**
-- Notifier l'administrateur lors de chaque nouvelle demande d'accès.
-- Notifier le commercial assigné lors de la création d'un nouveau contact.
-- Envoyer un rappel par email pour les tâches dont l'échéance approche.
+- **Sauvegarde de la base de données (Backup)** : Génère et télécharge une archive complète de la base de données au format SQL. Cette opération doit être effectuée régulièrement pour prévenir toute perte de données en cas d'incident technique.
+- **Nettoyage des journaux système** : Supprime les fichiers journaux techniques obsolètes pour libérer de l'espace disque sur le serveur.
+- **Export RGPD** : Génère un fichier contenant l'ensemble des données personnelles associées à un utilisateur ou à un contact spécifique, conformément au droit à la portabilité des données imposé par le RGPD.
 
 ---
 
-### 9.3. Export & Rapports
+## Partie IV — Gouvernance et Gestion des Accès
 
-**Rôle :** Extraction des données pour une analyse externe.
+### 4.1. Architecture des Rôles
 
-**Description :** Permet de générer des documents de synthèse à partir des données du CRM.
+La plateforme Nexus Pro repose sur une architecture de contrôle d'accès basée sur les rôles, communément désignée par l'acronyme **RBAC** (Role-Based Access Control). Ce modèle garantit que chaque utilisateur n'accède qu'aux fonctionnalités et aux données strictement nécessaires à l'exercice de ses fonctions, conformément au principe de moindre privilège.
 
-**Formats disponibles :**
-- **CSV** : Fichier tableur compatible avec Microsoft Excel et Google Sheets, idéal pour des analyses personnalisées.
-- **PDF** : Document formaté prêt à l'impression, adapté aux présentations et rapports de direction.
+Deux rôles principaux sont définis dans le système.
 
-**Types de rapports :**
-- Rapport des contacts
-- Rapport du pipeline commercial
-- Rapport des performances par commercial
+### 4.2. Rôle Administrateur
 
----
+L'Administrateur est le gestionnaire de la plateforme. Il dispose d'un accès complet et sans restriction à l'ensemble des modules et des fonctionnalités. Il est responsable de la configuration du système, de la gestion des utilisateurs, de la surveillance de la sécurité et de la conformité réglementaire.
 
-### 9.4. Maintenance
+**Périmètre d'accès complet :**
+- Tableau de bord avec vue consolidée de toute l'équipe
+- Gestion complète des contacts (lecture, création, modification, suppression)
+- Gestion complète des opportunités (lecture, création, modification, suppression)
+- Gestion de l'agenda et des tâches
+- Administration des utilisateurs (création, modification, désactivation)
+- Validation des demandes d'accès
+- Consultation du journal d'audit global
+- Configuration des paramètres système
+- Gestion des notifications
+- Génération de tous les types de rapports
+- Maintenance et sauvegarde de la base de données
 
-**Rôle :** Outils de santé et de protection du système.
+### 4.3. Rôle Commercial
 
-**Description :** Regroupe les fonctions techniques avancées pour assurer la pérennité et la sécurité des données.
+Le Commercial est l'utilisateur opérationnel de la plateforme. Son accès est ciblé sur les fonctionnalités nécessaires à la gestion de son activité commerciale quotidienne. Il n'a pas accès aux fonctions d'administration, de configuration et de surveillance du système.
 
-**Fonctionnalités :**
-- **Sauvegarde (Backup)** : Génère et télécharge une archive complète de la base de données. À effectuer régulièrement pour prévenir toute perte de données.
-- **Nettoyage des logs** : Supprime les fichiers journaux obsolètes pour libérer de l'espace disque.
-- **Export RGPD** : Génère un fichier contenant l'ensemble des données personnelles d'un utilisateur ou d'un contact, conformément aux obligations légales du Règlement Général sur la Protection des Données.
+**Périmètre d'accès :**
+- Tableau de bord avec vue personnelle (ses propres données uniquement)
+- Gestion des contacts (lecture, création, modification — suppression non autorisée)
+- Gestion des opportunités (lecture, création, modification — suppression non autorisée)
+- Gestion de l'agenda et des tâches
+- Gestion de son propre profil utilisateur
 
----
+**Accès non autorisés :**
+- Module de gestion des utilisateurs
+- Module de validation des demandes d'accès
+- Journal d'audit global
+- Paramètres du système
+- Maintenance et sauvegarde
 
-## 10. Gestion des Rôles et des Accès
-
-Le CRM Nexus Pro repose sur une architecture de contrôle d'accès basée sur les rôles (RBAC). Deux rôles principaux sont définis, chacun avec des périmètres d'action distincts.
-
-### 10.1. Rôle Administrateur
-
-L'Administrateur dispose d'un accès complet et sans restriction à l'ensemble de la plateforme. Il est responsable de la configuration, de la sécurité et de la gouvernance du système.
-
-**Pages et fonctionnalités accessibles :**
-- Tableau de bord (vue globale de toute l'équipe)
-- Module Contacts (lecture, création, modification, suppression)
-- Module Opportunités (lecture, création, modification, suppression)
-- Module Agenda & Tâches (lecture, création, modification, suppression)
-- **Module Utilisateurs** (création, modification, désactivation de comptes)
-- **Demandes d'Accès** (validation et rejet)
-- **Journal d'Audit** (consultation complète)
-- **Paramètres du Système** (configuration générale, notifications, maintenance)
-- **Export & Rapports** (génération de tous les types de rapports)
-
----
-
-### 10.2. Rôle Commercial
-
-Le Commercial dispose d'un accès ciblé sur les fonctionnalités opérationnelles nécessaires à son activité quotidienne. Il n'a pas accès aux fonctions d'administration et de configuration du système.
-
-**Pages et fonctionnalités accessibles :**
-- Tableau de bord (vue personnelle de ses propres données uniquement)
-- Module Contacts (lecture, création, modification — pas de suppression)
-- Module Opportunités (lecture, création, modification — pas de suppression)
-- Module Agenda & Tâches (lecture, création, modification, suppression de ses propres tâches)
-- Profil Utilisateur (gestion de ses propres informations)
-
-**Pages et fonctionnalités non accessibles :**
-- Module Utilisateurs & Accès
-- Journal d'Audit global
-- Paramètres du Système
-- Maintenance & Sauvegarde
-
----
-
-### 10.3. Tableau Comparatif des Droits d'Accès
+### 4.4. Tableau Comparatif des Droits d'Accès
 
 | Fonctionnalité | Administrateur | Commercial |
 | :--- | :---: | :---: |
-| Dashboard (vue globale équipe) | ✅ | ❌ |
-| Dashboard (vue personnelle) | ✅ | ✅ |
+| Tableau de bord — Vue globale équipe | ✅ | ❌ |
+| Tableau de bord — Vue personnelle | ✅ | ✅ |
 | Contacts — Lecture | ✅ | ✅ |
-| Contacts — Création & Modification | ✅ | ✅ |
+| Contacts — Création et Modification | ✅ | ✅ |
 | Contacts — Suppression | ✅ | ❌ |
 | Opportunités — Lecture | ✅ | ✅ |
-| Opportunités — Création & Modification | ✅ | ✅ |
+| Opportunités — Création et Modification | ✅ | ✅ |
 | Opportunités — Suppression | ✅ | ❌ |
-| Agenda & Tâches | ✅ | ✅ |
+| Agenda et Tâches | ✅ | ✅ |
+| Profil Utilisateur personnel | ✅ | ✅ |
 | Gestion des Utilisateurs | ✅ | ❌ |
 | Validation des Demandes d'Accès | ✅ | ❌ |
 | Journal d'Audit | ✅ | ❌ |
 | Paramètres Généraux | ✅ | ❌ |
-| Notifications Système | ✅ | ❌ |
-| Export & Rapports | ✅ | ❌ |
-| Maintenance & Sauvegarde | ✅ | ❌ |
+| Configuration des Notifications | ✅ | ❌ |
+| Export et Rapports | ✅ | ❌ |
+| Maintenance et Sauvegarde | ✅ | ❌ |
 
 ---
 
-*Guide Utilisateur Officiel — CRM Nexus Pro. Document de référence à usage interne.*
+## Conclusion
+
+La plateforme CRM Nexus Pro constitue un outil de gestion de la relation client complet, sécurisé et adapté aux besoins des équipes commerciales modernes. Son architecture modulaire permet une adoption progressive, en commençant par les fonctionnalités essentielles (gestion des contacts et du pipeline) avant d'exploiter les capacités avancées de reporting et d'administration.
+
+La combinaison d'une interface intuitive, d'une accessibilité multi-support (ordinateur, tablette, smartphone) et d'un système de gouvernance rigoureux basé sur les rôles en fait une solution robuste pour centraliser la connaissance client, améliorer la productivité des équipes et fournir à la direction les indicateurs nécessaires à une prise de décision éclairée.
+
+---
+
+*Document de Référence — CRM Nexus Pro*
+*Usage Interne — Confidentiel*
