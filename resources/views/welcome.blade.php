@@ -67,7 +67,7 @@
             <!-- PWA Install Button Mobile -->
             <button id="pwa-install-btn-mobile" style="display: none;" class="lg:hidden flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20 transform active:scale-95">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                Installer
+                Télécharger
             </button>
 
             @auth
@@ -338,7 +338,7 @@
             });
         }
 
-        // PWA Robust Install Logic
+        // PWA Proactive Install Logic
         let deferredPrompt;
         const installBtnMobile = document.getElementById('pwa-install-btn-mobile');
         const iosModal = document.getElementById('ios-install-modal');
@@ -348,37 +348,38 @@
         const isMobile = () => /android|iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
         const isInStandaloneMode = () => ('standalone' in window.navigator && window.navigator.standalone) || (window.matchMedia('(display-mode: standalone)').matches);
 
+        function triggerInstall() {
+            if (isIos()) {
+                iosModal.classList.remove('hidden');
+            } else {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    // Fallback to guide if prompt not yet captured
+                    androidModal.classList.remove('hidden');
+                }
+            }
+        }
+
         // Always show button on mobile if not standalone
         if (isMobile() && !isInStandaloneMode() && installBtnMobile) {
             installBtnMobile.style.display = 'flex';
-            
-            installBtnMobile.onclick = function() {
-                if (isIos()) {
-                    iosModal.classList.remove('hidden');
-                } else {
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        deferredPrompt.userChoice.then(() => {
-                            deferredPrompt = null;
-                        });
-                    } else {
-                        androidModal.classList.remove('hidden');
-                    }
-                }
-            };
+            installBtnMobile.onclick = triggerInstall;
         }
 
-        // Capture event
+        // Capture event and immediately bind to button for direct action
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            console.log('beforeinstallprompt event fired');
             if (installBtnMobile) {
-                installBtnMobile.onclick = function() {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then(() => {
-                        deferredPrompt = null;
-                    });
-                };
+                installBtnMobile.onclick = triggerInstall;
             }
         });
     </script>
