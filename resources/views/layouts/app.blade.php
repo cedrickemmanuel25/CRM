@@ -45,9 +45,28 @@
 
         /* Utilities */
         .text-gradient {
-            background: linear-gradient(to r, #3b82f6, #00f2ff);
+            background: linear-gradient(to right, #3b82f6, #00f2ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        /* Global Page Title Style — matches "DEMANDES D'ACCÈS" */
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            color: white;
+            line-height: 1.1;
+        }
+        @media (min-width: 768px) {
+            .page-title { font-size: 2.75rem; }
+        }
+        .page-title .accent {
+            background: linear-gradient(to right, #3b82f6, #00f2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>

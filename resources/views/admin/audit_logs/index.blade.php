@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <div class="sm:flex-auto">
-            <h1 class="text-3xl font-black text-white tracking-tight uppercase">Logs d'Audit v2</h1>
+            <h1 class="page-title">Journal <span class="accent">d'Audit</span></h1>
             <p class="mt-2 text-sm text-slate-400 font-medium">Historique des actions sensibles et des événements système.</p>
         </div>
     </div>

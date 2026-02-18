@@ -70,7 +70,7 @@
                 </nav>
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-4xl font-bold tracking-tight text-slate-100 mb-2">
+                        <h1 class="page-title">Mes <span class="accent">Contacts</span></h1>
                             Gestion des Contacts
                         </h1>
                         <div class="flex items-center gap-3 text-sm text-slate-500">

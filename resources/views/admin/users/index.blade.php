@@ -33,7 +33,7 @@
     <!-- Hero Section / Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/5 pb-8">
         <div>
-            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-100 uppercase">Gestion Utilisateurs</h1>
+            <h1 class="page-title">Gestion <span class="accent">Utilisateurs</span></h1>
             <p class="text-slate-500 mt-1 text-xs md:text-sm font-medium uppercase tracking-wider">{{ $users->count() }} Comptes enregistrés</p>
         </div>
         <div class="flex items-center gap-3">

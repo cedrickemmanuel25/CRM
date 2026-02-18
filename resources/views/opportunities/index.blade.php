@@ -44,7 +44,7 @@
         <div class="mb-6 sm:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white">Pipeline des Ventes</h1>
+                    <h1 class="page-title">Pipeline <span class="accent">des Ventes</span></h1>
                     <p class="mt-1 text-sm text-slate-400">Gérez et suivez vos opportunités commerciales</p>
                 </div>
                 

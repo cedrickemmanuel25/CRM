@@ -6,7 +6,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-            <h1 class="text-xl font-semibold text-gray-900">Journal d'audit</h1>
+            <h1 class="page-title">Journal <span class="accent">d'Audit</span></h1>
             <p class="mt-2 text-sm text-gray-700">Historique complet des actions système.</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
