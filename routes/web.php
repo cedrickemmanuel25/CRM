@@ -9,6 +9,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/heartbeat', function() {
+    return response()->json(['status' => 'alive', 'time' => now()]);
+})->name('heartbeat');
+
 Route::get('/test-public', function() {
     return "Public test works - " . date('H:i:s');
 });

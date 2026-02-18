@@ -107,8 +107,8 @@ if (auth()->check()) {
                 <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-[#030712] border-r border-white/10 px-6 pb-4">
                     <div class="flex h-16 shrink-0 items-center justify-between">
                         <div class="flex items-center gap-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-lg flex items-center justify-center rotate-3">
-                                <img src="{{ company_logo() }}" class="h-6 w-auto brightness-0 invert">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-lg flex items-center justify-center rotate-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                <img src="{{ company_logo() }}" class="h-6 w-auto brightness-0 invert" style="height: 24px; width: auto; max-height: 24px;">
                             </div>
                             <span class="text-white font-black text-xl tracking-tighter uppercase">{{ company_name() }}</span>
                         </div>
@@ -138,8 +138,8 @@ if (auth()->check()) {
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col lg:w-[18%] transition-all duration-300">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto glass-sidebar px-4 pb-4 custom-scrollbar">
             <a href="{{ route('dashboard') }}" class="flex h-20 shrink-0 items-center mt-4 gap-x-3 px-2">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 shadow-lg shadow-blue-500/20">
-                    <img src="{{ company_logo() }}" class="h-8 w-auto brightness-0 invert">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 shadow-lg shadow-blue-500/20" style="width: 48px; height: 48px; min-width: 48px;">
+                    <img src="{{ company_logo() }}" class="h-8 w-auto brightness-0 invert" style="height: 32px; width: auto; max-height: 32px;">
                 </div>
                 <span class="text-white font-black text-xl tracking-tighter uppercase leading-none">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
@@ -330,7 +330,22 @@ if (auth()->check()) {
                     });
                 };
             }
-        });
+        // Heartbeat to keep session alive infinitely while tab is open
+        setInterval(() => {
+            fetch('{{ route('heartbeat') }}', {
+                headers: { 
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.status === 401 || response.status === 419) {
+                    // Session actually expired or CSRF token mismatch, reload to login
+                    window.location.reload();
+                }
+            })
+            .catch(err => console.warn('Heartbeat failed', err));
+        }, 300000); // Every 5 minutes
     </script>
 </body>
 </html>
