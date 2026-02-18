@@ -23,6 +23,15 @@
 
     <style>
         :root { --accent: #3b82f6; --neon: #00f2ff; --bg: #030712; }
+        
+        /* Definitive Logo Safety */
+        img.logo-secure { 
+            height: auto !important; 
+            display: block; 
+            max-width: 100%;
+        }
+        .logo-h-8 { height: 32px !important; width: auto !important; }
+        .logo-h-10 { height: 40px !important; width: auto !important; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: white; overflow-x: hidden; }
 
         .glass {
@@ -68,7 +77,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-10 py-4 sm:py-6 flex justify-between items-center">
             <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
-                    <img src="{{ company_logo() }}" class="w-6 sm:w-8 brightness-0 invert">
+                    <img src="{{ company_logo() }}" class="logo-secure logo-h-8 brightness-0 invert" style="height: 32px; width: auto !important;">
                 </div>
                 <span class="text-base sm:text-xl font-extrabold tracking-tighter uppercase truncate max-w-[120px] sm:max-w-none">{{ company_name() }}</span>
             </div>

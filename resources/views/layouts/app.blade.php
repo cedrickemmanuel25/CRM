@@ -18,6 +18,18 @@
     <style>
         :root { --accent: #3b82f6; --neon: #00f2ff; --bg: #030712; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: white; }
+        
+        /* Definitive Logo Safety - Prevents giant logo if Tailwind fails */
+        img.logo-secure { 
+            height: auto !important; 
+            display: block; 
+            max-width: 100%;
+        }
+        .logo-h-6 { height: 24px !important; width: auto !important; }
+        .logo-h-8 { height: 32px !important; width: auto !important; }
+        .logo-h-10 { height: 40px !important; width: auto !important; }
+        .logo-h-14 { height: 56px !important; width: auto !important; }
+        .logo-h-16 { height: 64px !important; width: auto !important; }
 
         .iti { width: 100% !important; direction: ltr !important; }
         .iti__flag-container { left: 0 !important; right: auto !important; z-index: 10; }
@@ -127,7 +139,7 @@ if (auth()->check()) {
                     <div class="flex h-16 shrink-0 items-center justify-between">
                         <div class="flex items-center gap-x-3">
                             <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-lg flex items-center justify-center rotate-3" style="width: 40px; height: 40px; min-width: 40px;">
-                                <img src="{{ company_logo() }}" class="h-6 w-auto brightness-0 invert" style="height: 24px; width: auto; max-height: 24px;">
+                                <img src="{{ company_logo() }}" class="logo-secure logo-h-6 brightness-0 invert" style="height: 24px; width: auto; max-height: 24px !important;">
                             </div>
                             <span class="text-white font-black text-xl tracking-tighter uppercase">{{ company_name() }}</span>
                         </div>
@@ -158,7 +170,7 @@ if (auth()->check()) {
         <div class="flex grow flex-col gap-y-5 overflow-y-auto glass-sidebar px-4 pb-4 custom-scrollbar">
             <a href="{{ route('dashboard') }}" class="flex h-20 shrink-0 items-center mt-4 gap-x-3 px-2">
                 <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 shadow-lg shadow-blue-500/20" style="width: 48px; height: 48px; min-width: 48px;">
-                    <img src="{{ company_logo() }}" class="h-8 w-auto brightness-0 invert" style="height: 32px; width: auto; max-height: 32px;">
+                    <img src="{{ company_logo() }}" class="logo-secure logo-h-8 brightness-0 invert" style="height: 32px; width: auto; max-height: 32px !important;">
                 </div>
                 <span class="text-white font-black text-xl tracking-tighter uppercase leading-none">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
