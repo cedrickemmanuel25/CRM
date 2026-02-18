@@ -14,6 +14,15 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Definitive Logo Safety */
+        img.logo-secure { 
+            height: auto !important; 
+            display: block; 
+            max-width: 100%;
+        }
+        .logo-h-8 { height: 32px !important; width: auto !important; }
+        .logo-h-10 { height: 40px !important; width: auto !important; }
         .iti { 
             width: 100% !important; 
             direction: ltr !important;
@@ -106,7 +115,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                 <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 ring-1 ring-gray-900/5 shadow-2xl relative">
                     <div class="flex h-16 shrink-0 items-center justify-between border-b border-gray-50">
                         <div class="flex items-center gap-x-3">
-                            <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-10 w-auto">
+                            <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-10" style="height: 40px; width: auto !important;">
                             <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() }}</span>
                         </div>
                         <button type="button" @click="sidebarOpen = false" class="-mr-2 p-2 text-gray-500 hover:text-gray-900 focus:outline-none">
@@ -141,7 +150,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-4 pb-4 custom-scrollbar relative">
             <!-- Sidebar Header -->
             <a href="{{ route('admin.dashboard') }}" class="flex h-16 shrink-0 items-center mt-4 gap-x-3 px-2 overflow-hidden">
-                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="h-8 w-auto shrink-0 transition-all duration-300">
+                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-8 shrink-0 transition-all duration-300" style="height: 32px; width: auto !important;">
                 <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
