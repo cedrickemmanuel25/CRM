@@ -50,7 +50,7 @@
                         <li class="text-blue-500">Activités</li>
                     </ol>
                 </nav>
-                <h1 class="text-4xl font-bold tracking-tight text-slate-100 mb-2">Journal d'Activité</h1>
+                <h1 class="page-title">Journal <span class="accent">d'Activité</span></h1>
                 <p class="text-slate-500 text-sm mt-1">Historique complet de vos interactions et rappels.</p>
             </div>
             <div class="bg-white/5 p-4 rounded-2xl border border-white/10 text-blue-500 shadow-xl">

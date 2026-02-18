@@ -50,7 +50,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-black text-white tracking-tighter uppercase">Tâches & Missions</h1>
+                            <h1 class="page-title">Tâches <span class="accent">&amp; Missions</span></h1>
                             <p class="text-[10px] font-black text-indigo-500/60 uppercase tracking-[0.3em] mt-1">{{ count($tasks['todo']) + count($tasks['in_progress']) + count($tasks['done']) }} flux opérationnels</p>
                         </div>
                     </div>

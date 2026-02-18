@@ -36,7 +36,7 @@
     <!-- Page Header -->
     <div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-black text-white tracking-tight uppercase">Profil Administrateur</h1>
+            <h1 class="page-title">Profil <span class="accent">Administrateur</span></h1>
             <p class="mt-2 text-slate-400 font-medium">Gérez votre profil et consultez les statistiques système</p>
         </div>
         <div class="flex items-center gap-3">

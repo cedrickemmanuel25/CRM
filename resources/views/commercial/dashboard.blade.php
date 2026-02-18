@@ -56,7 +56,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/5">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight text-white">Tableau de Bord Commercial</h1>
+            <h1 class="page-title">Tableau de Bord <span class="accent">Commercial</span></h1>
             <p class="text-slate-500 text-sm mt-1 font-medium">Suivi de performance et pilotage du pipeline</p>
         </div>
         <div class="flex items-center gap-3">

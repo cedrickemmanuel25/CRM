@@ -9,7 +9,7 @@
         <!-- Page Header -->
         <div class="mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
-                <h1 class="text-3xl font-black text-white tracking-tight uppercase">Paramètres de l'espace</h1>
+                <h1 class="page-title">Paramètres <span class="accent">du Système</span></h1>
                 <p class="mt-2 text-sm text-slate-400 font-medium">Gérez la configuration globale de votre CRM, la sécurité et les préférences.</p>
             </div>
             <div>

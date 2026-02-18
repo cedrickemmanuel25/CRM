@@ -51,7 +51,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight text-white">Tableau de Bord</h1>
+            <h1 class="page-title">Tableau <span class="accent">de Bord</span></h1>
             <p class="text-slate-500 text-sm mt-1">Résumé consolidé de votre activité</p>
         </div>
         <div class="flex items-center gap-3">

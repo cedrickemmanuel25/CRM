@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="md:flex md:items-center md:justify-between mb-10">
         <div class="flex-1 min-w-0">
-            <h1 class="text-3xl font-black text-white tracking-tight uppercase">Règles d'Attribution</h1>
+            <h1 class="page-title">Règles <span class="accent">d'Attribution</span></h1>
             <p class="mt-2 text-slate-400 font-medium">Configurez comment les opportunités sont distribuées automatiquement aux commerciaux.</p>
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4">

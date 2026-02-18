@@ -71,7 +71,7 @@
     <!-- Header: Enterprise Standard -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/5 pb-8">
         <div>
-            <h1 class="text-4xl font-bold tracking-tight text-slate-100">Tableau de Bord</h1>
+            <h1 class="page-title">Tableau <span class="accent">de Bord</span></h1>
             <p class="text-slate-500 mt-1 text-sm font-medium">Vue d'ensemble des opérations et performance commerciale</p>
         </div>
         

@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-black text-white tracking-tight uppercase">Maintenance & RGPD</h1>
+            <h1 class="page-title">Maintenance <span class="accent">&amp; RGPD</span></h1>
             <p class="mt-2 text-slate-400 font-medium">Outils de sauvegarde, conformité RGPD et suppression de données.</p>
         </div>
         <div class="flex items-center gap-3">
