@@ -1,14 +1,46 @@
-// Service Worker Version: 3
+const CACHE_NAME = 'nexus-pro-v1';
+const ASSETS_TO_CACHE = [
+    '/',
+    '/manifest.json',
+    '/resources/css/app.css',
+    '/resources/js/app.js',
+    '/images/logo.png'
+];
+
+// Install Event
 self.addEventListener('install', (event) => {
-    self.skipWaiting();
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(ASSETS_TO_CACHE);
+        })
+    );
 });
 
+// Activate Event
 self.addEventListener('activate', (event) => {
-    event.waitUntil(clients.claim());
+    event.waitUntil(
+        caches.keys().then((keys) => {
+            return Promise.all(
+                keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+            );
+        })
+    );
 });
 
+// Fetch Event
 self.addEventListener('fetch', (event) => {
-    // Simple pass-through for now to satisfy PWA requirements
-    // In a real production app, we would cache static assets here
-    event.respondWith(fetch(event.request));
+    // For navigation requests, try network first, then cache
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).catch(() => caches.match('/'))
+        );
+        return;
+    }
+
+    // For other assets, try cache first, then network
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
 });
