@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
         :root { --accent: #3b82f6; --neon: #00f2ff; --bg: #030712; }
@@ -53,33 +54,63 @@
 
     <canvas id="bg-canvas"></canvas>
 
-    <nav class="fixed w-full z-50 px-4 sm:px-10 py-4 sm:py-6 flex justify-between items-center border-b border-white/5 backdrop-blur-xl">
-        <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
-                <img src="{{ company_logo() }}" class="w-6 sm:w-8 brightness-0 invert">
+    <nav x-data="{ open: false }" class="fixed w-full z-50 transition-all border-b border-white/5 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-10 py-4 sm:py-6 flex justify-between items-center">
+            <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
+                    <img src="{{ company_logo() }}" class="w-6 sm:w-8 brightness-0 invert">
+                </div>
+                <span class="text-base sm:text-xl font-extrabold tracking-tighter uppercase truncate max-w-[120px] sm:max-w-none">{{ company_name() }}</span>
             </div>
-            <span class="text-base sm:text-xl font-extrabold tracking-tighter uppercase truncate max-w-[120px] sm:max-w-none">{{ company_name() }}</span>
-        </div>
-        
-        <div class="hidden lg:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-slate-400">
-            <a href="#features" class="hover:text-cyan-400 transition-colors">Fonctionnalités</a>
-            <a href="#modules" class="hover:text-cyan-400 transition-colors">Modules</a>
-            <a href="#security" class="hover:text-cyan-400 transition-colors">Sécurité</a>
+            
+            <div class="hidden lg:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                <a href="#features" class="hover:text-cyan-400 transition-colors">Fonctionnalités</a>
+                <a href="#modules" class="hover:text-cyan-400 transition-colors">Modules</a>
+                <a href="#security" class="hover:text-cyan-400 transition-colors">Sécurité</a>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-4 font-bold">
+                <!-- PWA Install Button Mobile (Always visible if PWA available) -->
+                <button id="pwa-install-btn-mobile" style="display: none;" class="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20 transform active:scale-95">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Télécharger
+                </button>
+
+                <!-- Desktop Auth Buttons -->
+                <div class="hidden md:flex items-center gap-4">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 bg-white text-slate-950 rounded-full text-xs uppercase hover:bg-cyan-400 transition-all font-black">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-xs text-white hover:text-cyan-400 transition-colors">Connexion</a>
+                        <a href="{{ route('access.request') }}" class="px-6 py-2.5 bg-white text-slate-950 rounded-full text-xs uppercase hover:bg-cyan-400 transition-all font-black">Demander l'Accès</a>
+                    @endauth
+                </div>
+
+                <!-- Hamburger Button (Mobile) -->
+                <button @click="open = !open" class="md:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">
+                    <svg x-show="!open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    <svg x-show="open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
         </div>
 
-        <div class="flex items-center gap-2 sm:gap-6">
-            <!-- PWA Install Button Mobile -->
-            <button id="pwa-install-btn-mobile" style="display: none;" class="flex lg:hidden items-center justify-center gap-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-3 py-2 rounded-full text-[8px] font-black uppercase tracking-tight transition-all shadow-lg shadow-blue-500/20 transform active:scale-95 flex-shrink-0">
-                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                <span class="hidden xs:inline">Télécharger</span>
-            </button>
-
-            @auth
-                <a href="{{ url('/dashboard') }}" class="px-4 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[9px] sm:text-xs uppercase hover:bg-cyan-400 transition-all flex-shrink-0">Dashboard</a>
-            @else
-                <a href="{{ route('login') }}" class="text-[9px] sm:text-sm font-bold text-white hover:text-cyan-400 transition-colors flex-shrink-0">Connexion</a>
-                <a href="{{ route('access.request') }}" class="px-4 sm:px-8 py-2 sm:py-3 bg-white text-slate-950 font-black rounded-full text-[9px] sm:text-xs uppercase hover:bg-cyan-400 transition-all flex-shrink-0">Accès</a>
-            @endauth
+        <!-- Mobile Menu -->
+        <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4" class="md:hidden glass border-t border-white/5 overflow-hidden" style="display: none;">
+            <div class="px-6 py-8 space-y-6">
+                <div class="flex flex-col gap-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 pb-6 border-b border-white/5">
+                    <a href="#features" @click="open = false" class="hover:text-cyan-400 transition-colors">Fonctionnalités</a>
+                    <a href="#modules" @click="open = false" class="hover:text-cyan-400 transition-colors">Modules</a>
+                    <a href="#security" @click="open = false" class="hover:text-cyan-400 transition-colors">Sécurité</a>
+                </div>
+                <div class="flex flex-col gap-4 pt-2">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="w-full py-4 bg-white text-slate-950 rounded-2xl text-center text-xs font-black uppercase tracking-widest shadow-xl">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class="w-full py-4 glass text-white rounded-2xl text-center text-xs font-bold uppercase tracking-widest border border-white/10">Connexion</a>
+                        <a href="{{ route('access.request') }}" class="w-full py-4 bg-blue-600 text-white rounded-2xl text-center text-xs font-black uppercase tracking-widest shadow-xl shadow-blue-500/20">Demander l'Accès</a>
+                    @endauth
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -357,7 +388,7 @@
                 // iPhone: Show steps guide
                 iosModal.classList.remove('hidden');
             } else {
-                // Android & Others: Direct native prompt
+                // Android & Others: Direct native prompt ONLY
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
@@ -367,8 +398,8 @@
                         deferredPrompt = null;
                     });
                 } else {
-                    // Only show guide if the browser doesn't support/hasn't triggered beforeinstallprompt
-                    androidModal.classList.remove('hidden');
+                    // Strictly NO guide for Android as per user request
+                    console.log('Installation prompt not yet triggered by browser');
                 }
             }
         }

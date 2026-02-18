@@ -3,7 +3,202 @@
 @section('title', 'Calendrier & Tâches')
 
 @section('content')
-<div class="min-h-screen bg-[#020617] text-slate-300" x-data="unifiedTaskApp()" x-init="if({{ $errors->any() ? 'true' : 'false' }}) openTaskModal = true">
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('unifiedTaskApp', () => ({
+        selectedDate: '{{ request('date', now()->format('Y-m-d')) }}',
+        currentMonth: new Date(),
+        showFullCalendar: false,
+        calendarView: 'week',
+        openTaskModal: false,
+        selectedEvent: null,
+        
+        events: @json($events ?? []),
+        legend: { task: 'bg-indigo-500', appel: 'bg-blue-500', email: 'bg-purple-500', reunion: 'bg-amber-500', note: 'bg-gray-500' },
+        
+        monthDays: [],
+        weekDays: [],
+        
+        init() {
+            try {
+                this.generateMonthDays();
+                this.generateWeekDays();
+                this.startPolling();
+                if ({{ $errors->any() ? 'true' : 'false' }}) {
+                    this.openTaskModal = true;
+                }
+            } catch (e) {
+                console.error('Init error:', e);
+            }
+        },
+
+        openNewTask() {
+            this.openTaskModal = true;
+        },
+
+        closeNewTask() {
+            this.openTaskModal = false;
+        },
+        
+        get currentMonthLabel() {
+            return this.currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+        },
+        
+        get selectedDateLabel() {
+            return new Date(this.selectedDate).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        },
+        
+        generateMonthDays() {
+            const year = this.currentMonth.getFullYear();
+            const month = this.currentMonth.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            let startDay = firstDay.getDay(); 
+            startDay = startDay === 0 ? 6 : startDay - 1;
+            this.monthDays = [];
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = startDay - 1; i >= 0; i--) {
+                const d = new Date(year, month - 1, prevMonthLastDay - i);
+                this.monthDays.push({ dayNumber: d.getDate(), date: this.formatDate(d), isCurrentMonth: false });
+            }
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const d = new Date(year, month, i);
+                this.monthDays.push({ dayNumber: i, date: this.formatDate(d), isCurrentMonth: true });
+            }
+            const remaining = 42 - this.monthDays.length;
+            for (let i = 1; i <= remaining; i++) {
+                const d = new Date(year, month + 1, i);
+                this.monthDays.push({ dayNumber: i, date: this.formatDate(d), isCurrentMonth: false });
+            }
+        },
+        
+        generateWeekDays() {
+            const date = new Date(this.selectedDate);
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            const weekStart = new Date(date.setDate(diff));
+            this.weekDays = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(weekStart);
+                d.setDate(d.getDate() + i);
+                this.weekDays.push({ date: this.formatDate(d), dayNumber: d.getDate(), dayName: d.toLocaleDateString('fr-FR', { weekday: 'short' }) });
+            }
+        },
+        
+        formatDate(d) {
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        },
+        
+        isSelected(date) { return date === this.selectedDate; },
+        isToday(date) { return date === this.formatDate(new Date()); },
+        hasEvents(date) { return this.events.some(e => e.start.startsWith(date)); },
+        getEventsForDate(date) { return this.events.filter(e => e.start.startsWith(date)); },
+        openEventDetail(event) { this.selectedEvent = event; },
+        formatTime(dateStr) { return new Date(dateStr).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); },
+        prevMonth() { this.currentMonth.setMonth(this.currentMonth.getMonth() - 1); this.generateMonthDays(); },
+        nextMonth() { this.currentMonth.setMonth(this.currentMonth.getMonth() + 1); this.generateMonthDays(); },
+        selectDate(date) { this.selectedDate = date; this.generateWeekDays(); this.fetchTasks(); },
+        
+        async fetchTasks() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('date', this.selectedDate);
+            try {
+                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' });
+                if (!response.ok) {
+                    if (response.status === 401) { window.location.reload(); return; }
+                    throw new Error(`Server status: ${response.status}`);
+                }
+                const data = await response.json();
+                if (data.html && this.$refs.taskBoard) {
+                    const decodedHtml = new TextDecoder('utf-8').decode(Uint8Array.from(atob(data.html), c => c.charCodeAt(0)));
+                    this.$refs.taskBoard.innerHTML = decodedHtml;
+                    this.events = data.events || this.events;
+                }
+            } catch (error) { console.warn('Sync error:', error.message); }
+        },
+        startPolling() { setInterval(() => this.fetchTasks(), 10000); }
+    }));
+});
+</script>
+
+<div class="min-h-screen bg-[#020617] text-slate-300" x-data="unifiedTaskApp()">
+    <!-- Modals moved to Top for stacking reliability -->
+    
+    <!-- Task Creation Modal -->
+    <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-[999] overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 p-8">
+            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl transition-opacity"></div>
+            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-2xl w-full overflow-hidden border border-white/10" x-transition>
+                <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <span class="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">Nouvelle Unité Action</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white uppercase tracking-tight">Planification Tâche</h3>
+                    </div>
+                    <button @click="openTaskModal = false" class="p-3 text-slate-500 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="px-8 py-8">
+                    <form action="{{ route('tasks.store') }}" method="POST">
+                        @csrf
+                        @include('tasks._form', [
+                            'users' => $users,
+                            'contacts' => $contacts,
+                            'opportunities' => $opportunities
+                        ])
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Detail Modal -->
+    <div x-show="selectedEvent" x-cloak class="fixed inset-0 z-[998] overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 p-8">
+            <div @click="selectedEvent = null" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
+            <template x-if="selectedEvent">
+                <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-lg w-full overflow-hidden border border-white/10" 
+                     x-transition
+                     :class="selectedEvent.className.replace('bg-', 'bg-').replace('text-', 'text-')">
+                    <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between transition-colors">
+                        <div>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.3em]">Analyse de Flux</span>
+                            </div>
+                            <h3 class="text-lg font-black text-white uppercase tracking-tight" x-text="selectedEvent.type === 'task' ? 'Fiche d\'action' : 'Mémo Activité'"></h3>
+                        </div>
+                        <button @click="selectedEvent = null" class="p-3 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-8 space-y-8">
+                        <div>
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 block">Désignation / Contexte</label>
+                            <p class="text-lg font-black text-white tracking-tight leading-snug" x-text="selectedEvent.title"></p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-8">
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1.5 block">Planification</label>
+                                <p class="text-white font-black text-sm" x-text="new Date(selectedEvent.start).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })"></p>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1.5 block">Horodatage</label>
+                                <p class="text-white font-black text-sm" x-text="formatTime(selectedEvent.start)"></p>
+                            </div>
+                        </div>
+                        <div class="flex justify-end pt-8 border-t border-white/5 gap-4">
+                            <template x-if="selectedEvent.type === 'task'">
+                                <a :href="'/tasks/' + selectedEvent.id" class="px-8 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">Inspecter</a>
+                            </template>
+                            <button @click="selectedEvent = null" class="px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
     
     <!-- Top Header : Enterprise Context -->
     <div class="bg-slate-900/50 backdrop-blur-xl border-b border-white/10 sticky top-16 z-30">
@@ -26,7 +221,7 @@
                         </svg>
                         <span x-text="showFullCalendar ? 'Tableau Kanban' : 'Vue Agenda'"></span>
                     </button>
-                    <button @click="console.log('Button Clicked'); openTaskModal = true" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
+                    <button @click="openNewTask()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -103,6 +298,8 @@
                 </div>
             </div>
 
+            <!-- Main Content Area -->
+            <div class="flex-1 w-full">
                 <!-- Full Calendar View (Alt) -->
                 <div x-show="showFullCalendar" x-cloak class="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
                     <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between bg-white/5">
@@ -183,227 +380,11 @@
             </div>
         </div>
     </div>
-
-    <!-- Task Creation Modal -->
-    <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-[60] overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 p-8">
-            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
-            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-2xl w-full overflow-hidden border border-white/10" x-show="openTaskModal" x-transition>
-                <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-2 mb-0.5">
-                            <span class="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">Nouvelle Unité Action</span>
-                        </div>
-                        <h3 class="text-lg font-black text-white uppercase tracking-tight">Planification Tâche</h3>
-                    </div>
-                    <button @click="openTaskModal = false" class="p-3 text-slate-500 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
-                </div>
-                <div class="px-8 py-8">
-                    <form action="{{ route('tasks.store') }}" method="POST">
-                        @csrf
-                        @include('tasks._form', [
-                            'users' => $users,
-                            'contacts' => $contacts,
-                            'opportunities' => $opportunities
-                        ])
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Event Detail Modal -->
-    <div x-show="selectedEvent" x-cloak class="fixed inset-0 z-[70] overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 p-8">
-            <div @click="selectedEvent = null" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
-            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-lg w-full overflow-hidden border border-white/10" x-show="selectedEvent" x-transition>
-                <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between transition-colors" :class="selectedEvent?.className.replace('bg-', 'bg-').replace('text-', 'text-')">
-                    <div>
-                        <div class="flex items-center gap-2 mb-0.5">
-                            <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.3em]">Analyse de Flux</span>
-                        </div>
-                        <h3 class="text-lg font-black text-white uppercase tracking-tight" x-text="selectedEvent?.type === 'task' ? 'Fiche d\'action' : 'Mémo Activité'"></h3>
-                    </div>
-                    <button @click="selectedEvent = null" class="p-3 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl transition-all border border-transparent hover:border-white/10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
-                </div>
-                <div class="p-8 space-y-8">
-                    <div>
-                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 block">Désignation / Contexte</label>
-                        <p class="text-lg font-black text-white tracking-tight leading-snug" x-text="selectedEvent?.title"></p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-8">
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1.5 block">Planification</label>
-                            <p class="text-white font-black text-sm" x-text="new Date(selectedEvent?.start).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })"></p>
-                        </div>
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1.5 block">Horodatage</label>
-                            <p class="text-white font-black text-sm" x-text="formatTime(selectedEvent?.start)"></p>
-                        </div>
-                    </div>
-                    <div class="flex justify-end pt-8 border-t border-white/5 gap-4">
-                        <template x-if="selectedEvent?.type === 'task'">
-                            <a :href="'/tasks/' + selectedEvent.id" class="px-8 py-3.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">Inspecter</a>
-                        </template>
-                        <button @click="selectedEvent = null" class="px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all">Fermer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 @push('scripts')
 <script>
-window.unifiedTaskApp = function() {
-    return {
-        selectedDate: '{{ request('date', now()->format('Y-m-d')) }}',
-        currentMonth: new Date(),
-        showFullCalendar: false,
-        calendarView: 'week',
-        openTaskModal: false,
-        selectedEvent: null,
-        
-        events: @json($events ?? []),
-        legend: { task: 'bg-indigo-500', appel: 'bg-blue-500', email: 'bg-purple-500', reunion: 'bg-amber-500', note: 'bg-gray-500' },
-        
-        monthDays: [],
-        weekDays: [],
-        
-        init() {
-            console.log('Unified Task App Initializing...');
-            this.generateMonthDays();
-            this.generateWeekDays();
-            this.startPolling();
-        },
-        
-        get currentMonthLabel() {
-            return this.currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-        },
-        
-        get selectedDateLabel() {
-            return new Date(this.selectedDate).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-        },
-        
-        generateMonthDays() {
-            const year = this.currentMonth.getFullYear();
-            const month = this.currentMonth.getMonth();
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            
-            let startDay = firstDay.getDay(); 
-            startDay = startDay === 0 ? 6 : startDay - 1; // Mon-Sun
-            
-            this.monthDays = [];
-            const prevMonthLastDay = new Date(year, month, 0).getDate();
-            
-            for (let i = startDay - 1; i >= 0; i--) {
-                const d = new Date(year, month - 1, prevMonthLastDay - i);
-                this.monthDays.push({ dayNumber: d.getDate(), date: this.formatDate(d), isCurrentMonth: false });
-            }
-            for (let i = 1; i <= lastDay.getDate(); i++) {
-                const d = new Date(year, month, i);
-                this.monthDays.push({ dayNumber: i, date: this.formatDate(d), isCurrentMonth: true });
-            }
-            const remaining = 42 - this.monthDays.length;
-            for (let i = 1; i <= remaining; i++) {
-                const d = new Date(year, month + 1, i);
-                this.monthDays.push({ dayNumber: i, date: this.formatDate(d), isCurrentMonth: false });
-            }
-        },
-        
-        generateWeekDays() {
-            const date = new Date(this.selectedDate);
-            const day = date.getDay();
-            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-            const weekStart = new Date(date.setDate(diff));
-            
-            this.weekDays = [];
-            for (let i = 0; i < 7; i++) {
-                const d = new Date(weekStart);
-                d.setDate(d.getDate() + i);
-                this.weekDays.push({ date: this.formatDate(d), dayNumber: d.getDate(), dayName: d.toLocaleDateString('fr-FR', { weekday: 'short' }) });
-            }
-        },
-        
-        formatDate(d) {
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        },
-        
-        isSelected(date) { return date === this.selectedDate; },
-        isToday(date) { return date === this.formatDate(new Date()); },
-        hasEvents(date) {
-            return this.events.some(e => e.start.startsWith(date));
-        },
-        
-        getEventsForDate(date) {
-            return this.events.filter(e => e.start.startsWith(date));
-        },
-
-        openEventDetail(event) {
-            this.selectedEvent = event;
-        },
-        
-        formatTime(dateStr) {
-            return new Date(dateStr).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-        },
-        
-        prevMonth() { this.currentMonth.setMonth(this.currentMonth.getMonth() - 1); this.generateMonthDays(); },
-        nextMonth() { this.currentMonth.setMonth(this.currentMonth.getMonth() + 1); this.generateMonthDays(); },
-        
-        selectDate(date) {
-            this.selectedDate = date;
-            this.generateWeekDays();
-            this.fetchTasks();
-        },
-        
-        async fetchTasks() {
-            const url = new URL(window.location.href);
-            url.searchParams.set('date', this.selectedDate);
-            
-            try {
-                const response = await fetch(url, { 
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                    credentials: 'same-origin'
-                });
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        console.warn('Session expirée, redirection...');
-                        window.location.reload();
-                        return;
-                    }
-                    throw new Error(`Server error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                if (data.html) {
-                    if (this.$refs.taskBoard) {
-                        const binaryString = atob(data.html);
-                        const bytes = new Uint8Array(binaryString.length);
-                        for (let i = 0; i < binaryString.length; i++) {
-                            bytes[i] = binaryString.charCodeAt(i);
-                        }
-                        const decodedHtml = new TextDecoder('utf-8').decode(bytes);
-                        this.$refs.taskBoard.innerHTML = decodedHtml;
-                        this.events = data.events || this.events;
-                    } else {
-                        console.debug('taskBoard ref not found, skipping partial replacement');
-                    }
-                }
-            } catch (error) {
-                console.warn('Polling error or network failure:', error.message);
-            }
-        },
-        
-        startPolling() {
-            setInterval(() => this.fetchTasks(), 10000);
-        }
-    }
-}
+    console.log('Calendar scripts V5 active');
 </script>
 @endpush
 
