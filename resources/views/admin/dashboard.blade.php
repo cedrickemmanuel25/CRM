@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Administration - Nexus CRM')
+@section('title', 'Tableau de Bord - CRM')
 
 @section('content')
 <style>

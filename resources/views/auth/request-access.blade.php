@@ -17,11 +17,10 @@
         
         /* Definitive Logo Safety */
         img.logo-secure { 
-            height: auto !important; 
             display: block; 
             max-width: 100%;
         }
-        .logo-h-14 { height: 56px !important; width: auto !important; }
+        .logo-h-14 { height: 40px !important; width: auto !important; }
         .iti { 
             width: 100% !important; 
             direction: ltr !important;
@@ -41,7 +40,6 @@
         
         body {
             background-color: #030712 !important;
-            overflow: hidden;
         }
         
         .relative.z-10 {
@@ -73,7 +71,7 @@
                 
                 <div class="relative z-10">
                     <div class="text-center mb-4">
-                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-14 mx-auto mb-3 brightness-0 invert" style="height: 56px; width: auto !important;">
+                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-14 mx-auto mb-3 brightness-0 invert" style="height: 40px; width: auto !important;">
                         <h2 class="text-xl font-extrabold text-white mb-0.5 uppercase tracking-tighter">Créer un compte</h2>
                         <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Remplissez le formulaire pour demander l'accès</p>
                     </div>

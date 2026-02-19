@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mon Profil - Nexus Admin')
+@section('title', 'Mon Profil - CRM')
 
 @section('content')
 <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up" x-data="{ 

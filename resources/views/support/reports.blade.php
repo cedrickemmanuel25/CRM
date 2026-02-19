@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Rapports Support - Nexus CRM')
+@section('title', 'Rapports Support - CRM')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 p-6">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Journal d\'Activité - Nexus CRM')
+@section('title', 'Historique des activités - CRM')
 
 @section('content')
 <style>
