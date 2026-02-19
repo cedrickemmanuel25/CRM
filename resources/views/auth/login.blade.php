@@ -19,11 +19,10 @@
         
         /* Definitive Logo Safety */
         img.logo-secure { 
-            height: auto !important; 
             display: block; 
             max-width: 100%;
         }
-        .logo-h-16 { height: 64px !important; width: auto !important; }
+        .logo-h-16 { height: 40px !important; width: auto !important; }
         
         #bg-canvas {
             position: fixed;
@@ -35,7 +34,6 @@
         
         body {
             background-color: #030712 !important;
-            overflow: hidden;
         }
         
         .relative.z-10 {
@@ -66,7 +64,7 @@
                 
                 <div class="relative z-10">
                     <div class="text-center mb-6">
-                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-16 mx-auto mb-4 brightness-0 invert" style="height: 64px; width: auto !important;">
+                        <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-16 mx-auto mb-4 brightness-0 invert" style="height: 40px; width: auto !important;">
                         <h2 class="text-2xl font-extrabold text-white mb-1 uppercase tracking-tighter">Connexion</h2>
                         <p class="text-sm text-slate-400">Entrez vos identifiants pour accéder à votre compte</p>
                     </div>

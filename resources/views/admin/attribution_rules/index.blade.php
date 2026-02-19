@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Règles d\'Attribution - Nexus Admin')
+@section('title', 'Gestion des attributions - CRM')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
     <!-- Header -->
-    <div class="md:flex md:items-center md:justify-between mb-10">
+    <div class="md:flex md::items-center md:justify-between mb-10">
         <div class="flex-1 min-w-0">
             <h1 class="page-title">Règles <span class="accent">d'Attribution</span></h1>
             <p class="mt-2 text-slate-400 font-medium">Configurez comment les opportunités sont distribuées automatiquement aux commerciaux.</p>
