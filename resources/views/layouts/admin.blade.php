@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - CRM</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ company_logo() }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}?v=3">
@@ -57,11 +58,8 @@ if (auth()->check()) {
     $pendingAccessCount = 0;
 }
 @endphp
-@endphp
 <body class="h-full bg-gray-50 overflow-y-auto" x-data="{ 
     sidebarOpen: false, 
-    notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
-
     notifModal: { open: false, title: '', message: '', url: '', date: '', id: null },
     unreadCount: {{ $unreadCount }},
     pendingAccessCount: {{ $pendingAccessCount }},
@@ -81,22 +79,31 @@ if (auth()->check()) {
         }
     },
     pollStats() {
+        const csrfToken = document.querySelector('meta[name=csrf-token]')?.content || '';
+        const headers = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        };
         // Poll notifications
-        fetch('{{ route('notifications.fetch') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
-            .then(response => response.json())
-            .then(data => {
-                this.unreadCount = data.count;
+        fetch('{{ route('notifications.fetch') }}', { headers, credentials: 'same-origin' })
+            .then(response => {
+                if (response.status === 401) { window.location.href = '{{ route('login') }}'; return null; }
+                if (response.status === 419) { window.location.reload(); return null; }
+                return response.json();
             })
-            .catch(error => console.error('Error polling notifications:', error));
+            .then(data => { if (data) this.unreadCount = data.count; })
+            .catch(error => console.warn('Poll notifications error:', error));
 
-        @if(auth()->user()->isAdmin())
+        @if(auth()->check() && auth()->user()->isAdmin())
         // Poll access requests (Admin only)
-        fetch('{{ route('admin.access-requests.stats') }}', { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } })
-            .then(response => response.json())
-            .then(data => {
-                this.pendingAccessCount = data.count;
+        fetch('{{ route('admin.access-requests.stats') }}', { headers, credentials: 'same-origin' })
+            .then(response => {
+                if (response.status === 401 || response.status === 419) return null;
+                return response.json();
             })
-            .catch(error => console.error('Error polling access requests:', error));
+            .then(data => { if (data) this.pendingAccessCount = data.count; })
+            .catch(error => console.warn('Poll access requests error:', error));
         @endif
     }
 }" 
@@ -116,7 +123,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                     <div class="flex h-16 shrink-0 items-center justify-between border-b border-gray-50">
                         <div class="flex items-center gap-x-3">
                             <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-10" style="height: 40px; width: auto !important;">
-                            <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() }}</span>
+                            <span class="text-gray-900 font-black text-sm tracking-tight truncate whitespace-nowrap">{{ company_name() }}</span>
                         </div>
                         <button type="button" @click="sidebarOpen = false" class="-mr-2 p-2 text-gray-500 hover:text-gray-900 focus:outline-none">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -150,8 +157,8 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-4 pb-4 custom-scrollbar relative">
             <!-- Sidebar Header -->
             <a href="{{ route('admin.dashboard') }}" class="flex h-16 shrink-0 items-center mt-4 gap-x-3 px-2 overflow-hidden">
-                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure logo-h-8 shrink-0 transition-all duration-300" style="height: 32px; width: auto !important;">
-                <span class="text-gray-900 font-black text-xl tracking-tight truncate">{{ company_name() ?: 'CRM Pro' }}</span>
+                <img src="{{ company_logo() }}" alt="{{ company_name() }} Logo" class="logo-secure shrink-0 transition-all duration-300" style="height: 24px; width: auto !important;">
+                <span class="text-gray-900 font-black text-sm tracking-tight whitespace-nowrap overflow-hidden">{{ company_name() ?: 'CRM Pro' }}</span>
             </a>
 
 
@@ -394,6 +401,28 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                 };
             }
         });
+
+        // ✅ Heartbeat — keep session alive while tab is open (every 4 min)
+        setInterval(function() {
+            fetch('{{ route('heartbeat') }}', {
+                headers: { 
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')
+                        ? document.querySelector('meta[name=csrf-token]').content
+                        : ''
+                },
+                credentials: 'same-origin'
+            })
+            .then(function(response) {
+                if (response.status === 401) {
+                    window.location.href = '{{ route('login') }}';
+                } else if (response.status === 419) {
+                    window.location.reload();
+                }
+            })
+            .catch(function(err) { console.warn('Heartbeat failed:', err); });
+        }, 240000); // Every 4 minutes
     </script>
 </body>
 </html>

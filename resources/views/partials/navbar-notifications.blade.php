@@ -8,17 +8,34 @@
         }, 10000);
     },
     pollNotifications() {
+        const csrfToken = document.querySelector('meta[name=csrf-token]')?.content || '';
         fetch('{{ route('notifications.fetch') }}', {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            credentials: 'same-origin'
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    // Session expired → stop polling and redirect
+                    window.location.href = '{{ route('login') }}';
+                    return null;
+                }
+                if (response.status === 419) {
+                    // CSRF mismatch → reload to refresh token
+                    window.location.reload();
+                    return null;
+                }
+                return response.json();
+            })
             .then(data => {
+                if (!data) return;
                 this.count = data.count;
                 this.notifications = data.notifications;
-            });
+            })
+            .catch(err => console.warn('Notification poll error:', err));
     },
     markAsRead(id) {
         fetch('/notifications/' + id + '/read', {
