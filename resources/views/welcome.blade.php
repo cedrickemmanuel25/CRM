@@ -75,11 +75,11 @@
 
     <nav x-data="{ open: false }" class="fixed w-full z-50 transition-all border-b border-white/5 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-10 py-4 sm:py-6 flex justify-between items-center">
-            <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform">
-                    <img src="{{ company_logo() }}" class="logo-secure logo-h-8 brightness-0 invert" style="height: 32px; width: auto !important;">
+            <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer min-w-0">
+                <div class="w-7 h-7 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-lg sm:rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-12 transition-transform shrink-0">
+                    <img src="{{ company_logo() }}" class="logo-secure brightness-0 invert" style="height: 18px; width: auto;">
                 </div>
-                <span class="text-base sm:text-xl font-extrabold tracking-tighter uppercase truncate max-w-[120px] sm:max-w-none">{{ company_name() }}</span>
+                <span class="text-sm sm:text-xl font-extrabold tracking-tighter uppercase whitespace-nowrap">{{ company_name() }}</span>
             </div>
             
             <div class="hidden lg:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-slate-400">
