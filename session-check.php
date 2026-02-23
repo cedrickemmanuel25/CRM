@@ -1,103 +1,84 @@
 <?php
 /**
- * Script de diagnostic de session Laravel (V2 - Support Public Folder)
- * À placer idéalement dans le dossier public/ sur cPanel
+ * Script de diagnostic de session Laravel (V3 - Debug Mode)
  */
 
-// Recherche de l'autoloader (root ou parent)
-if (file_exists(__DIR__.'/vendor/autoload.php')) {
-    $basePath = __DIR__;
-} elseif (file_exists(__DIR__.'/../vendor/autoload.php')) {
-    $basePath = dirname(__DIR__);
-} else {
-    die("ERREUR : Impossible de trouver vendor/autoload.php. Vérifiez l'emplacement du script.");
-}
-
-require $basePath.'/vendor/autoload.php';
-$app = require_once $basePath.'/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-$kernel->bootstrap();
+// Activer l'affichage des erreurs pour le débug
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 echo '<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Diagnostic Session CRM</title>
+    <title>Debug Session CRM</title>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f0f7ff; line-height: 1.5; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-top: 0; }
-        .grid { display: grid; grid-template-columns: 200px 1fr; gap: 10px; margin-top: 20px; }
-        .label { font-weight: bold; color: #4b5563; }
-        .value { font-family: monospace; background: #f3f4f6; padding: 2px 8px; border-radius: 4px; overflow-wrap: break-word; }
-        .status { margin-top: 30px; padding: 15px; border-radius: 8px; font-weight: bold; }
-        .ok { background: #dcfce7; color: #166534; }
-        .error { background: #fee2e2; color: #991b1b; }
-        ul { padding-left: 20px; }
+        body { font-family: monospace; background: #1a1a1a; color: #00ff00; padding: 20px; line-height: 1.5; }
+        .error-box { background: #330000; color: #ff0000; border: 1px solid red; padding: 15px; margin: 10px 0; }
+        h1 { color: #fff; border-bottom: 1px solid #444; }
+        .info { color: #00bbff; }
     </style>
 </head>
 <body>
-<div class="card">
-    <h1>🔍 Diagnostic de Session Laravel</h1>
-    <p>Emplacement du script : <code>' . $_SERVER['SCRIPT_FILENAME'] . '</code></p>
-    <div class="grid">
-        <div class="label">APP_URL:</div>
-        <div class="value">' . config('app.url') . '</div>
+<h1>🛠️ Debugging Laravel Bootstrap...</h1>';
 
-        <div class="label">SESSION_DRIVER:</div>
-        <div class="value">' . config('session.driver') . '</div>
-
-        <div class="label">SESSION_LIFETIME:</div>
-        <div class="value">' . config('session.lifetime') . ' minutes</div>
-
-        <div class="label">SESSION_DOMAIN:</div>
-        <div class="value">' . (config('session.domain') ?: 'null') . '</div>
-
-        <div class="label">SESSION_PATH:</div>
-        <div class="value">' . config('session.path') . '</div>
-
-        <div class="label">SESSION_SECURE:</div>
-        <div class="value">' . (config('session.secure') ? 'true (Bon pour HTTPS)' : 'false (Attention!)') . '</div>
-        
-        <div class="label">HTTPS Détecté:</div>
-        <div class="value">' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'OUI' : 'NON') . '</div>
-
-        <div class="label">COOKIE NAME:</div>
-        <div class="value">' . config('session.cookie') . '</div>
-    </div>';
-
-$isOk = true;
-$checks = [];
-
-if (config('app.url') === 'http://127.0.0.1:8000') {
-    $isOk = false;
-    $checks[] = "❌ APP_URL est configuré sur 127.0.0.1 au lieu du domaine réel.";
+echo "PHP Version: " . PHP_VERSION . " <br>";
+if (version_compare(PHP_VERSION, '8.2.0', '<')) {
+    echo '<div class="error-box">❌ ERREUR : Laravel 11/12 nécessite PHP 8.2 minimum. Votre serveur utilise ' . PHP_VERSION . '</div>';
 }
 
-if (config('session.lifetime') > 525600) {
-    $checks[] = "⚠️ SESSION_LIFETIME est très élevé (> 1 an).";
+// Recherche de l'autoloader
+echo "Checking paths...<br>";
+$pathsToTry = [
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    dirname(__DIR__) . '/vendor/autoload.php'
+];
+
+$basePath = null;
+foreach ($pathsToTry as $path) {
+    if (file_exists($path)) {
+        echo "✅ Found autoloader at: $path <br>";
+        $basePath = dirname($path);
+        break;
+    }
 }
 
-if (!config('session.secure') && (str_starts_with(config('app.url'), 'https') || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'))) {
-    $isOk = false;
-    $checks[] = "❌ SESSION_SECURE_COOKIE devrait être à true car vous utilisez HTTPS.";
+if (!$basePath) {
+    echo '<div class="error-box">❌ ERREUR : Impossible de localiser le dossier "vendor".</div>';
+    exit;
 }
 
-echo '<div class="status ' . ($isOk ? 'ok' : 'error') . '">';
-if ($isOk) {
-    echo "✅ La configuration semble correcte.";
-} else {
-    echo "⚠️ Problèmes détectés :<br><ul>";
-    foreach($checks as $check) echo "<li>$check</li>";
+try {
+    echo "Loading autoloader...<br>";
+    require $basePath . '/vendor/autoload.php';
+
+    echo "Bootstrapping application...<br>";
+    // Laravel 11+ return instance in bootstrap/app.php
+    $app = require_once $basePath . '/bootstrap/app.php';
+    
+    echo "Resolving Kernel...<br>";
+    $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
+    
+    echo "Bootstrapping Kernel...<br>";
+    $kernel->bootstrap();
+
+    echo '<h2 class="info">✅ Laravel bootstrapped successfully!</h2>';
+    
+    echo "<h3>Configuration:</h3><ul>";
+    echo "<li>APP_URL: " . config('app.url') . "</li>";
+    echo "<li>SESSION_DRIVER: " . config('session.driver') . "</li>";
+    echo "<li>SESSION_SECURE: " . (config('session.secure') ? 'TRUE' : 'FALSE') . "</li>";
+    echo "<li>SESSION_DOMAIN: " . (config('session.domain') ?: 'NULL') . "</li>";
+    echo "<li>SESSION_PATH: " . config('session.path') . "</li>";
     echo "</ul>";
+
+} catch (\Throwable $e) {
+    echo '<div class="error-box">';
+    echo "<strong>Fatal Error:</strong> " . $e->getMessage() . "<br>";
+    echo "<strong>File:</strong> " . $e->getFile() . " (Line " . $e->getLine() . ")<br>";
+    echo "<strong>Trace:</strong><pre>" . $e->getTraceAsString() . "</pre>";
+    echo '</div>';
 }
-echo '</div>';
 
-echo '<p style="margin-top:20px; font-size: 0.9em; color: #666;">
-    Si les valeurs ci-dessus ne correspondent pas à votre fichier .env actuel, exécutez 
-    <code>clear-cache-server.php</code> pour vider le cache de configuration.
-</p>';
-
-echo '</div>
-</body>
-</html>';
+echo '</body></html>';
