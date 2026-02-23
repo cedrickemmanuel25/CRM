@@ -1,20 +1,20 @@
 <?php
 /**
- * Script de nettoyage du cache Laravel (V2 - Debug Mode)
+ * Script de nettoyage du cache Laravel (V3 - Corrected Paths)
  */
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-if (file_exists(__DIR__.'/vendor/autoload.php')) {
-    $basePath = __DIR__;
-} elseif (file_exists(__DIR__.'/../vendor/autoload.php')) {
-    $basePath = dirname(__DIR__);
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    $rootPath = __DIR__;
+} elseif (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+    $rootPath = dirname(__DIR__);
 } else {
-    die("ERREUR : Impossible de trouver vendor/autoload.php.");
+    die("ERREUR : Impossible de localiser le dossier vendor.");
 }
 
-require $basePath.'/vendor/autoload.php';
+require $rootPath . '/vendor/autoload.php';
 
 echo '<!DOCTYPE html>
 <html lang="fr">
@@ -27,7 +27,7 @@ echo '<!DOCTYPE html>
     <pre style="background: #eee; padding: 15px;">';
 
 try {
-    $app = require_once $basePath.'/bootstrap/app.php';
+    $app = require_once $rootPath . '/bootstrap/app.php';
     $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
     
     echo "Vidage config...\n";
