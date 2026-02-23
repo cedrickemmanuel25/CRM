@@ -1,30 +1,37 @@
 <?php
 /**
- * Script de lecture des logs Laravel
+ * Script de lecture des logs (Laravel + PHP Native)
  */
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$logPath = __DIR__ . '/../storage/logs/laravel.log';
+$laravelLog = __DIR__ . '/../storage/logs/laravel.log';
+$phpErrorLog = __DIR__ . '/error_log';
+$rootErrorLog = __DIR__ . '/../error_log';
 
-echo "<h1>Laravel Log Reader</h1>";
-echo "Checking log file at: $logPath <br>";
+echo "<h1>System Log Reader</h1>";
 
-if (!file_exists($logPath)) {
-    die("❌ Log file NOT FOUND.");
+function showLog($path, $label) {
+    echo "<h2>$label ($path)</h2>";
+    if (!file_exists($path)) {
+        echo "<p style='color:orange;'>Non trouvé.</p>";
+        return;
+    }
+    
+    $lines = 30;
+    $content = shell_exec("tail -n $lines " . escapeshellarg($path));
+    if (!$content) {
+        $fileContent = file($path);
+        $content = implode("", array_slice($fileContent, -$lines));
+    }
+    
+    echo "<pre style='background:#f4f4f4; padding:15px; border:1px solid #ccc; max-height:400px; overflow:auto;'>";
+    echo htmlspecialchars($content);
+    echo "</pre>";
 }
 
-$lines = 50;
-$content = shell_exec("tail -n $lines " . escapeshellarg($logPath));
+showLog($phpErrorLog, "PHP Error Log (Public Folder)");
+showLog($rootErrorLog, "PHP Error Log (Root Folder)");
+showLog($laravelLog, "Laravel Log (Storage Folder)");
 
-if (!$content) {
-    // Fallback if tail is not available
-    $fileContent = file($logPath);
-    $content = implode("", array_slice($fileContent, -$lines));
-}
-
-echo "<h2>Last $lines lines:</h2>";
-echo "<pre style='background:#f4f4f4; padding:15px; border:1px solid #ccc; overflow:auto;'>";
-echo htmlspecialchars($content);
-echo "</pre>";
 ?>
