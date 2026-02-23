@@ -3,7 +3,6 @@
  * Script de diagnostic de session Laravel (V3 - Debug Mode)
  */
 
-// Activer l'affichage des erreurs pour le débug
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -22,13 +21,7 @@ echo '<!DOCTYPE html>
 <body>
 <h1>🛠️ Debugging Laravel Bootstrap...</h1>';
 
-echo "PHP Version: " . PHP_VERSION . " <br>";
-if (version_compare(PHP_VERSION, '8.2.0', '<')) {
-    echo '<div class="error-box">❌ ERREUR : Laravel 11/12 nécessite PHP 8.2 minimum. Votre serveur utilise ' . PHP_VERSION . '</div>';
-}
-
 // Recherche de l'autoloader
-echo "Checking paths...<br>";
 $pathsToTry = [
     __DIR__ . '/vendor/autoload.php',
     __DIR__ . '/../vendor/autoload.php',
@@ -38,7 +31,6 @@ $pathsToTry = [
 $basePath = null;
 foreach ($pathsToTry as $path) {
     if (file_exists($path)) {
-        echo "✅ Found autoloader at: $path <br>";
         $basePath = dirname($path);
         break;
     }
@@ -50,17 +42,9 @@ if (!$basePath) {
 }
 
 try {
-    echo "Loading autoloader...<br>";
     require $basePath . '/vendor/autoload.php';
-
-    echo "Bootstrapping application...<br>";
-    // Laravel 11+ return instance in bootstrap/app.php
     $app = require_once $basePath . '/bootstrap/app.php';
-    
-    echo "Resolving Kernel...<br>";
     $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
-    
-    echo "Bootstrapping Kernel...<br>";
     $kernel->bootstrap();
 
     echo '<h2 class="info">✅ Laravel bootstrapped successfully!</h2>';
