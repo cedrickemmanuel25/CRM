@@ -1,6 +1,6 @@
 <?php
 /**
- * Script de diagnostic de session Laravel (V3 - Debug Mode)
+ * Script de diagnostic de session Laravel (V4 - Corrected Paths)
  */
 
 error_reporting(E_ALL);
@@ -21,30 +21,28 @@ echo '<!DOCTYPE html>
 <body>
 <h1>🛠️ Debugging Laravel Bootstrap...</h1>';
 
-// Recherche de l'autoloader
-$pathsToTry = [
-    __DIR__ . '/vendor/autoload.php',
-    __DIR__ . '/../vendor/autoload.php',
-    dirname(__DIR__) . '/vendor/autoload.php'
-];
-
-$basePath = null;
-foreach ($pathsToTry as $path) {
-    if (file_exists($path)) {
-        $basePath = dirname($path);
-        break;
-    }
-}
-
-if (!$basePath) {
-    echo '<div class="error-box">❌ ERREUR : Impossible de localiser le dossier "vendor".</div>';
+// Détection du dossier racine
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    $rootPath = __DIR__;
+} elseif (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+    $rootPath = dirname(__DIR__);
+} else {
+    echo '<div class="error-box">❌ ERREUR : Impossible de localiser le dossier "vendor" à la racine ou au niveau parent.</div>';
     exit;
 }
 
 try {
-    require $basePath . '/vendor/autoload.php';
-    $app = require_once $basePath . '/bootstrap/app.php';
+    echo "Root path detected: $rootPath <br>";
+    echo "Loading autoloader...<br>";
+    require $rootPath . '/vendor/autoload.php';
+
+    echo "Bootstrapping application...<br>";
+    $app = require_once $rootPath . '/bootstrap/app.php';
+    
+    echo "Resolving Kernel...<br>";
     $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
+    
+    echo "Bootstrapping Kernel...<br>";
     $kernel->bootstrap();
 
     echo '<h2 class="info">✅ Laravel bootstrapped successfully!</h2>';
