@@ -12,10 +12,10 @@
 
     <!-- Description -->
     <div>
-        <label for="description" class="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2.5 ml-1">Vision Globale</label>
+        <label for="description" class="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2.5 ml-1">Description</label>
         <textarea id="description" name="description" rows="3"
             class="w-full px-5 py-4 bg-white/[0.03] border border-white/10 rounded-2xl text-sm text-white placeholder-slate-600 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white/[0.05] transition-all outline-none resize-none"
-            placeholder="Détails stratégiques..."></textarea>
+            placeholder="Détails de la tâche..."></textarea>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -123,13 +123,13 @@
     </div>
 
     <!-- Actions -->
-    <div class="flex items-center justify-end gap-4 pt-8 mt-4 border-t border-white/5">
+    <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-8 mt-4 border-t border-white/5 pb-2">
         <button type="button" @click="if(typeof openTaskModal !== 'undefined') openTaskModal = false; else window.history.back();" 
-            class="px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.02] text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all active:scale-95">
+            class="w-full sm:w-auto px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.02] text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all active:scale-95">
             Annuler
         </button>
         <button type="submit" 
-            class="inline-flex items-center gap-3 px-8 py-3.5 rounded-2xl bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-2xl bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
             </svg>

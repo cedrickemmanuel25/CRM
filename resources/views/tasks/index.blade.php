@@ -158,10 +158,11 @@
     </div>
 
     <!-- Modal -->
-    <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-[60] overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 p-8">
-            <div @click="openTaskModal = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
-            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-2xl w-full overflow-hidden border border-white/10" x-show="openTaskModal" x-transition>
+    <div x-show="openTaskModal" x-cloak class="fixed inset-0 z-[60] overflow-y-auto custom-scrollbar">
+        <div class="flex items-start justify-center min-h-screen px-4 py-10 sm:py-20">
+            <!-- Backdrop: Removed @click to prevent accidental closing -->
+            <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl transition-opacity"></div>
+            <div class="relative bg-[#020617] rounded-[2.5rem] shadow-2xl max-w-2xl w-full border border-white/10" x-show="openTaskModal" x-transition>
                 <div class="px-8 py-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
                     <div>
                         <div class="flex items-center gap-2 mb-0.5">
@@ -190,11 +191,9 @@
 
 <style>
 [x-cloak] { display: none !important; }
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 @endsection

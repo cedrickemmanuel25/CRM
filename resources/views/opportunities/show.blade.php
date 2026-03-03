@@ -10,7 +10,7 @@
 )" x-cloak>
     
     <!-- Loading Overlay -->
-    <div x-show="isLoading" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-30" style="display: none;">
+    <div x-show="isLoading" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50" style="display: none;">
         <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -19,66 +19,33 @@
 
     <!-- Error Toast Notification -->
     <div x-show="showErrorToast" 
-         x-transition:enter="transform ease-out duration-300 transition"
-         x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-         x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
-         x-transition:leave="transition ease-in duration-100"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed bottom-4 right-4 z-[80] w-full max-w-sm overflow-hidden rounded-lg bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 pointer-events-auto" style="display: none;">
-        <div class="p-4">
-            <div class="flex items-start">
-                <div class="flex-shrink-0">
-                    <svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                    </svg>
-                </div>
-                <div class="ml-3 w-0 flex-1 pt-0.5">
-                    <p class="text-sm font-medium text-white">Erreur</p>
-                    <p class="mt-1 text-sm text-slate-400" x-text="errorMessage"></p>
-                </div>
-                <div class="ml-4 flex flex-shrink-0">
-                    <button type="button" @click="showErrorToast = false" class="inline-flex rounded-md bg-slate-800 text-slate-400 hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <span class="sr-only">Fermer</span>
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+         x-transition
+         class="fixed bottom-4 right-4 z-[1000] w-full max-w-sm overflow-hidden rounded-lg bg-red-600 shadow-lg text-white p-4" 
+         style="display: none;">
+        <div class="flex items-center">
+            <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-sm font-medium" x-text="errorMessage"></p>
         </div>
     </div>
-    <div x-show="showConfirmModal" class="fixed inset-0 z-[70] overflow-y-auto" style="display: none;">
-        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showConfirmModal = false">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm w-full border border-white/10">
-                <div class="bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-900/50 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-white">
-                                Changer d'étape ?
-                            </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-slate-400">
-                                    Voulez-vous passer cette opportunité à l'étape <span x-text="stageGuides[targetStage] ? stageGuides[targetStage].label.toUpperCase() : 'SUIVANTE'" class="font-bold text-indigo-600"></span> ?
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-slate-900/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-white/5">
-                    <button type="button" @click="executeStageChange()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+
+    <!-- General Confirm Modal -->
+    <div x-show="showConfirmModal" 
+         class="fixed inset-0 z-[999] flex items-center justify-center p-4" 
+         x-cloak>
+        <div class="fixed inset-0 bg-black/95" @click="showConfirmModal = false"></div>
+        <div class="relative w-full max-w-sm bg-slate-900 rounded-2xl overflow-hidden shadow-2xl" style="background-color: #0f172a !important;">
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-white mb-2">Changer d'étape ?</h3>
+                <p class="text-slate-400 text-sm mb-6">
+                    Voulez-vous passer cette opportunité à l'étape <span x-text="targetStage.toUpperCase()" class="font-bold text-indigo-400"></span> ?
+                </p>
+                <div class="flex gap-3">
+                    <button @click="executeStageChange()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg transition">
                         Confirmer
                     </button>
-                    <button type="button" @click="showConfirmModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-white/10 shadow-sm px-4 py-2 bg-slate-700 text-base font-medium text-white hover:bg-slate-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    <button @click="showConfirmModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-lg transition">
                         Annuler
                     </button>
                 </div>
@@ -86,82 +53,6 @@
         </div>
     </div>
 
-    <!-- Qualification Modal (Relocated) -->
-    <div x-show="showQualifyModal" class="fixed inset-0 z-[60] overflow-y-auto" style="display: none;">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showQualifyModal = false">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full border border-white/10">
-                <div class="bg-indigo-600 px-4 py-3 sm:px-6 flex justify-between items-center">
-                    <h3 class="text-lg leading-6 font-bold text-white uppercase tracking-wider" id="modal-title">
-                        Qualification de l'Opportunité
-                    </h3>
-                    <button @click="showQualifyModal = false" class="text-indigo-200 hover:text-white">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-                <!-- Form content is large, I should just move it or use include. For now I paste the structure and rely on the fact that I will DELETE the duplicates at the bottom -->
-                <form action="{{ route('opportunities.update', $opportunity) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    
-                    <div class="bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="space-y-6">
-                            <p class="text-sm text-slate-300 bg-indigo-900/20 p-3 rounded-lg border-l-4 border-indigo-500">
-                                Pour passer à l'étape suivante, veuillez valider les critères de qualification.
-                            </p>
-                            <input type="hidden" name="stade" value="qualification">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="modal_budget" class="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-2">Budget Estimé</label>
-                                    <div class="relative rounded-md shadow-sm">
-                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <span class="text-slate-500 sm:text-sm">{{ currency_symbol() }}</span>
-                                        </div>
-                                        <input type="number" name="budget_estime" id="modal_budget" value="{{ old('budget_estime', $opportunity->budget_estime) }}" required
-                                            class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-white/10 bg-slate-900/50 text-white rounded-md py-2" placeholder="0.00">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="modal_delai" class="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-2">Délai Souhaité</label>
-                                    <input type="date" name="delai_projet" id="modal_delai" value="{{ old('delai_projet', $opportunity->delai_projet ? $opportunity->delai_projet->format('Y-m-d') : '') }}" required
-                                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-white/10 bg-slate-900/50 text-white rounded-md py-2">
-                                </div>
-                            </div>
-                            <div class="relative flex items-start py-3 px-4 border border-white/10 rounded-lg hover:bg-white/5 transition-colors">
-                                <div class="min-w-0 flex-1 text-sm">
-                                    <label for="modal_decisionnaire" class="font-bold text-slate-300 select-none cursor-pointer">Décisionnaire identifié</label>
-                                </div>
-                                <div class="ml-3 flex items-center h-5">
-                                    <input id="modal_decisionnaire" name="decisionnaire" type="checkbox" value="1" {{ $opportunity->decisionnaire ? 'checked' : '' }}
-                                        class="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-white/10 bg-slate-900/50 rounded cursor-pointer">
-                                </div>
-                            </div>
-                            <div>
-                                <label for="modal_besoin" class="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-2">Besoins / Points de Douleur</label>
-                                <textarea name="besoin" id="modal_besoin" rows="3" required
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-white/10 bg-slate-900/50 text-white rounded-md">{{ old('besoin', $opportunity->besoin) }}</textarea>
-                            </div>
-                            <input type="hidden" name="score" value="20">
-                        </div>
-                    </div>
-                    
-                    <div class="bg-slate-900/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-white/5">
-                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm uppercase tracking-wide">
-                            Valider & Qualifier
-                        </button>
-                        <button type="button" @click="showQualifyModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-white/10 shadow-sm px-4 py-2 bg-slate-700 text-base font-medium text-white hover:bg-slate-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            Annuler
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pipeline Progress Bar Moved to List View -->
     <div class="mb-4"></div>
 
     <!-- Top Actions Mobil/Desktop -->
@@ -286,9 +177,15 @@
                 </div>
             </div>
 
+            <!-- Guide de l'étape -->
+            <div class="bg-slate-800/20 backdrop-blur-xl shadow rounded-xl border border-white/10 p-5">
+                <h4 class="text-xs font-black text-blue-300 uppercase tracking-[0.2em] mb-1">Guide de l'étape : {{ ucfirst($opportunity->stade === 'qualification' ? 'Prospect Qualifié' : $opportunity->stade) }}</h4>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 text-slate-500 italic">Informations spécifiques à venir...</h3>
+            </div>
+
             <!-- Propriétaire & Info Système -->
             <div class="bg-slate-800/20 backdrop-blur-xl shadow rounded-xl border border-white/10 p-5">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Informations</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Détails de l'opportunité</h3>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-slate-500">Commercial</span>
@@ -628,7 +525,12 @@
                 client_name: '{{ $opportunity->contact?->entreprise ?? $opportunity->contact?->full_name }}'
             },
 
+            // Notification / Error State
+            showErrorToast: false,
+            errorMessage: '',
+
             // Pipeline Modals
+            showConfirmModal: false,
             showProspectionModal: false,
             showQualificationModal: false,
             showPropositionModal: false,
@@ -636,82 +538,71 @@
             showWonModal: false,
             showLostModal: false,
 
-            stageGuides: {
-                prospection: {
-                    label: 'Prospection',
-                    description: 'Le contact vient d’être créé. Aucun échange concret n’a encore eu lieu.',
-                    contactStatus: 'Nouveau contact',
-                    objective: 'Entrer en relation',
-                    actions: ['Appeler', 'Envoyer un email', 'Message WhatsApp / LinkedIn', 'Ajout de notes'],
-                    buttons: ['Appeler', 'Envoyer un email', 'Ajouter une note']
-                },
-                qualification: {
-                    label: 'Qualification',
-                    description: 'Le besoin du client est analysé et validé.',
-                    contactStatus: 'Contact qualifié',
-                    objective: 'Vérifier la faisabilité de l’opportunité',
-                    actions: ['Identifier le besoin', 'Vérifier le budget', 'Confirmer le décideur', 'Ajouter des notes'],
-                    buttons: ['Créer une opportunité']
-                },
-                proposition: {
-                    label: 'Proposition',
-                    description: 'Une proposition commerciale a été transmise au client.',
-                    contactStatus: 'Offre envoyée',
-                    objective: 'Convaincre le client',
-                    actions: ['Envoyer un devis', 'Modifier la proposition', 'Relancer le client'],
-                    buttons: ['Passer en Négociation']
-                },
-                negociation: {
-                    label: 'Négociation',
-                    description: 'Les conditions commerciales sont en cours d’ajustement.',
-                    contactStatus: 'En discussion',
-                    objective: 'Trouver un accord',
-                    actions: ['Négocier le prix', 'Ajuster les délais', 'Mettre à jour le devis'],
-                    buttons: ['Marquer comme Gagné', 'Marquer comme Perdu']
-                },
-                gagne: {
-                    label: 'Gagné',
-                    description: 'Le client a accepté l’offre.',
-                    contactStatus: 'Opportunité gagnée',
-                    objective: 'Démarrer la prestation',
-                    actions: ['Générer le contrat', 'Créer la facture', 'Lancer le service'],
-                    buttons: ['Confirmer la Vente']
-                },
-                perdu: {
-                    label: 'Perdu',
-                    description: 'Le client n’a pas donné suite.',
-                    contactStatus: 'Opportunité perdue',
-                    objective: 'Capitaliser sur l’expérience',
-                    actions: ['Sélectionner la raison de perte', 'Ajouter un commentaire', 'Archiver l’opportunité'],
-                    buttons: ['Archiver l’opportunité']
-                }
+            // Local State
+            showHistory: false,
+            activeTab: 'overview',
+            showActivityForm: false,
+            currentStage: '{{ $opportunity->stade }}',
+            targetStage: '',
+
+            init() {
+                console.log('Alpine init: Opportunity Show Page');
             },
 
             async changeStage(newStage) {
                 // Prevent multi-clicks if loading
                 if (this.isLoading) return;
 
-                // Allow re-clicking 'qualification' to edit fields, otherwise block same-stage clicks
-                if (newStage === this.currentStage && newStage !== 'qualification') return;
+                // Close all modals first to prevent overlaps
+                this.showProspectionModal = false;
+                this.showQualificationModal = false;
+                this.showPropositionModal = false;
+                this.showNegociationModal = false;
+                this.showWonModal = false;
+                this.showLostModal = false;
 
-                // Specific Transition Logic: Always open modal for Qualification stage
-                if (newStage === 'qualification') {
-                     this.showQualifyModal = true;
-                     return;
+                // Map target stage to the specific transition modal
+                switch(newStage) {
+                    case 'qualification':
+                        this.showProspectionModal = true;
+                        break;
+                    case 'proposition':
+                        this.showQualificationModal = true;
+                        break;
+                    case 'negociation':
+                        this.showPropositionModal = true;
+                        break;
+                    case 'gagne':
+                        // If coming from negociation, show the specific Won modal
+                        if (this.currentStage === 'negociation') {
+                            this.showWonModal = true;
+                        } else {
+                            this.showNegociationModal = true;
+                        }
+                        break;
+                    case 'perdu':
+                         if (this.currentStage === 'negociation') {
+                            this.showLostModal = true;
+                        } else {
+                            this.showNegociationModal = true;
+                        }
+                        break;
+                    default:
+                        // Fallback to simple confirmation if needed
+                        this.targetStage = newStage;
+                        this.showConfirmModal = true;
                 }
-
-                // Restore Confirmation Modal logic 
-                this.targetStage = newStage;
-                this.showConfirmModal = true;
             },
 
             async executeStageChange() {
                 const newStage = this.targetStage;
+                if (!newStage) return;
+
                 this.showConfirmModal = false;
-                this.isLoading = true; // Show loading state
+                this.isLoading = true;
 
                 try {
-                    const response = await fetch(updateUrl, {
+                    const response = await fetch(this.transitionUrl, {
                         method: 'PATCH',
                         headers: {
                             'Content-Type': 'application/json',
@@ -723,22 +614,20 @@
 
                     const data = await response.json();
 
-                    if (data.success) {
+                    if (data.success || response.ok) {
                         window.location.reload(); 
                     } else {
                         this.isLoading = false;
                         this.errorMessage = data.message || 'Impossible de mettre à jour le statut.';
                         this.showErrorToast = true;
-                        let self = this;
-                        setTimeout(function() { self.showErrorToast = false; }, 4000);
+                        setTimeout(() => { this.showErrorToast = false; }, 4000);
                     }
                 } catch (error) {
                     this.isLoading = false;
                     console.error('Error:', error);
                     this.errorMessage = 'Une erreur système est survenue.';
                     this.showErrorToast = true;
-                    let self = this;
-                    setTimeout(function() { self.showErrorToast = false; }, 4000);
+                    setTimeout(() => { this.showErrorToast = false; }, 4000);
                 }
             }
         };

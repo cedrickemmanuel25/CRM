@@ -14,7 +14,7 @@
                 @php
                     $stages = [
                         'prospection'   => ['label' => 'Prospection',   'color' => 'slate',    'icon' => 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'],
-                        'qualification' => ['label' => 'Qualification', 'color' => 'blue',     'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+                        'qualification' => ['label' => 'Prospect Qualifié', 'color' => 'blue',     'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                         'proposition'   => ['label' => 'Proposition',   'color' => 'purple',   'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
                         'negociation'   => ['label' => 'Négociation',   'color' => 'amber',    'icon' => 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4'],
                         'gagne'         => ['label' => 'Gagné',         'color' => 'emerald',  'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
@@ -49,7 +49,7 @@
                         <div class="p-3 space-y-3 kanban-list" data-stage="{{ $key }}">
                             @if(isset($pipeline[$key]))
                                 @foreach($pipeline[$key] as $opp)
-                                <div class="kanban-card bg-slate-800/50 backdrop-blur-sm border-2 border-white/10 rounded-lg p-3 hover:border-{{ $config['color'] }}-400 hover:shadow-lg hover:shadow-{{ $config['color'] }}-500/10 sm:cursor-grab sm:active:cursor-grabbing group" 
+                                <div class="kanban-card bg-slate-800/50 backdrop-blur-sm border-2 border-white/10 rounded-lg p-3 sm:cursor-grab sm:active:cursor-grabbing group" 
                                      data-id="{{ $opp->id }}"
                                      data-current-stage="{{ $opp->stade }}"
                                      data-besoin="{{ $opp->besoin }}"
@@ -62,17 +62,17 @@
                                             <h4 class="text-xs font-bold text-white hover:text-blue-400 line-clamp-2">{{ $opp->titre }}</h4>
                                         </a>
                                         <div class="flex items-center justify-end flex-nowrap gap-1 ml-2 flex-shrink-0">
-                                            <a href="{{ route('opportunities.show', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all" title="Voir">
+                                            <a href="{{ route('opportunities.show', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg" title="Voir">
                                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                             </a>
                                             @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id == auth()->id()))
-                                            <a href="{{ route('opportunities.edit', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all" title="Modifier">
+                                            <a href="{{ route('opportunities.edit', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg" title="Modifier">
                                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                             </a>
                                             <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $el)" class="contents">
                                                 @csrf @method('DELETE')
                                                 <input type="hidden" name="view" :value="viewMode">
-                                                <button type="submit" class="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all" title="Supprimer">
+                                                <button type="submit" class="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg" title="Supprimer">
                                                     <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                 </button>
                                             </form>
@@ -117,8 +117,11 @@
                                         </button>
                                     </div>
                                     
-                                    <div x-show="getCardState({{ $opp->id }})" class="mt-2 overflow-x-auto pb-2" style="display: none;" @click.stop>
-                                        <div class="transform scale-90 origin-top-left w-max">
+                                    <div x-show="getCardState({{ $opp->id }})" 
+                                         class="mt-2 overflow-x-auto pb-2 custom-scrollbar" 
+                                         style="display: none;" 
+                                         @click.stop>
+                                        <div class="w-max pt-2 min-w-full">
                                             @include('opportunities.partials._status_bar', ['opportunity' => $opp])
                                         </div>
                                     </div>
@@ -134,11 +137,11 @@
         </div>
 
         <!-- VUE LISTE -->
-        <div x-show="viewMode === 'list'" x-transition class="px-4 sm:px-4 lg:px-4">
+        <div x-show="viewMode === 'list'" class="px-4 sm:px-4 lg:px-4">
             <!-- Mobile Card View -->
             <div class="block md:hidden space-y-3 p-4">
                 @foreach($opportunities as $opp)
-                <div class="bg-slate-900/40 backdrop-blur-sm rounded-lg border border-white/10 p-4 hover:shadow-lg hover:shadow-blue-500/10 transition-all">
+                <div class="bg-slate-900/40 backdrop-blur-sm rounded-lg border border-white/10 p-4 shadow-lg shadow-blue-500/10">
                     <div class="flex items-start justify-between mb-3">
                         <a href="{{ route('opportunities.show', $opp) }}" class="flex-1">
                             <h3 class="text-sm font-bold text-white hover:text-blue-400 mb-1">{{ $opp->titre }}</h3>
@@ -175,7 +178,7 @@
                                     client_name: '{{ $opp->contact?->entreprise ?? $opp->contact?->full_name }}'
                                 }
                             }))"
-                            class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 transition-colors">
+                            class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200">
                             {{ $opp->stade }}
                         </button>
                     </div>
@@ -201,17 +204,17 @@
                         </div>
                         @if(!auth()->user()->isSupport())
                         <div class="flex items-center justify-end flex-nowrap gap-2 min-w-max">
-                            <a href="{{ route('opportunities.show', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all" title="Voir">
+                            <a href="{{ route('opportunities.show', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg" title="Voir">
                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             </a>
-                            <a href="{{ route('opportunities.edit', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all" title="Modifier">
+                            <a href="{{ route('opportunities.edit', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg" title="Modifier">
                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                             @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id == auth()->id()))
                             <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $el)" class="contents">
                                 @csrf @method('DELETE')
                                 <input type="hidden" name="view" :value="viewMode">
-                                <button type="submit" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all" title="Supprimer">
+                                <button type="submit" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg" title="Supprimer">
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </form>
@@ -246,7 +249,7 @@
                         <tbody x-data="{ expanded: false }" class="bg-slate-900/20 border-b border-white/10 hover:bg-slate-800/40">
                             <tr class="group">
                                 <td class="px-3 py-4 text-center">
-                                    <button @click.stop="expanded = !expanded" class="text-slate-400 hover:text-blue-400 focus:outline-none transform" :class="expanded ? 'rotate-90' : ''">
+                                    <button @click.stop="expanded = !expanded" class="text-slate-400 hover:text-blue-400 focus:outline-none">
                                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                     </button>
                                 </td>
@@ -300,7 +303,7 @@
                                                 client_name: '{{ $opp->contact?->entreprise ?? $opp->contact?->full_name }}'
                                             }
                                         }))"
-                                        class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 transition-colors cursor-pointer"
+                                        class="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{{ $color }}-100 text-{{ $color }}-700 hover:bg-{{ $color }}-200 cursor-pointer"
                                         title="Passer à l'étape suivante">
                                         {{ $opp->stade }}
                                     </button>
@@ -321,17 +324,17 @@
                                 @if(!auth()->user()->isSupport())
                                 <td class="px-3 py-4 text-right whitespace-nowrap" onclick="event.stopPropagation()">
                                     <div class="flex items-center justify-end flex-nowrap gap-2 min-w-max">
-                                        <a href="{{ route('opportunities.show', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all" onclick="event.stopPropagation()" title="Voir">
+                                        <a href="{{ route('opportunities.show', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg" onclick="event.stopPropagation()" title="Voir">
                                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </a>
-                                        <a href="{{ route('opportunities.edit', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all" onclick="event.stopPropagation()" title="Modifier">
+                                        <a href="{{ route('opportunities.edit', $opp) }}" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg" onclick="event.stopPropagation()" title="Modifier">
                                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </a>
                                         @if(auth()->user()->hasRole(['admin', 'commercial']) && (auth()->user()->isAdmin() || $opp->commercial_id == auth()->id()))
                                         <form action="{{ route('opportunities.destroy', $opp) }}" method="POST" @click.prevent="deleteOpportunity({{ $opp->id }}, $el)" class="contents" onclick="event.stopPropagation()">
                                             @csrf @method('DELETE')
                                             <input type="hidden" name="view" :value="viewMode">
-                                            <button type="submit" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all" onclick="event.stopPropagation()" title="Supprimer">
+                                            <button type="submit" class="flex-shrink-0 inline-flex items-center justify-center h-8 w-8 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg" onclick="event.stopPropagation()" title="Supprimer">
                                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                             </button>
                                         </form>
@@ -340,12 +343,17 @@
                                 </td>
                                 @endif
                             </tr>
-                            <tr x-show="expanded" class="bg-gray-50/50" style="display: none;">
-                                <td colspan="9" class="p-4 border-t border-gray-100">
-                                    <div class="flex items-center gap-4">
-                                        <span class="text-xs font-bold text-gray-500 uppercase">Évolution du Statut</span>
-                                        <div class="flex-1">
-                                            @include('opportunities.partials._status_bar', ['opportunity' => $opp])
+                            <tr x-show="expanded" class="bg-slate-800/20" style="display: none;" x-cloak>
+                                <td colspan="9" class="p-0 border-t border-white/5 overflow-hidden">
+                                    <div x-show="expanded">
+                                        <div class="p-6 flex flex-col lg:flex-row lg:items-center gap-8 min-w-max">
+                                            <div class="flex-shrink-0">
+                                                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Évolution du Statut</span>
+                                                <div class="h-1.5 w-12 bg-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
+                                            </div>
+                                            <div class="flex-1 w-full overflow-x-auto pb-2 custom-scrollbar">
+                                                @include('opportunities.partials._status_bar', ['opportunity' => $opp])
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

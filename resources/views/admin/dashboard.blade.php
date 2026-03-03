@@ -187,6 +187,8 @@
         </div>
         <div id="acquisitionTrendLine" class="h-64"></div>
     </div>
+
+    @include('partials._task_reminder_modal')
 </div>
 @endsection
 

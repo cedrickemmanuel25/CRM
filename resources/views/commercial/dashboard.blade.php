@@ -229,6 +229,8 @@
             </div>
         </div>
     </div>
+
+    @include('partials._task_reminder_modal')
 </div>
 @endsection
 
