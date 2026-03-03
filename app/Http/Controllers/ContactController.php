@@ -205,7 +205,7 @@ class ContactController extends Controller
     public function show(Contact $contact, Request $request)
     {
         // Autorisation : Admin voit tout, Commercial voit seulement les siens
-        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403, 'Vous n\'êtes pas autorisé à voir ce contact.');
         }
 
@@ -255,7 +255,7 @@ class ContactController extends Controller
         if ($user->isAdmin()) {
             $canEdit = true;
         } elseif ($user->isCommercial()) {
-            $canEdit = (int)$contact->user_id_owner === (int)$user->id;
+            $canEdit = $contact->user_id_owner == $user->id;
         }
         
         return view('contacts.show', compact('contact', 'potentialValue', 'tickets', 'notes', 'allActivities', 'tasks', 'canEdit'));
@@ -267,7 +267,7 @@ class ContactController extends Controller
     public function edit(Contact $contact)
     {
         // Autorisation
-        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403, 'Vous n\'avez pas les droits de modification sur ce contact.');
         }
 
@@ -280,7 +280,7 @@ class ContactController extends Controller
     public function update(Request $request, Contact $contact)
     {
         // Autorisation
-        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403, 'Vous n\'êtes pas autorisé à modifier ce contact.');
         }
 
@@ -352,7 +352,7 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         // Autorisation : Admin ou propriétaire du contact
-        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403, 'Vous n\'êtes pas autorisé à supprimer ce contact.');
         }
 
@@ -469,7 +469,7 @@ class ContactController extends Controller
      */
     public function export(Contact $contact)
     {
-        if (auth()->user()->isCommercial() && $contact->user_id_owner !== auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403);
         }
 
@@ -517,7 +517,7 @@ class ContactController extends Controller
     public function updateStage(Request $request, Contact $contact)
     {
         // Autorisation
-        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403);
         }
 
@@ -558,7 +558,7 @@ class ContactController extends Controller
     public function convertToOpportunity(Contact $contact)
     {
         // Autorisation
-        if (auth()->user()->isCommercial() && (int)$contact->user_id_owner !== (int)auth()->id()) {
+        if (auth()->user()->isCommercial() && $contact->user_id_owner != auth()->id()) {
             abort(403);
         }
 
