@@ -6,7 +6,7 @@
 
 @section('header_actions')
     @if(auth()->user()->hasRole(['admin', 'commercial']))
-    <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150">
+    <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
         Nouvelle Opportunité
     </a>
@@ -21,7 +21,7 @@
     
     <!-- Loading Overlay -->
     <div x-show="isLoading" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-30" style="display: none;">
-        <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
@@ -50,7 +50,7 @@
                 
                 <div class="flex items-center gap-3">
                     @if(auth()->user()->hasRole(['admin', 'commercial']))
-                    <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent rounded-lg shadow-sm text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                    <a href="{{ route('opportunities.create') }}" class="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent rounded-lg shadow-sm text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700">
                         <svg class="-ml-1 mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         <span class="hidden sm:inline">Nouvelle Opportunité</span>
                         <span class="sm:hidden">Nouveau</span>
@@ -123,18 +123,18 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <!-- Toggle de vue -->
                 <div class="inline-flex bg-slate-900/50 rounded-lg p-1 w-full sm:w-auto">
-                    <button @click="switchView('pipeline')" :class="viewMode === 'pipeline' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
+                    <button @click="switchView('pipeline')" :class="viewMode === 'pipeline' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md flex items-center justify-center">
                         <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
                         Pipeline
                     </button>
-                    <button @click="switchView('list')" :class="viewMode === 'list' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all flex items-center justify-center">
+                    <button @click="switchView('list')" :class="viewMode === 'list' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md flex items-center justify-center">
                         <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                         Liste
                     </button>
                 </div>
 
                 <!-- Bouton filtres -->
-                <button @click="showFilters = !showFilters" :class="showFilters ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500' : 'bg-slate-800 text-slate-300 border-white/10 hover:bg-slate-700'" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-all w-full sm:w-auto">
+                <button @click="showFilters = !showFilters" :class="showFilters ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500' : 'bg-slate-800 text-slate-300 border-white/10 hover:bg-slate-700'" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium w-full sm:w-auto">
                     <svg class="h-4 w-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     Filtres
                 </button>
@@ -142,7 +142,7 @@
         </div>
 
         <!-- Panneau de filtres -->
-        <div x-show="showFilters" x-transition class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6 mb-6">
+        <div x-show="showFilters" class="bg-slate-800/20 backdrop-blur-xl rounded-lg border border-white/10 p-6 mb-6">
             <form action="{{ route('opportunities.index') }}" method="GET">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="lg:col-span-2">
@@ -165,7 +165,13 @@
                         <select name="stade" class="block w-full px-4 py-2 border border-white/10 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                             <option value="" class="text-gray-900">Tous</option>
                             @foreach(['prospection', 'qualification', 'proposition', 'negociation', 'gagne', 'perdu'] as $s)
-                            <option value="{{ $s }}" {{ request('stade') == $s ? 'selected' : '' }} class="text-gray-900">{{ ucfirst($s) }}</option>
+                            <option value="{{ $s }}" {{ request('stade') == $s ? 'selected' : '' }} class="text-gray-900">
+                                @if($s == 'qualification')
+                                    Prospect Qualifié
+                                @else
+                                    {{ ucfirst($s) }}
+                                @endif
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -192,10 +198,10 @@
                 </div>
 
                 <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-white/5">
-                    <a href="{{ route('opportunities.index') }}" class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                    <a href="{{ route('opportunities.index') }}" class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white">
                         Réinitialiser
                     </a>
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700">
                         Appliquer
                     </button>
                 </div>
@@ -439,7 +445,7 @@
             
             stageGuides: {
                 prospection:   { label: 'Prospection', objective: 'Entrer en relation' },
-                qualification: { label: 'Qualification', objective: 'Vérifier la faisabilité de l’opportunité' },
+                qualification: { label: 'Prospect Qualifié', objective: 'Vérifier la faisabilité de l’opportunité' },
                 proposition:   { label: 'Proposition', objective: 'Convaincre le client' },
                 negociation:   { label: 'Négociation', objective: 'Trouver un accord' },
                 gagne:         { label: 'Gagné', objective: 'Démarrer la prestation' },
@@ -448,17 +454,13 @@
 
             handleStageRequest(event) {
                 const data = event.detail;
-                
-                this.activeOpportunity = {
-                    id: data.id,
-                    stade: data.currentStage,
-                    besoin: data.besoin || '',
-                    budget: data.budget || '',
-                    montant: data.amount || '',
-                    client_name: data.client_name || ''
-                };
-
-                this.transitionUrl = `{{ route('opportunities.processTransition', ':id') }}`.replace(':id', data.id);
+                // Update local state and open modal locally
+                this.activeOpportunity.id = data.id;
+                this.activeOpportunity.stade = data.currentStage || '';
+                this.activeOpportunity.besoin = data.besoin || '';
+                this.activeOpportunity.budget = data.budget || '';
+                this.activeOpportunity.montant = data.amount || '';
+                this.activeOpportunity.client_name = data.client_name || '';
                 
                 this.changeStage(data.stage);
             },

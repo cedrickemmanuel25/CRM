@@ -127,6 +127,8 @@
         <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">Dynamique d'Acquisition</h3>
         <div id="leadsTrendChart" class="h-64"></div>
     </div>
+
+    @include('partials._task_reminder_modal')
 </div>
 @endsection
 

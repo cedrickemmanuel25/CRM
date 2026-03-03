@@ -1,10 +1,10 @@
-<div class="min-w-[700px]">
+<div class="w-full">
     <nav aria-label="Progress">
-        <ul class="flex w-full mt-2 rounded-lg overflow-hidden text-xs font-bold font-heading text-center shadow-sm cursor-pointer">
+        <ul class="flex w-full mt-2 rounded-lg overflow-hidden text-[10px] font-bold font-heading text-center shadow-sm cursor-pointer uppercase">
              @php
                 $stages = [
                     'prospection' => 'Prospection',
-                    'qualification' => 'Qualification',
+                    'qualification' => 'Prospect Qualifié',
                     'proposition' => 'Proposition',
                     'negociation' => 'Négociation',
                     'gagne' => 'Gagné',
@@ -47,30 +47,23 @@
                          decisionnaire: {{ $opportunity->decisionnaire ? 'true' : 'false' }},
                         besoin: `{{ addslashes($opportunity->besoin) }}`
                     })" 
-                    class="flex-1 py-3 border-r border-white/20 last:border-0 {{ $val }} relative flex items-center justify-center group"
+                    class="flex-1 min-w-[110px] py-4 border-r border-white/20 last:border-0 {{ $val }} relative flex items-center justify-center group transition-all"
                     role="button"
                     tabindex="0">
                     
-                    @if($isCompleted) <svg class="w-4 h-4 mr-1 text-emerald-200" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> @endif
-                    @if($key === 'perdu' && $isCurrent) <svg class="w-4 h-4 mr-1 text-rose-200" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg> @endif
-                    {{ strtoupper($label) }}
+                    <div class="flex items-center justify-center px-4 w-full">
+                        @if($isCompleted) <svg class="w-3.5 h-3.5 mr-1.5 text-emerald-200 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> @endif
+                        @if($key === 'perdu' && $isCurrent) <svg class="w-3.5 h-3.5 mr-1.5 text-rose-200 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg> @endif
+                        <span class="truncate whitespace-nowrap">{{ $label }}</span>
+                    </div>
 
-                    <!-- Arrow Point CSS -->
+                    <!-- Chevron Point -->
                    @if(!$loop->last)
-                    <div class="absolute top-0 -right-[12px] h-full w-[24px] z-20" style="
+                    <div class="absolute top-0 -right-[10px] h-full w-[20px] z-20 pointer-events-none" style="
                         background: inherit; 
-                        clip-path: polygon(100% 0, 100% 100%, 50% 100%, 0% 50%, 50% 0);
+                        clip-path: polygon(0 0, 100% 50%, 0 100%, 30% 50%);
                         left: 100%;
-                        transform: translateX(-50%);
-                    "></div>
-                   @endif
-                   
-                    <!-- Arrow Socket CSS (Indent) -->
-                   @if(!$loop->first)
-                    <div class="absolute top-0 -left-[12px] h-full w-[24px] z-0 bg-white" style="
-                        clip-path: polygon(100% 0, 100% 100%, 50% 100%, 0% 50%, 50% 0);
-                        left: 0;
-                        transform: translateX(-50%);
+                        transform: translateX(-30%);
                     "></div>
                    @endif
                 </li>
