@@ -129,8 +129,8 @@ class TicketController extends Controller
     {
         // Autorisation : Admin/Support voient tout. Commercial voit les siens ou ceux de ses contacts.
         if (auth()->user()->isCommercial()) {
-            $isOwner = $ticket->user_id === auth()->id();
-            $isContactOwner = $ticket->contact && $ticket->contact->user_id_owner === auth()->id();
+            $isOwner = $ticket->user_id == auth()->id();
+            $isContactOwner = $ticket->contact && $ticket->contact->user_id_owner == auth()->id();
             
             if (!$isOwner && !$isContactOwner) {
                 abort(403, 'Vous n\'êtes pas autorisé à voir ce ticket.');
@@ -181,7 +181,7 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        if (!auth()->user()->isAdmin() && !auth()->user()->isSupport() && $ticket->user_id !== auth()->id()) {
+        if (!auth()->user()->isAdmin() && !auth()->user()->isSupport() && $ticket->user_id != auth()->id()) {
             abort(403);
         }
 

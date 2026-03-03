@@ -259,7 +259,7 @@ class OpportunityController extends Controller
         $oldCommercialId = $opportunity->commercial_id;
 
         // 1. Check Attribution Change
-        if ($request->has('commercial_id') && (int)$validated['commercial_id'] !== $opportunity->commercial_id) {
+        if ($request->has('commercial_id') && $validated['commercial_id'] != $opportunity->commercial_id) {
             $newCommercial = User::findOrFail($validated['commercial_id']);
             $this->attributionService->assignManually($opportunity, $newCommercial, auth()->user());
             
@@ -275,7 +275,7 @@ class OpportunityController extends Controller
         }
 
         // 2. Check Stage Change
-        if ($request->has('stade') && $validated['stade'] !== $opportunity->stade) {
+        if ($request->has('stade') && $validated['stade'] != $opportunity->stade) {
             $opportunity->moveToStage($validated['stade'], auth()->id());
         }
 
