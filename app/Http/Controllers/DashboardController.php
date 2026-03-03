@@ -132,21 +132,18 @@ class DashboardController extends Controller
             'recent_activities' => Activity::with(['user', 'parent'])->latest()->take(4)->get(),
             'commercial_performance' => $this->getCommercialPerformance(),
             'latest_opportunities' => Opportunity::with('contact')->latest()->take(3)->get(),
-            'tasks' => \App\Models\Task::where('assigned_to', auth()->id())->where('statut', '!=', 'done')->latest()->take(4)->get(),
+            'tasks' => \App\Models\Task::where('statut', '!=', 'done')->latest()->take(4)->get(),
             'overdue_tasks' => \App\Models\Task::with(['related', 'assignee'])
-                ->where('assigned_to', auth()->id())
                 ->where('statut', '!=', 'done')
                 ->where('due_date', '<', now())
                 ->orderBy('due_date', 'asc')
                 ->get(),
             'due_today_tasks' => \App\Models\Task::with(['related', 'assignee'])
-                ->where('assigned_to', auth()->id())
                 ->where('statut', '!=', 'done')
                 ->whereDate('due_date', today())
                 ->orderBy('due_date', 'asc')
                 ->get(),
             'upcoming_tasks' => \App\Models\Task::with(['related', 'assignee'])
-                ->where('assigned_to', auth()->id())
                 ->where('statut', '!=', 'done')
                 ->where('due_date', '>', now())
                 ->where('due_date', '<=', now()->addDays(7))

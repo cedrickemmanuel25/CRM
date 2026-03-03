@@ -53,7 +53,14 @@
                         <div class="flex items-start justify-between gap-4">
                             <div class="min-w-0">
                                 <h4 class="text-xs font-bold text-white group-hover:text-rose-400 transition-colors truncate">{{ $task->titre }}</h4>
-                                <p class="text-[10px] text-slate-400 mt-1 line-clamp-1 italic">{{ $task->due_date->diffForHumans() }}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <p class="text-[10px] text-slate-400 italic">{{ $task->due_date->diffForHumans() }}</p>
+                                    @if(auth()->user()->isAdmin() && $task->assignee)
+                                        <span class="text-[9px] font-bold text-rose-400/70 border border-rose-400/20 px-1.5 rounded uppercase tracking-wider">
+                                            {{ $task->assignee->name }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                             <a href="{{ route('tasks.show', $task) }}" class="shrink-0 p-1.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
                                 <svg class="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
@@ -77,7 +84,14 @@
                         <div class="flex items-start justify-between gap-4">
                             <div class="min-w-0">
                                 <h4 class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors truncate">{{ $task->titre }}</h4>
-                                <p class="text-[10px] text-slate-400 mt-1 italic">{{ $task->due_date->format('H:i') }}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <p class="text-[10px] text-slate-400 italic">{{ $task->due_date->format('H:i') }}</p>
+                                    @if(auth()->user()->isAdmin() && $task->assignee)
+                                        <span class="text-[9px] font-bold text-blue-400/70 border border-blue-400/20 px-1.5 rounded uppercase tracking-wider">
+                                            {{ $task->assignee->name }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                             <a href="{{ route('tasks.show', $task) }}" class="shrink-0 p-1.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
                                 <svg class="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
@@ -101,7 +115,14 @@
                         <div class="flex items-start justify-between gap-4">
                             <div class="min-w-0">
                                 <h4 class="text-xs font-bold text-white group-hover:text-emerald-400 transition-colors truncate">{{ $task->titre }}</h4>
-                                <p class="text-[10px] text-slate-400 mt-1 italic">{{ $task->due_date->translatedFormat('d M H:i') }}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <p class="text-[10px] text-slate-400 italic">{{ $task->due_date->translatedFormat('d M H:i') }}</p>
+                                    @if(auth()->user()->isAdmin() && $task->assignee)
+                                        <span class="text-[9px] font-bold text-emerald-400/70 border border-emerald-400/20 px-1.5 rounded uppercase tracking-wider">
+                                            {{ $task->assignee->name }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                             <a href="{{ route('tasks.show', $task) }}" class="shrink-0 p-1.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
                                 <svg class="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
