@@ -62,7 +62,7 @@
                         open: false, 
                         selectedId: '{{ old('contact_id', $opportunity->contact_id ?? '') }}', 
                         selectedName: '{{ $isEdit && $opportunity->contact ? str_replace("'", "\'", $opportunity->contact->prenom . ' ' . $opportunity->contact->nom) : '' }}',
-                        contacts: {{ $contacts->map(function($c) { return ['id' => $c->id, 'name' => $c->prenom . ' ' . $c->nom, 'company' => $c->entreprise ?? 'Particulier', 'initials' => strtoupper(substr($c->prenom,0,1).substr($c->nom,0,1))]; })->toJson() }},
+                        contacts: {{ $contacts->map(function($c) { return ['id' => $c->id, 'name' => $c->prenom . ' ' . $c->nom, 'company' => $c->entreprise ?? 'Particulier', 'initials' => mb_strtoupper(mb_substr($c->prenom,0,1).mb_substr($c->nom,0,1))]; })->toJson() }},
                         get filteredContacts() {
                             if (this.search === '') return this.contacts;
                             return this.contacts.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.company.toLowerCase().includes(this.search.toLowerCase()));

@@ -42,7 +42,7 @@
                     <dd class="mt-1 text-sm text-gray-900 flex items-center">
                         @if($task->assignee)
                             <div class="h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 text-xs font-bold mr-2">
-                                {{ substr($task->assignee->name, 0, 1) }}
+                                {{ mb_substr($task->assignee->name, 0, 1) }}
                             </div>
                             {{ $task->assignee->name }}
                         @else

@@ -121,9 +121,16 @@
                                     'resolved' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
                                     default => 'bg-slate-100 text-slate-700 border-slate-200'
                                 };
+                                $statusLabels = [
+                                    'new' => 'Nouveau',
+                                    'in_progress' => 'En cours',
+                                    'resolved' => 'Résolu',
+                                    'waiting_client' => 'Attente client',
+                                    'closed' => 'Fermé',
+                                ];
                             @endphp
                             <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold border {{ $statusClasses }} uppercase tracking-wider">
-                                {{ $ticket->status }}
+                                {{ $statusLabels[$ticket->status] ?? $ticket->status }}
                             </span>
                         </td>
                         <td class="px-6 py-4">
@@ -156,7 +163,7 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500 border border-slate-200">
-                                    {{ $ticket->contact ? substr($ticket->contact->nom_complet, 0, 2) : '??' }}
+                                    {{ $ticket->contact ? mb_substr($ticket->contact->nom_complet, 0, 2) : '??' }}
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-slate-800 truncate">{{ $ticket->contact->nom_complet ?? 'Client inconnu' }}</p>

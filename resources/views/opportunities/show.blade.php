@@ -154,7 +154,7 @@
                     @if($opportunity->contact)
                     <div class="flex items-center mb-4">
                         <div class="h-12 w-12 rounded-full bg-slate-700 flex items-center justify-center text-lg font-bold text-slate-300 mr-3">
-                            {{ strtoupper(substr($opportunity->contact->prenom, 0, 1) . substr($opportunity->contact->nom, 0, 1)) }}
+                            {{ mb_strtoupper(mb_substr($opportunity->contact->prenom, 0, 1) . mb_substr($opportunity->contact->nom, 0, 1)) }}
                         </div>
                         <div>
                             <p class="font-bold text-white leading-tight">{{ $opportunity->contact->prenom }} {{ $opportunity->contact->nom }}</p>
@@ -191,7 +191,7 @@
                         <span class="text-slate-500">Commercial</span>
                         <div class="flex items-center">
                             <div class="h-6 w-6 rounded-full bg-indigo-900/50 flex items-center justify-center text-[10px] font-bold text-indigo-300 mr-2">
-                                {{ substr($opportunity->commercial?->name ?? 'N', 0, 1) }}
+                                {{ mb_substr($opportunity->commercial?->name ?? 'N', 0, 1) }}
                             </div>
                             <span class="font-medium text-white">{{ $opportunity->commercial?->name ?? 'Non assigné' }}</span>
                         </div>
@@ -237,7 +237,7 @@
                                         <div class="relative flex space-x-3">
                                             <div>
                                                 <span class="h-8 w-8 rounded-full bg-indigo-900/50 flex items-center justify-center ring-8 ring-slate-800">
-                                                    <span class="text-xs font-bold text-indigo-300">{{ substr($history->assignedTo->name, 0, 1) }}</span>
+                                                    <span class="text-xs font-bold text-indigo-300">{{ mb_substr($history->assignedTo->name, 0, 1) }}</span>
                                                 </span>
                                             </div>
                                             <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
@@ -500,10 +500,6 @@
 
         </div>
 
-    </div>
-    </div>
-
-    </div>
 @include('opportunities._modals')
 </div>
 <!-- Scripts (déjà inclus via layout mais nécessaire pour Alpine si pas global) -->

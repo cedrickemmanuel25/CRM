@@ -7,6 +7,13 @@
  * Ou accéder via SSH et exécuter: php artisan route:clear
  */
 
+// Utilisable uniquement en ligne de commande : si le dossier du projet est exposé par le serveur web,
+// ce script ne doit pas pouvoir être déclenché par une requête HTTP anonyme.
+if (php_sapi_name() !== 'cli') {
+    http_response_code(404);
+    exit;
+}
+
 // Charger l'autoloader de Composer
 require __DIR__.'/vendor/autoload.php';
 

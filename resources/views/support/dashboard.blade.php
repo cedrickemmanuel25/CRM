@@ -208,9 +208,8 @@
     </div>
 
     @include('partials._task_reminder_modal')
-</div>
 
-<!-- Modal Logic -->
+<!-- Modal Logic (à l'intérieur du conteneur x-data qui déclare openTicketModal) -->
 <div x-show="openTicketModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
     <div class="relative w-full max-w-xl saas-card bg-[#0f172a] shadow-2xl p-10">
         <div class="flex justify-between items-center mb-10">
@@ -219,6 +218,7 @@
         </div>
         @include('tickets.partials._form', ['isModal' => true])
     </div>
+</div>
 </div>
 @endsection
 
@@ -230,7 +230,7 @@
         const categories = ['new', 'in_progress', 'resolved', 'waiting_client', 'closed'];
         
         new ApexCharts(document.querySelector("#supportStatusChart"), {
-            chart: { type: 'bar', height: '100%', toolbar: { show: false }, fontFamily: 'Inter' },
+            chart: { type: 'bar', height: 320, toolbar: { show: false }, fontFamily: 'Inter' }, // = h-80 du conteneur ('100%' rendait 400px)
             series: [{ name: 'Tickets', data: categories.map(c => Number(statusData[c] || 0)) }],
             colors: ['#3b82f6'],
             plotOptions: { bar: { borderRadius: 4, columnWidth: '30%', distributed: false } },

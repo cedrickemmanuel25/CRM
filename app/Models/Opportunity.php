@@ -111,7 +111,7 @@ class Opportunity extends Model
         
         $startDate = $lastChange ? $lastChange->changed_at : $this->created_at;
         
-        return (int) now()->diffInDays($startDate);
+        return (int) $startDate->diffInDays(now());
     }
 
     /**

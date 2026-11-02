@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Activity;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -127,19 +128,20 @@ class TaskController extends Controller
             'priority' => 'required|in:low,medium,high',
             'description' => 'nullable|string',
             'related_id' => 'nullable|integer',
-            'related_type' => 'nullable|string',
+            'related_type' => 'nullable|string|in:contact,opportunity,App\Models\Contact,App\Models\Opportunity',
         ]);
 
         $task = Task::create([
             'titre' => $validated['titre'],
-            'description' => $validated['description'],
+            'description' => $validated['description'] ?? null,
             'assigned_to' => $validated['assigned_to'],
             'due_date' => $validated['due_date'],
             'priority' => $validated['priority'],
             'statut' => 'todo',
             'created_by' => auth()->id(),
             'related_id' => $validated['related_id'] ?? null,
-            'related_type' => $validated['related_type'] ?? null,
+            // Alias du morphMap (ex. "contact") pour que $contact->tasks() retrouve la tâche
+            'related_type' => isset($validated['related_type']) ? Relation::getMorphAlias($validated['related_type']) : null,
         ]);
         
         // Fire Event for Notifications

@@ -127,15 +127,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        // Autorisation : Admin/Support voient tout. Commercial voit les siens ou ceux de ses contacts.
-        if (auth()->user()->isCommercial()) {
-            $isOwner = $ticket->user_id == auth()->id();
-            $isContactOwner = $ticket->contact && $ticket->contact->user_id_owner == auth()->id();
-            
-            if (!$isOwner && !$isContactOwner) {
-                abort(403, 'Vous n\'êtes pas autorisé à voir ce ticket.');
-            }
-        }
+        $this->authorizeCommercialAccess($ticket);
 
         $ticket->load(['contact', 'assignee', 'creator', 'activities.user']);
         $users = User::whereIn('role', ['admin', 'support'])->get();
@@ -148,6 +140,8 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
+        $this->authorizeCommercialAccess($ticket);
+
         $contacts = Contact::orderBy('nom')->get();
         $users = User::whereIn('role', ['admin', 'support'])->get();
         return view('tickets.edit', compact('ticket', 'contacts', 'users'));
@@ -158,6 +152,8 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        $this->authorizeCommercialAccess($ticket);
+
         $validated = $request->validate([
             'subject' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
@@ -194,6 +190,8 @@ class TicketController extends Controller
      */
     public function addResponse(Request $request, Ticket $ticket)
     {
+        $this->authorizeCommercialAccess($ticket);
+
         $request->validate([
             'message' => 'required|string',
         ]);
@@ -208,5 +206,21 @@ class TicketController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Réponse ajoutée.');
+    }
+
+    /**
+     * Admin/Support accèdent à tous les tickets. Un commercial n'accède qu'aux tickets
+     * qu'il a créés ou qui concernent ses propres contacts.
+     */
+    private function authorizeCommercialAccess(Ticket $ticket): void
+    {
+        if (auth()->user()->isCommercial()) {
+            $isOwner = $ticket->user_id == auth()->id();
+            $isContactOwner = $ticket->contact && $ticket->contact->user_id_owner == auth()->id();
+
+            if (!$isOwner && !$isContactOwner) {
+                abort(403, 'Vous n\'êtes pas autorisé à accéder à ce ticket.');
+            }
+        }
     }
 }

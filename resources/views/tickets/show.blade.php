@@ -111,7 +111,7 @@
                                     <div class="relative flex items-start space-x-4">
                                         <div class="relative">
                                             <div class="h-10 w-10 flex items-center justify-center rounded-xl shadow-md border {{ ($activity->user && $activity->user->isSupport()) ? 'bg-indigo-600 text-white border-indigo-700' : 'bg-white text-slate-500 border-slate-200' }} font-black text-sm transition-transform hover:scale-110">
-                                                {{ substr($activity->user->name ?? '?', 0, 1) }}
+                                                {{ mb_substr($activity->user->name ?? '?', 0, 1) }}
                                             </div>
                                         </div>
                                         <div class="flex-1 min-w-0">
@@ -219,7 +219,7 @@
                             @if($ticket->assignee)
                             <div class="flex items-center gap-3 p-3 rounded-2xl bg-indigo-50/50 border border-indigo-100 hover:bg-indigo-100/50 transition-colors">
                                 <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xs font-black shadow-md">
-                                    {{ substr($ticket->assignee->name, 0, 1) }}
+                                    {{ mb_substr($ticket->assignee->name, 0, 1) }}
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-black text-slate-900 truncate leading-none mb-1">{{ $ticket->assignee->name }}</p>

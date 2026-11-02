@@ -12,7 +12,7 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -41,7 +41,45 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function makeUser(string $role, array $attributes = []): App\Models\User
 {
-    // ..
+    return App\Models\User::factory()->create(array_merge(['role' => $role], $attributes));
+}
+
+function makeContact(App\Models\User $owner, array $attributes = []): App\Models\Contact
+{
+    return App\Models\Contact::create(array_merge([
+        'user_id_owner' => $owner->id,
+        'nom' => 'Durand',
+        'prenom' => 'Élise',
+        'email' => uniqid('contact') . '@example.com',
+        'entreprise' => 'Atelier Boréal',
+        'source' => 'LinkedIn',
+    ], $attributes));
+}
+
+function makeOpportunity(App\Models\Contact $contact, array $attributes = []): App\Models\Opportunity
+{
+    return App\Models\Opportunity::create(array_merge([
+        'commercial_id' => $contact->user_id_owner,
+        'contact_id' => $contact->id,
+        'titre' => 'Refonte du site',
+        'montant_estime' => 10000,
+        'stade' => 'qualification',
+        'probabilite' => 30,
+        'statut' => 'actif',
+    ], $attributes));
+}
+
+function makeTicket(App\Models\User $creator, App\Models\Contact $contact, array $attributes = []): App\Models\Ticket
+{
+    return App\Models\Ticket::create(array_merge([
+        'subject' => 'Erreur à l\'export',
+        'description' => 'Description du ticket',
+        'category' => 'technical',
+        'priority' => 'high',
+        'status' => 'new',
+        'contact_id' => $contact->id,
+        'user_id' => $creator->id,
+    ], $attributes));
 }

@@ -215,7 +215,7 @@ x-init="sidebarOpen = false; setInterval(() => pollStats(), 30000)"
                                 <img class="h-8 w-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}">
                             @else
                                 <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200">
-                                    {{ substr(auth()->user()->name, 0, 1) }}
+                                    {{ mb_substr(auth()->user()->name, 0, 1) }}
                                 </div>
                             @endif
                             <span class="hidden lg:flex lg:items-center">

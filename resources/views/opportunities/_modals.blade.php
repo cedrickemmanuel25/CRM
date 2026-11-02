@@ -95,7 +95,6 @@
                     </button>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 
@@ -198,7 +197,6 @@
                     </div>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 
@@ -312,7 +310,6 @@
                     </button>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 
@@ -416,7 +413,6 @@
                     </div>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 
@@ -505,7 +501,6 @@
                     </button>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 
@@ -585,6 +580,5 @@
                     </button>
                 </div>
             </form>
-        </div>
     </div>
 </div>

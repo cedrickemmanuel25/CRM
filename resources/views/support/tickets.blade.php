@@ -113,9 +113,8 @@
             @endforelse
         </ul>
     </div>
-</div>
 
-<!-- Modal for New Ticket -->
+<!-- Modal for New Ticket (à l'intérieur du conteneur x-data qui déclare showModal) -->
 <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showModal = false">
@@ -179,5 +178,6 @@
             </form>
         </div>
     </div>
+</div>
 </div>
 @endsection

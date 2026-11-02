@@ -35,7 +35,7 @@ class TaskOverdueNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable): MailMessage
     {
-        $daysOverdue = now()->diffInDays($this->task->due_date);
+        $daysOverdue = (int) $this->task->due_date->diffInDays(now());
         
         return (new MailMessage)
             ->subject('⚠️ Tâche en retard')
@@ -60,7 +60,7 @@ class TaskOverdueNotification extends Notification implements ShouldQueue
             'task_title' => $this->task->titre,
             'task_description' => $this->task->description,
             'due_date' => $this->task->due_date->format('Y-m-d H:i:s'),
-            'days_overdue' => now()->diffInDays($this->task->due_date),
+            'days_overdue' => (int) $this->task->due_date->diffInDays(now()),
             'priority' => $this->task->priority,
             'type' => 'task_overdue',
             'message' => 'La tâche "' . $this->task->titre . '" est en retard.',

@@ -215,7 +215,7 @@ if (auth()->check()) {
                     <div class="h-6 w-px bg-white/5"></div>
                     <div class="flex items-center gap-3">
                         <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600/20 to-cyan-400/20 border border-white/10 flex items-center justify-center text-cyan-400 font-black shadow-inner" style="{{ auth()->user()->avatar ? 'background-image: url(' . asset('storage/' . auth()->user()->avatar) . '); background-size: cover;' : '' }}">
-                            {{ auth()->user()->avatar ? '' : substr(auth()->user()->name, 0, 1) }}
+                            {{ auth()->user()->avatar ? '' : mb_substr(auth()->user()->name, 0, 1) }}
                         </div>
                         <span class="hidden lg:block text-xs font-bold text-slate-300 uppercase tracking-wider">{{ auth()->user()->name }}</span>
                     </div>

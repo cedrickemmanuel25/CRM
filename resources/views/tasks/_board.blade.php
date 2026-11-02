@@ -98,7 +98,7 @@
                             </div>
                             
                             <div class="w-6 h-6 rounded-lg bg-blue-600/20 border border-blue-500/20 text-blue-400 text-[8px] font-black flex items-center justify-center uppercase shadow-lg group-hover/card:bg-blue-600 group-hover/card:text-white transition-all duration-500" title="Assigné à : {{ $task->assignee?->name ?? 'Système' }}">
-                                {{ substr($task->assignee?->name ?? 'S', 0, 1) }}
+                                {{ mb_substr($task->assignee?->name ?? 'S', 0, 1) }}
                             </div>
                         </div>
 

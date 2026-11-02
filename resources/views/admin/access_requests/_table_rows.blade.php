@@ -4,7 +4,7 @@
             <div class="flex items-center">
                 <div class="h-10 w-10 flex-shrink-0">
                     <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                        <span class="text-white font-black text-xs">{{ strtoupper(substr($request->prenom, 0, 1) . substr($request->nom, 0, 1)) }}</span>
+                        <span class="text-white font-black text-xs">{{ mb_strtoupper(mb_substr($request->prenom, 0, 1) . mb_substr($request->nom, 0, 1)) }}</span>
                     </div>
                 </div>
                 <div class="ml-4">

@@ -169,7 +169,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <div class="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 text-xs font-black ring-2 ring-white shadow-sm">
-                                        {{ substr($ticket->contact->nom ?? 'C', 0, 1) }}
+                                        {{ mb_substr($ticket->contact->nom ?? 'C', 0, 1) }}
                                     </div>
                                     <span class="text-sm font-semibold text-slate-700">{{ $ticket->contact->nom_complet ?? 'Inconnu' }}</span>
                                 </div>
@@ -178,7 +178,7 @@
                                 @if($ticket->assignee)
                                 <div class="flex items-center gap-2">
                                     <div class="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs font-bold">
-                                        {{ substr($ticket->assignee->name ?? 'U', 0, 1) }}
+                                        {{ mb_substr($ticket->assignee->name ?? 'U', 0, 1) }}
                                     </div>
                                     <span class="text-sm font-semibold text-slate-700">{{ $ticket->assignee->name ?? 'N/A' }}</span>
                                 </div>

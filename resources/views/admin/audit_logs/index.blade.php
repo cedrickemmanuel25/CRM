@@ -40,7 +40,7 @@
                                         <div class="flex items-center">
                                             @if($log->user)
                                                 <div class="h-6 w-6 rounded-md bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-black text-[10px] mr-2 shadow-inner">
-                                                    {{ substr($log->user->name, 0, 1) }}
+                                                    {{ mb_substr($log->user->name, 0, 1) }}
                                                 </div>
                                                 <div>
                                                     <div class="font-bold text-slate-100 group-hover/row:text-blue-400 transition-colors text-xs">{{ $log->user->name }}</div>
@@ -101,7 +101,7 @@
                     <div class="flex items-center gap-3">
                         @if($log->user)
                             <div class="h-10 w-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-black text-xs shadow-inner">
-                                {{ substr($log->user->name, 0, 1) }}
+                                {{ mb_substr($log->user->name, 0, 1) }}
                             </div>
                             <div>
                                 <h4 class="text-xs font-black text-white uppercase tracking-wide leading-tight">{{ $log->user->name }}</h4>

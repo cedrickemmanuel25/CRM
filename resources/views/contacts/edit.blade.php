@@ -52,7 +52,7 @@
                 <!-- Left: Entity Context -->
                 <div class="flex items-center gap-4">
                     <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-blue-600 flex-shrink-0 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-lg shadow-blue-900/40">
-                        {{ strtoupper(substr($contact->prenom, 0, 1)) }}
+                        {{ mb_strtoupper(mb_substr($contact->prenom, 0, 1)) }}
                     </div>
                     <div class="flex flex-col min-w-0">
                         <nav aria-label="Breadcrumb" class="hidden xs:block">

@@ -229,13 +229,19 @@ class AdminController extends Controller
      */
     public function cleanup()
     {
-        // Users
-        $usersDeleted = User::onlyTrashed()->count();
-        User::onlyTrashed()->forceDelete();
+        // Les SoftDeletes ont été retirés des utilisateurs et contacts (migrations du 21/01/2026) :
+        // on ne purge que les modèles qui utilisent encore la corbeille.
+        $purge = function (string $model): int {
+            if (!in_array(\Illuminate\Database\Eloquent\SoftDeletes::class, class_uses_recursive($model))) {
+                return 0;
+            }
+            $count = $model::onlyTrashed()->count();
+            $model::onlyTrashed()->forceDelete();
+            return $count;
+        };
 
-        // Contacts
-        $contactsDeleted = \App\Models\Contact::onlyTrashed()->count();
-        \App\Models\Contact::onlyTrashed()->forceDelete();
+        $usersDeleted = $purge(User::class);
+        $contactsDeleted = $purge(\App\Models\Contact::class);
 
         AuditLog::log('system_cleanup', auth()->user(), null, [
             'users_purged' => $usersDeleted, 

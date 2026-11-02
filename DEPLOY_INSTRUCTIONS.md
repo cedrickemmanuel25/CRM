@@ -43,18 +43,16 @@ SESSION_PATH=/CRM/public
 
 ### Étape 2 : Nettoyer le cache
 
-**Option A - Via le script web (RECOMMANDÉ, sans SSH) :**
+> Les anciens scripts de diagnostic accessibles par le web (`clear-cache-server.php`, `read-logs.php`,
+> `session-check.php`, `simple-test.php`) ont été retirés du dépôt : ils étaient exécutables sans
+> authentification. Supprimez-les aussi du serveur s'ils y sont encore présents.
 
-1. **Télécharger** le fichier `clear-cache-server.php` à la racine du projet CRM  
-   📍 Emplacement : `/home/yacons/public_html/CRM/clear-cache-server.php`
+**Option A - Via le Terminal cPanel (sans SSH externe) :**
 
-2. **Accéder** à l'URL dans votre navigateur :  
-   🌐 https://ya-consulting.com/CRM/clear-cache-server.php
-
-3. **Vérifier** que tous les caches sont nettoyés avec succès (✅)
-
-4. **⚠️ SUPPRIMER** le fichier `clear-cache-server.php` immédiatement après usage  
-   (pour des raisons de sécurité)
+```bash
+cd /home/yacons/public_html/CRM
+php clear-cache.php
+```
 
 **Option B - Via SSH (si disponible) :**
 

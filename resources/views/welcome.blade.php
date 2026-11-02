@@ -196,7 +196,7 @@
             </div>
 
             <!-- Pipeline de Vente -->
-            <div class="md:col-span-2 glass bento-card relative group overflow-hidden h-[350px] md:h-auto">
+            <div id="modules" class="md:col-span-2 glass bento-card relative group overflow-hidden h-[350px] md:h-auto">
                 <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-cyan-500/10 to-transparent"></div>
                 <div class="absolute right-0 top-0 w-2/3 h-full opacity-20">
                     <svg class="w-full h-full" viewBox="0 0 300 200">
@@ -225,7 +225,7 @@
             </div>
 
             <!-- Sécurité -->
-            <div class="glass bento-card p-8 flex flex-col justify-center">
+            <div id="security" class="glass bento-card p-8 flex flex-col justify-center">
                 <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 backdrop-blur-sm border border-blue-400/30">
                     <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>

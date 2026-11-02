@@ -187,6 +187,7 @@ class DashboardController extends Controller
         $forecastCurrent = $data['kpis']['my_forecast_revenue'];
         $data['kpis']['my_forecast_change'] = $forecastPrev > 0 ? round((($forecastCurrent - $forecastPrev) / $forecastPrev) * 100) : 0;
 
+        $data['kpis']['goal_actual'] = $this->wonThisMonth($user->id);
         $data['kpis']['goal_percentage'] = $this->calculateGoalPercentage($user->id, $quota);
 
         // My Pipeline by Stage
@@ -347,12 +348,17 @@ class DashboardController extends Controller
 
     private function calculateGoalPercentage($userId, $target = 50000)
     {
-        $actual = Opportunity::byCommercial($userId)
+        $actual = $this->wonThisMonth($userId);
+
+        return $target > 0 ? min(100, round(($actual / $target) * 100)) : 0;
+    }
+
+    private function wonThisMonth($userId)
+    {
+        return Opportunity::byCommercial($userId)
             ->where('stade', 'gagne')
             ->whereMonth('created_at', now()->month)
             ->sum('montant_estime');
-        
-        return $target > 0 ? min(100, round(($actual / $target) * 100)) : 0;
     }
 
     private function getCommercialPerformance()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Opportunity;
 use App\Models\Contact;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Response;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;

@@ -261,7 +261,7 @@
                         <div class="pt-5 sm:pt-6 border-t border-white/5">
                             <div class="flex items-center gap-3 sm:gap-4">
                                 <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-[10px] sm:text-xs font-bold text-blue-400 uppercase">
-                                    {{ strtoupper(substr($contact->owner?->name ?? '?', 0, 1)) }}
+                                    {{ mb_strtoupper(mb_substr($contact->owner?->name ?? '?', 0, 1)) }}
                                 </div>
                                 <div>
                                     <p class="label-caps mb-0.5 opacity-50">Responsable</p>
@@ -471,7 +471,7 @@
                                             <td class="px-6 py-5 whitespace-nowrap">
                                                 <div class="flex items-center gap-3">
                                                     <div class="h-8 w-8 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-tighter shadow-sm">
-                                                        {{ strtoupper(substr($opp->commercial?->name ?? '?', 0, 1)) }}
+                                                        {{ mb_strtoupper(mb_substr($opp->commercial?->name ?? '?', 0, 1)) }}
                                                     </div>
                                                     <span class="text-xs font-bold text-slate-400">{{ $opp->commercial?->name ?? 'Non assigné' }}</span>
                                                 </div>
@@ -570,7 +570,7 @@
                                                             <div class="flex items-center gap-5">
                                                                 <span class="flex items-center gap-2">
                                                                     <div class="h-4 w-4 rounded-full bg-slate-800 flex items-center justify-center text-[8px] border border-white/5">
-                                                                        {{ strtoupper(substr($activity->user?->name ?? 'S', 0, 1)) }}
+                                                                        {{ mb_strtoupper(mb_substr($activity->user?->name ?? 'S', 0, 1)) }}
                                                                     </div>
                                                                     {{ $activity->user?->name ?? 'Système' }}
                                                                 </span>
@@ -640,7 +640,7 @@
                                                 <div class="text-sm font-bold text-slate-100">{{ $task->titre }}</div>
                                                 <div class="flex items-center mt-2">
                                                     <div class="h-6 w-6 rounded-lg bg-slate-800 border border-white/5 flex items-center justify-center text-[8px] font-black text-slate-500 uppercase tracking-tighter shadow-sm mr-2.5">
-                                                        {{ strtoupper(substr($task->assignee?->name ?? '?', 0, 1)) }}
+                                                        {{ mb_strtoupper(mb_substr($task->assignee?->name ?? '?', 0, 1)) }}
                                                     </div>
                                                     <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest tracking-tighter">{{ $task->assignee?->name ?? 'Non assigné' }}</span>
                                                 </div>

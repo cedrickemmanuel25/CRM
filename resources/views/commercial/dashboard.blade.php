@@ -139,7 +139,7 @@
                     <div class="h-full bg-blue-600 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.2)]" style="width: {{ $data['kpis']['goal_percentage'] }}%"></div>
                 </div>
                 <div class="flex justify-between text-[11px] font-bold text-slate-500">
-                    <span>{{ format_currency($data['kpis']['my_forecast_revenue']) }} réalisé</span>
+                    <span>{{ format_currency($data['kpis']['goal_actual']) }} réalisé</span>
                     <span>Objectif: {{ format_currency($data['kpis']['sales_quota']) }}</span>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                 @forelse($data['lists']['hot_opportunities'] as $opp)
                 <div class="flex items-center gap-4">
                     <div class="w-7 h-7 rounded bg-blue-500/10 border border-blue-500/20 flex items-center justify-center font-bold text-blue-500 text-xs">
-                        {{ substr($opp->titre, 0, 1) }}
+                        {{ mb_substr($opp->titre, 0, 1) }}
                     </div>
                     <div class="min-w-0">
                         <p class="text-xs font-semibold text-slate-200 truncate">{{ $opp->titre }}</p>

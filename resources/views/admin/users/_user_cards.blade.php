@@ -6,7 +6,7 @@
     <div class="flex items-center gap-4">
         <div class="h-14 w-14 flex-shrink-0 relative">
             @php
-                $initials = collect(explode(' ', $user->name))->map(fn($part) => substr($part, 0, 1))->take(2)->join('');
+                $initials = collect(explode(' ', $user->name))->map(fn($part) => mb_substr($part, 0, 1))->take(2)->join('');
                 $colorClasses = $user->role === 'admin' ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' : 
                                ($user->role === 'commercial' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 
                                ($user->role === 'support' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-slate-500/20 text-slate-400 border-slate-500/30'));

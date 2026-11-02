@@ -453,12 +453,12 @@ class ContactController extends Controller
         ]);
 
         $contact->opportunities()->create([
-            'user_id' => auth()->id(),
+            'commercial_id' => $contact->user_id_owner ?? auth()->id(),
             'titre' => $validated['titre'],
             'montant_estime' => $validated['montant_estime'],
             'stade' => $validated['stade'],
             'probabilite' => $validated['probabilite'],
-            'date_cloture_estimee' => now()->addMonths(1), // Défaut
+            'date_cloture_prev' => now()->addMonths(1), // Défaut
         ]);
 
         return back()->with('success', 'Opportunité créée.');
@@ -544,7 +544,7 @@ class ContactController extends Controller
             'user_id' => auth()->id(),
             'type' => $validated['type'],
             'description' => "Interaction via " . ucfirst($validated['type']),
-            'contenu' => $validated['notes'],
+            'contenu' => $validated['notes'] ?? null,
             'date_activite' => now(),
             'statut' => 'termine',
         ]);

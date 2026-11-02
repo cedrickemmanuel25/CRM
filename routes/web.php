@@ -13,10 +13,6 @@ Route::get('/heartbeat', function() {
     return response()->json(['status' => 'alive', 'time' => now()]);
 })->name('heartbeat');
 
-Route::get('/test-public', function() {
-    return "Public test works - " . date('H:i:s');
-});
-
 // Routes d'authentification (accessibles uniquement aux invités)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -48,6 +44,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/contacts/{contact}/activity', [App\Http\Controllers\ContactController::class, 'addActivity'])->name('contacts.addActivity');
         Route::post('/contacts/{contact}/note', [App\Http\Controllers\ContactController::class, 'storeNote'])->name('contacts.storeNote');
         Route::post('/contacts/{contact}/ticket', [App\Http\Controllers\ContactController::class, 'storeTicket'])->name('contacts.storeTicket');
+        Route::post('/contacts/{contact}/interaction', [App\Http\Controllers\ContactController::class, 'logInteraction'])->name('contacts.logInteraction');
+        Route::post('/activities', [App\Http\Controllers\ActivityController::class, 'store'])->name('activities.store');
     });
 
     // Admin & Commercial can manage contacts (creation, edit, delete, conversion)
@@ -60,53 +58,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/contacts/{contact}/opportunity', [App\Http\Controllers\ContactController::class, 'addOpportunity'])->name('contacts.addOpportunity');
         Route::get('/contacts/{contact}/export', [App\Http\Controllers\ContactController::class, 'export'])->name('contacts.export');
         Route::post('/contacts/{contact}/convert', [App\Http\Controllers\ContactController::class, 'convertToOpportunity'])->name('contacts.convert');
+        Route::patch('/contacts/{contact}/stage', [App\Http\Controllers\ContactController::class, 'updateStage'])->name('contacts.updateStage');
     });
     
     Route::middleware('auth')->group(function () {
         Route::get('/contacts', [App\Http\Controllers\ContactController::class, 'index'])->name('contacts.index');
         Route::get('/contacts/fetch', [App\Http\Controllers\ContactController::class, 'fetch'])->name('contacts.fetch');
-        Route::get('/fix-encoding', function() {
-            $contacts = \App\Models\Contact::all();
-            $count = 0;
-            $replacements = [
-                'Ã©vÃ©nement' => 'Événement',
-                'Ã©vÃ¨nement' => 'Événement', 
-                'Ã‰vÃ©nement' => 'Événement',
-                'Ã‰vÃ¨nement' => 'Événement',
-                '6agn6' => 'Gagné',
-                'GagnÃ©' => 'Gagné',
-                'gagnÃ©' => 'gagné',
-                'ProspÃ©' => 'Prospé',
-                'prospÃ©' => 'prospé',
-                'Ã©' => 'é',
-                'Ã¨' => 'è',
-                'Ãª' => 'ê',
-                'Ã ' => 'à',
-                'Ã§' => 'ç',
-                'Ã‰' => 'É',
-            ];
-            
-            foreach ($contacts as $contact) {
-                $changed = false;
-                foreach (['source', 'statut', 'nom', 'prenom', 'entreprise'] as $field) {
-                    if ($contact->$field) {
-                        $newValue = str_replace(array_keys($replacements), array_values($replacements), $contact->$field);
-                        if ($newValue !== $contact->$field) {
-                            $contact->$field = $newValue;
-                            $changed = true;
-                        }
-                    }
-                }
-                if ($changed) {
-                    $contact->save();
-                    $count++;
-                }
-            }
-            return "Correction terminée. $count contacts mis à jour.";
-        })->name('fix.encoding');
         Route::get('/contacts/{contact}', [App\Http\Controllers\ContactController::class, 'show'])->name('contacts.show');
-        Route::patch('/contacts/{contact}/stage', [App\Http\Controllers\ContactController::class, 'updateStage'])->name('contacts.updateStage');
-        Route::post('/contacts/{contact}/interaction', [App\Http\Controllers\ContactController::class, 'logInteraction'])->name('contacts.logInteraction');
     });
 
     // Opportunities Module
@@ -119,16 +77,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/opportunities/{opportunity}/mark-won', [App\Http\Controllers\OpportunityController::class, 'markAsWon'])->name('opportunities.markWon');
         Route::post('/opportunities/{opportunity}/mark-lost', [App\Http\Controllers\OpportunityController::class, 'markAsLost'])->name('opportunities.markLost');
         Route::delete('/opportunities/{opportunity}', [App\Http\Controllers\OpportunityController::class, 'destroy'])->name('opportunities.destroy');
+        Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
     });
-    
-    // Routes de transition (Placées hors du middleware 'role' pour test, mais toujours sous 'auth')
-    Route::post('/opportunities/{opportunity}/transition', [App\Http\Controllers\OpportunityController::class, 'processTransition'])->name('opportunities.processTransition');
+
     Route::get('/opportunities/{opportunity}/transition', function() {
         return redirect()->route('opportunities.index');
     });
-
-    Route::get('/debug-routing-controller', [App\Http\Controllers\OpportunityController::class, 'getRoutingDiagnostic']);
-    Route::get('/debug-routing-simple', function() { return "Simple routing works - " . now(); });
 
 
     // All roles can view opportunities (wildcard routes last)
@@ -138,7 +92,6 @@ Route::middleware('auth')->group(function () {
 
     // Activities Module
     Route::get('/activities', [App\Http\Controllers\ActivityController::class, 'index'])->name('activities.index');
-    Route::post('/activities', [App\Http\Controllers\ActivityController::class, 'store'])->name('activities.store');
 
     // Tasks Module
     // Write access for Admin, Commercial, Support

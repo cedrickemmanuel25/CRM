@@ -461,7 +461,10 @@
                 this.activeOpportunity.budget = data.budget || '';
                 this.activeOpportunity.montant = data.amount || '';
                 this.activeOpportunity.client_name = data.client_name || '';
-                
+
+                // Cible des formulaires des modales de transition (supprimée par erreur dans 7f21b1d)
+                this.transitionUrl = `{{ route('opportunities.processTransition', ':id') }}`.replace(':id', data.id);
+
                 this.changeStage(data.stage);
             },
 

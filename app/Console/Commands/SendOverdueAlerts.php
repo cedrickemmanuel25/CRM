@@ -46,7 +46,7 @@ class SendOverdueAlerts extends Command
                 $task->assignee->notify(new TaskOverdueNotification($task));
                 $count++;
                 
-                $daysOverdue = now()->diffInDays($task->due_date);
+                $daysOverdue = (int) $task->due_date->diffInDays(now());
                 $this->line("⚠ Alert sent to {$task->assignee->name} for overdue task ({$daysOverdue} days): {$task->titre}");
             }
         }
