@@ -81,6 +81,16 @@
                     </div>
                 @endif
 
+                @if (config('demo.enabled'))
+                    <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-700">
+                        <p class="font-semibold">Démonstration — données fictives, mot de passe : <span class="font-mono">Demo@1234</span></p>
+                        <p class="mt-1">Commercial : <span class="font-mono">commercial@example.com</span></p>
+                        <p>Support : <span class="font-mono">support@example.com</span></p>
+                        <p>Administrateur (réglages verrouillés) : <span class="font-mono">admin@example.com</span></p>
+                        <p>Visiteur : <span class="font-mono">visiteur@example.com</span></p>
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
 

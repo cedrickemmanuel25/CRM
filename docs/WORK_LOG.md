@@ -118,3 +118,14 @@ comportement à décider par le propriétaire du projet). Ils sont repris dans l
 | Captures de la landing | `landing-desktop.png` (1440 × 1718) et `landing-mobile.png` (390 × 2256), pleine page après défilement progressif ; les anciennes `landing.png` et `mobile-landing.png`, qui montraient encore le badge retiré, sont supprimées. La page ne comporte pas de pied de page : la capture s'arrête après la dernière carte de la section fonctionnalités. | Dimensions lues dans les fichiers ; inspection visuelle |
 | Galerie GitHub Pages | `docs/index.html` (redirection), `docs/demo/` (HTML, CSS, JS sans dépendance), `docs/.nojekyll` | Playwright desktop et mobile : 21/21 images chargées, 0 erreur, 0 débordement, navigation par module et visionneuse fonctionnelles |
 | Dossier portfolio | `portfolio-export/` : présentation, étude de cas, technologies, fonctionnalités, architecture, captures | Liens et images vérifiés |
+
+## Démonstration interactive (troisième mission)
+
+| Élément | Détail | Vérification |
+|---|---|---|
+| Mode démonstration | `config/demo.php`, middleware `DemoMode` (routes web), `DEMO_MODE=false` par défaut : aucun effet en local | Tests `DemoModeTest` (16 cas) ; suite complète : 69 tests réussis |
+| Protections | Administration en lecture seule, export des comptes, profil, demande d'accès publique et téléversements bloqués ; e-mails forcés en `log` ; ni IP ni navigateur dans le journal d'audit | Tests automatisés et recette navigateur |
+| Réinitialisation | Commande `demo:reset` (refus si `DEMO_MODE` faux ou si le nom de la base ne contient pas « demo »), planifiée toutes les 6 h ; sauvegarde `mysqldump` désactivée en démonstration | Refus constaté sur `crm_portfolio` ; réinitialisation réussie sur la base dédiée `crm_demo` |
+| Page de connexion | Encadré des comptes de démonstration affiché uniquement si `DEMO_MODE=true` | Test automatisé et recette |
+| Répétition générale | Instance locale `APP_ENV=production`, `APP_DEBUG=false`, `DEMO_MODE=true` sur `crm_demo` | Playwright desktop et mobile : 33 contrôles réussis (landing, connexion, modules, déconnexion, blocages, fichiers privés non exposés, absence de trace d'erreur) |
+| Déploiement | `.env.demo.example` (sans secret) et `docs/DEPLOY_DEMO.md` (alwaysdata, offre gratuite) | En attente de la création du compte d'hébergement |

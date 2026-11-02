@@ -35,6 +35,10 @@ class AuditLog extends Model
      */
     public static function log($action, $model = null, $oldValues = null, $newValues = null)
     {
+        if (config('demo.enabled') && is_array($newValues)) {
+            unset($newValues['ip'], $newValues['user_agent']);
+        }
+
         self::create([
             'user_id' => auth()->id(),
             'action' => $action,
@@ -42,8 +46,9 @@ class AuditLog extends Model
             'model_id' => $model ? $model->id : null,
             'old_values' => $oldValues,
             'new_values' => $newValues,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
+            // Démonstration publique : le journal est visible des visiteurs, on n'y conserve ni IP ni navigateur
+            'ip_address' => config('demo.enabled') ? null : request()->ip(),
+            'user_agent' => config('demo.enabled') ? null : request()->userAgent(),
         ]);
     }
     public function getTranslatedActionAttribute()

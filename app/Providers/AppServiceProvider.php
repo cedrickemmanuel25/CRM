@@ -29,6 +29,16 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Europe/Paris');
         setlocale(LC_TIME, 'fr_FR.utf8', 'fr_FR', 'fra', 'french');
 
+        // Derrière le proxy HTTPS de l'hébergeur, générer des URL https si APP_URL l'est
+        if (str_starts_with((string) config('app.url'), 'https://')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
+        // Démonstration publique : aucun e-mail réel ne doit partir, quelle que soit la configuration
+        if (config('demo.enabled')) {
+            config(['mail.default' => 'log']);
+        }
+
         // Polymorphic Map
         \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
             'contact' => \App\Models\Contact::class,
