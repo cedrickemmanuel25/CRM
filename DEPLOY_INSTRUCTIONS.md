@@ -116,8 +116,8 @@ composer dump-autoload --optimize
 
 3. **Vérifier que la base de données est accessible** :
    - Host: `127.0.0.1`
-   - Database: `***REMOVED***`
-   - User: `***REMOVED***`
+   - Database: `nom_de_la_base`
+   - User: `utilisateur_base`
 
 4. **Recréer le cache de configuration** :
    ```bash
@@ -171,8 +171,8 @@ composer dump-autoload --optimize
 | `APP_ENV` | `local` | `production` |
 | `APP_DEBUG` | `true` | `false` |
 | `LOG_LEVEL` | `debug` | `error` |
-| `DB_DATABASE` | `crm` | `***REMOVED***` |
-| `DB_USERNAME` | `root` | `***REMOVED***` |
+| `DB_DATABASE` | `crm` | `nom_de_la_base` |
+| `DB_USERNAME` | `root` | `utilisateur_base` |
 | `SESSION_PATH` | `/` | `/CRM/public` |
 
 ---
