@@ -46,6 +46,7 @@ unique ; une ligne n'est passée en « Résolu » qu'après un test de validatio
 | BUG-07 | Dashboard commercial : jauge « Quota mensuel » à 0 % affichant « 125 200 € réalisé » | Le pourcentage est calculé sur le CA gagné du mois, mais le libellé affichait le CA prévisionnel (affaires en cours) | `DashboardController`, `commercial/dashboard.blade.php` | Le libellé affiche le montant gagné utilisé pour le pourcentage (`goal_actual`, requête factorisée dans `wonThisMonth`) | Test automatisé : 10 000 € gagnés + 50 000 € en cours → « 10 000 € réalisé », 20 % | Résolu |
 | BUG-08 | Durées négatives et décimales : « -4 jours » dans le stade (liste des opportunités), retard « -3.99 jours » dans les alertes de tâches | Depuis Carbon 3 (Laravel 11+), `now()->diffInDays($datePassée)` renvoie une valeur signée et flottante | `Opportunity::getTimeInStageAttribute`, `SendOverdueAlerts`, `TaskOverdueNotification` | `(int) $datePassée->diffInDays(now())` | Test automatisé (4 jours dans le stade, 3 jours de retard) ; commande `tasks:send-overdue-alerts` exécutée : valeurs positives | Résolu |
 | UI-10 | Liste des tickets : statuts affichés en codes bruts (`IN_PROGRESS`, `WAITING_CLIENT`) | Valeur brute affichée alors que les libellés français existent dans le filtre de la même page | `tickets/index.blade.php` | Table de libellés (même modèle que `$priorityLabels` de la fiche ticket) | Capture vérifiée | Résolu |
+| UI-11 | Landing : retrait du badge « Plateforme Professionnelle » (demande du propriétaire) | Badge décoratif (`div.reveal` avec point animé et libellé) devenu inutile sans son texte | `welcome.blade.php` | Badge supprimé ; titres, paragraphes, illustrations et boutons inchangés | Captures intégrales desktop (1440 × 1718) et mobile (390 × 2256) inspectées : contenu centré, aucune erreur JS | Résolu |
 | HYG-02 | `clear-cache.php` (racine) exécutable via HTTP si le dossier du projet est exposé (cas du déploiement cPanel décrit) | Aucun contrôle du SAPI | `clear-cache.php` | Refus (404) hors ligne de commande | Script exécuté en CLI : OK | Résolu |
 
 ## Parcours vérifiés (étape 2)
@@ -109,3 +110,11 @@ comportement à décider par le propriétaire du projet). Ils sont repris dans l
 - Alpine.js chargé deux fois sur la fiche opportunité et la page des règles d'attribution : une seule initialisation constatée, aucun effet observé.
 - Fiche opportunité : les modales de transition y sont présentes mais aucun élément de la page ne les ouvre (la méthode `changeStage` n'est pas appelée) ; les transitions se font depuis le pipeline.
 - Données de production antérieures : les activités/tâches enregistrées avec un nom de classe complet nécessiteraient une migration de données (BUG-02).
+
+## Présentation portfolio (seconde mission)
+
+| Élément | Détail | Vérification |
+|---|---|---|
+| Captures de la landing | `landing-desktop.png` (1440 × 1718) et `landing-mobile.png` (390 × 2256), pleine page après défilement progressif ; les anciennes `landing.png` et `mobile-landing.png`, qui montraient encore le badge retiré, sont supprimées. La page ne comporte pas de pied de page : la capture s'arrête après la dernière carte de la section fonctionnalités. | Dimensions lues dans les fichiers ; inspection visuelle |
+| Galerie GitHub Pages | `docs/index.html` (redirection), `docs/demo/` (HTML, CSS, JS sans dépendance), `docs/.nojekyll` | Playwright desktop et mobile : 21/21 images chargées, 0 erreur, 0 débordement, navigation par module et visionneuse fonctionnelles |
+| Dossier portfolio | `portfolio-export/` : présentation, étude de cas, technologies, fonctionnalités, architecture, captures | Liens et images vérifiés |

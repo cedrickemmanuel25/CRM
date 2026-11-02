@@ -135,14 +135,6 @@
 
     <section class="relative pt-48 pb-20 px-10">
         <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
-            <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-white/10 mb-8">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                </span>
-                <span class="text-[10px] font-bold tracking-widest uppercase text-cyan-400">Plateforme Professionnelle</span>
-            </div>
-            
             <h1 class="reveal text-5xl sm:text-7xl lg:text-[110px] font-extrabold leading-tight lg:leading-none tracking-tighter mb-8">
                 CRM <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-300">Intelligent</span>
             </h1>

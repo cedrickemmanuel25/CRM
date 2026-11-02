@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CRM Laravel — Démonstration visuelle</title>
+    <meta name="description" content="Galerie de présentation des écrans réels d'un CRM développé avec Laravel 12 : contacts, pipeline commercial, tâches, support, reporting et administration.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b82f6'/%3E%3Ctext x='16' y='21' font-family='Arial' font-size='11' font-weight='700' fill='white' text-anchor='middle'%3ECRM%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+    <a class="skip" href="#modules">Aller aux écrans</a>
+
+    <header class="topbar">
+        <div class="wrap topbar__inner">
+            <a class="brand" href="#top" aria-label="Haut de page">
+                <span class="brand__mark" aria-hidden="true">CRM</span>
+                <span class="brand__name">CRM Laravel</span>
+            </a>
+            <nav class="topbar__links" aria-label="Liens du projet">
+                <a href="https://github.com/cedrickemmanuel25/CRM/blob/main/docs/PORTFOLIO_CASE_STUDY.md">Étude de cas</a>
+                <a class="btn btn--ghost" href="https://github.com/cedrickemmanuel25/CRM">Code sur GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="top">
+        <section class="hero">
+            <div class="wrap">
+                <p class="eyebrow">Galerie de présentation</p>
+                <h1>Un CRM complet pour piloter ventes, clients et support</h1>
+                <p class="lead">
+                    Application web développée avec <strong>Laravel 12</strong> et MySQL : contacts, pipeline des
+                    ventes, attribution des affaires, tâches, tickets de support, reporting et administration,
+                    avec un espace dédié à chaque rôle.
+                </p>
+                <div class="notice" role="note">
+                    <strong>Ce site est une galerie statique.</strong>
+                    Il présente des captures réelles de l'application en fonctionnement, sur une base de démonstration
+                    aux données entièrement fictives. L'application elle-même nécessite PHP et MySQL ; ses sources et
+                    sa procédure d'installation sont sur GitHub.
+                </div>
+                <div class="hero__actions">
+                    <a class="btn btn--primary" href="#modules">Explorer les écrans</a>
+                    <a class="btn btn--ghost" href="https://github.com/cedrickemmanuel25/CRM#f-installation">Installer le projet</a>
+                </div>
+                <ul class="facts" aria-label="Chiffres vérifiés">
+                    <li><strong>4</strong><span>rôles : admin, commercial, support, visiteur</span></li>
+                    <li><strong>10</strong><span>modules métier</span></li>
+                    <li><strong>53</strong><span>tests automatisés réussis</span></li>
+                    <li><strong>21</strong><span>captures réelles desktop et mobile</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <nav class="modnav" aria-label="Modules">
+            <div class="wrap modnav__inner">
+                <a href="#landing">Accueil</a>
+                <a href="#auth">Authentification</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#contacts">Contacts</a>
+                <a href="#pipeline">Pipeline</a>
+                <a href="#opportunites">Opportunités</a>
+                <a href="#taches">Tâches</a>
+                <a href="#support">Support</a>
+                <a href="#reporting">Reporting</a>
+                <a href="#admin">Administration</a>
+            </div>
+        </nav>
+
+        <div id="modules" class="wrap modules">
+
+            <section class="module" id="landing" aria-labelledby="t-landing">
+                <header class="module__head">
+                    <span class="module__num">01</span>
+                    <div>
+                        <h2 id="t-landing">Page d'accueil publique</h2>
+                        <p>Point d'entrée du CRM : présentation des fonctionnalités, accès à la connexion et formulaire de demande d'accès.</p>
+                    </div>
+                </header>
+                <div class="shots shots--1p">
+                    <figure class="shot shot--tall">
+                        <button class="shot__frame" type="button" data-full="../screenshots/landing-desktop.png">
+                            <img src="../screenshots/landing-desktop.png" alt="Page d'accueil du CRM, capture intégrale en desktop" loading="lazy" width="1440" height="1718">
+                        </button>
+                        <figcaption><span class="tag">Desktop · page entière</span>Hero, navigation et cartes de présentation des modules (contacts, pipeline, sécurité, rapports).</figcaption>
+                    </figure>
+                    <figure class="shot shot--phone">
+                        <button class="shot__frame" type="button" data-full="../screenshots/landing-mobile.png">
+                            <img src="../screenshots/landing-mobile.png" alt="Page d'accueil du CRM sur mobile, capture intégrale" loading="lazy" width="390" height="2256">
+                        </button>
+                        <figcaption><span class="tag">Mobile · page entière</span>Mise en page sur une colonne, menu repliable.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="auth" aria-labelledby="t-auth">
+                <header class="module__head">
+                    <span class="module__num">02</span>
+                    <div>
+                        <h2 id="t-auth">Authentification</h2>
+                        <p>Connexion par e-mail et mot de passe, limitée à 5 tentatives par minute, puis redirection vers le tableau de bord propre au rôle.</p>
+                    </div>
+                </header>
+                <div class="shots shots--1p">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/login.png">
+                            <img src="../screenshots/login.png" alt="Écran de connexion" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Desktop</span>Formulaire de connexion avec option « rester connecté » et lien vers la demande d'accès.</figcaption>
+                    </figure>
+                    <figure class="shot shot--phone">
+                        <button class="shot__frame" type="button" data-full="../screenshots/mobile-login.png">
+                            <img src="../screenshots/mobile-login.png" alt="Écran de connexion sur mobile" loading="lazy" width="390" height="844">
+                        </button>
+                        <figcaption><span class="tag">Mobile</span>Même écran en 390 × 844.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="dashboard" aria-labelledby="t-dashboard">
+                <header class="module__head">
+                    <span class="module__num">03</span>
+                    <div>
+                        <h2 id="t-dashboard">Tableaux de bord</h2>
+                        <p>Chaque rôle dispose de ses indicateurs : vue globale pour l'administrateur, performance personnelle pour le commercial.</p>
+                    </div>
+                </header>
+                <div class="shots shots--3">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/dashboard-admin.png">
+                            <img src="../screenshots/dashboard-admin.png" alt="Tableau de bord administrateur" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Administrateur</span>Leads, CA prévisionnel, actions en attente et répartition des opportunités par stade.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/dashboard-commercial.png">
+                            <img src="../screenshots/dashboard-commercial.png" alt="Tableau de bord commercial" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Commercial</span>CA prévisionnel, taux de conversion, quota mensuel, retards, rappels et rendez-vous.</figcaption>
+                    </figure>
+                    <figure class="shot shot--phone">
+                        <button class="shot__frame" type="button" data-full="../screenshots/mobile-dashboard-commercial.png">
+                            <img src="../screenshots/mobile-dashboard-commercial.png" alt="Tableau de bord commercial sur mobile" loading="lazy" width="390" height="844">
+                        </button>
+                        <figcaption><span class="tag">Mobile</span>Indicateurs empilés pour une lecture sur téléphone.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="contacts" aria-labelledby="t-contacts">
+                <header class="module__head">
+                    <span class="module__num">04</span>
+                    <div>
+                        <h2 id="t-contacts">Gestion des contacts</h2>
+                        <p>Base de contacts filtrable et fiche détaillée regroupant coordonnées, statut pipeline, opportunités, journal et rappels.</p>
+                    </div>
+                </header>
+                <div class="shots shots--3">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/contacts.png">
+                            <img src="../screenshots/contacts.png" alt="Liste des contacts" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Liste</span>Recherche, filtres par entreprise, source et commercial, statut CRM et propriétaire.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/contact-detail.png">
+                            <img src="../screenshots/contact-detail.png" alt="Fiche contact" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Fiche contact</span>Statut synchronisé avec les opportunités, onglets, note interne, conversion en opportunité.</figcaption>
+                    </figure>
+                    <figure class="shot shot--phone">
+                        <button class="shot__frame" type="button" data-full="../screenshots/mobile-contacts.png">
+                            <img src="../screenshots/mobile-contacts.png" alt="Liste des contacts sur mobile" loading="lazy" width="390" height="844">
+                        </button>
+                        <figcaption><span class="tag">Mobile</span>Le tableau devient une liste de cartes.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="pipeline" aria-labelledby="t-pipeline">
+                <header class="module__head">
+                    <span class="module__num">05</span>
+                    <div>
+                        <h2 id="t-pipeline">Pipeline commercial</h2>
+                        <p>Vue Kanban des opportunités par étape, de la prospection à la signature, avec valeur totale, valeur pondérée et taux de conversion.</p>
+                    </div>
+                </header>
+                <div class="shots shots--1p">
+                    <figure class="shot shot--wide">
+                        <button class="shot__frame" type="button" data-full="../screenshots/pipeline.png">
+                            <img src="../screenshots/pipeline.png" alt="Pipeline des ventes en vue Kanban" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Kanban</span>Chaque colonne affiche le nombre d'affaires et leur montant ; chaque carte, le commercial et la probabilité.</figcaption>
+                    </figure>
+                    <figure class="shot shot--phone">
+                        <button class="shot__frame" type="button" data-full="../screenshots/mobile-pipeline.png">
+                            <img src="../screenshots/mobile-pipeline.png" alt="Pipeline sur mobile" loading="lazy" width="390" height="844">
+                        </button>
+                        <figcaption><span class="tag">Mobile</span>Indicateurs du pipeline sur téléphone.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="opportunites" aria-labelledby="t-opps">
+                <header class="module__head">
+                    <span class="module__num">06</span>
+                    <div>
+                        <h2 id="t-opps">Opportunités</h2>
+                        <p>Vue liste filtrable et fiche opportunité avec montant pondéré, stade, contact associé, interactions et historique des stades.</p>
+                    </div>
+                </header>
+                <div class="shots">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/opportunities-list.png">
+                            <img src="../screenshots/opportunities-list.png" alt="Liste des opportunités" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Liste</span>Montant et valeur pondérée, probabilité, stade, échéance et commercial.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/opportunity-detail.png">
+                            <img src="../screenshots/opportunity-detail.png" alt="Fiche opportunité" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Fiche</span>Montant, probabilité, clôture prévue, contact, interactions récentes et historique.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="taches" aria-labelledby="t-taches">
+                <header class="module__head">
+                    <span class="module__num">07</span>
+                    <div>
+                        <h2 id="t-taches">Tâches et agenda</h2>
+                        <p>Suivi des actions par statut et planning hebdomadaire combinant tâches, appels et réunions.</p>
+                    </div>
+                </header>
+                <div class="shots">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/tasks.png">
+                            <img src="../screenshots/tasks.png" alt="Tableau Kanban des tâches" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Kanban</span>Tâches à faire, en cours et terminées, avec échéance, priorité et élément lié.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/calendar.png">
+                            <img src="../screenshots/calendar.png" alt="Agenda hebdomadaire" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Agenda</span>Vue semaine des tâches et des activités planifiées.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="support" aria-labelledby="t-support">
+                <header class="module__head">
+                    <span class="module__num">08</span>
+                    <div>
+                        <h2 id="t-support">Support client</h2>
+                        <p>Console dédiée aux agents : tickets par statut et priorité, file d'attente et urgences.</p>
+                    </div>
+                </header>
+                <div class="shots">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/support-dashboard.png">
+                            <img src="../screenshots/support-dashboard.png" alt="Console support" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Console</span>Nouveaux tickets, en traitement, urgences, volume par statut et priorités.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/tickets.png">
+                            <img src="../screenshots/tickets.png" alt="Liste des tickets" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Tickets</span>Catégorie, statut, urgence et client, avec recherche et filtres.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="reporting" aria-labelledby="t-reporting">
+                <header class="module__head">
+                    <span class="module__num">09</span>
+                    <div>
+                        <h2 id="t-reporting">Reporting</h2>
+                        <p>Exports CSV et PDF des opportunités, contacts et leads, filtrés par période et par commercial ; chaque export est journalisé.</p>
+                    </div>
+                </header>
+                <div class="shots shots--1">
+                    <figure class="shot shot--wide">
+                        <button class="shot__frame" type="button" data-full="../screenshots/reports.png">
+                            <img src="../screenshots/reports.png" alt="Centre de données et exports" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Exports</span>Choix du type de données, de la période, du propriétaire et du format de sortie.</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="module" id="admin" aria-labelledby="t-admin">
+                <header class="module__head">
+                    <span class="module__num">10</span>
+                    <div>
+                        <h2 id="t-admin">Administration</h2>
+                        <p>Gestion des comptes et des rôles, paramètres de l'organisation, demandes d'accès, règles d'attribution et journal d'audit.</p>
+                    </div>
+                </header>
+                <div class="shots">
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/admin-users.png">
+                            <img src="../screenshots/admin-users.png" alt="Gestion des utilisateurs" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Utilisateurs</span>Comptes par rôle, contact, date d'adhésion, modification et réinitialisation.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <button class="shot__frame" type="button" data-full="../screenshots/admin-settings.png">
+                            <img src="../screenshots/admin-settings.png" alt="Paramètres système" loading="lazy" width="1440" height="1024">
+                        </button>
+                        <figcaption><span class="tag">Paramètres</span>Identité de l'organisation, notifications, exports et maintenance.</figcaption>
+                    </figure>
+                </div>
+            </section>
+        </div>
+
+        <section class="features" aria-labelledby="t-features">
+            <div class="wrap">
+                <h2 id="t-features">Fonctionnalités en bref</h2>
+                <div class="features__grid">
+                    <article><h3>Rôles et permissions</h3><p>Accès contrôlé par rôle et par propriétaire : un commercial ne voit que ses contacts, opportunités et tickets ; le visiteur est en lecture seule.</p></article>
+                    <article><h3>Pipeline guidé</h3><p>Six étapes, des informations demandées à chaque transition, historique des stades et statut du contact mis à jour automatiquement.</p></article>
+                    <article><h3>Attribution des affaires</h3><p>Manuelle ou par règles priorisées : source, montant, secteur ou équilibrage de charge, avec historique.</p></article>
+                    <article><h3>Tâches et rappels</h3><p>Kanban, agenda, rappel des tâches du jour et en retard, alertes planifiées.</p></article>
+                    <article><h3>Support</h3><p>Tickets catégorisés et priorisés, assignation, réponses et rapports PDF par période.</p></article>
+                    <article><h3>Traçabilité</h3><p>Journal d'audit, exports journalisés, notifications en base et par e-mail selon les préférences.</p></article>
+                </div>
+                <p class="stack"><strong>Stack :</strong> PHP 8.2+ · Laravel 12 · MySQL / MariaDB · Blade · Tailwind CSS 4 · Alpine.js · ApexCharts · DomPDF · Vite · Pest</p>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="wrap cta__inner">
+                <div>
+                    <h2>Aller plus loin</h2>
+                    <p>Architecture, choix techniques, défis rencontrés et résultats vérifiés sont détaillés dans l'étude de cas.</p>
+                </div>
+                <div class="cta__actions">
+                    <a class="btn btn--primary" href="https://github.com/cedrickemmanuel25/CRM/blob/main/docs/PORTFOLIO_CASE_STUDY.md">Lire l'étude de cas</a>
+                    <a class="btn btn--ghost" href="https://github.com/cedrickemmanuel25/CRM">Voir le dépôt GitHub</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap footer__inner">
+            <p>Projet réalisé par <a href="https://github.com/cedrickemmanuel25">cedrickemmanuel25</a>.</p>
+            <p>Captures réelles de l'application sur données fictives. Ce site ne contient aucune donnée client.</p>
+        </div>
+    </footer>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Capture agrandie">
+        <div class="lightbox__bar">
+            <p class="lightbox__caption" id="lightbox-caption"></p>
+            <div class="lightbox__controls">
+                <button type="button" data-action="prev" aria-label="Capture précédente">‹</button>
+                <span id="lightbox-count" aria-live="polite"></span>
+                <button type="button" data-action="next" aria-label="Capture suivante">›</button>
+                <button type="button" data-action="close" aria-label="Fermer">✕</button>
+            </div>
+        </div>
+        <div class="lightbox__stage">
+            <img id="lightbox-img" alt="">
+        </div>
+    </dialog>
+
+    <script src="demo.js" defer></script>
+</body>
+</html>
